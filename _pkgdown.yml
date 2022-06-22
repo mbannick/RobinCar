@@ -1,0 +1,10 @@
+template:
+  params:
+    bootswatch: yeti
+reference:
+- title: "Robust estimation and inference for covariate-adaptive randomization schemes."
+  desc: >
+    Robust estimation and inference for covariate-adaptive randomization schemes in randomized controlled trials. Includes linear and non-linear (glm) adjustment working models.
+- contents:
+  - robincar_linear
+  - robincar_glm
