@@ -1,6 +1,7 @@
 pandoc: 2.17.1.1
 pkgdown: 2.0.4
 pkgdown_sha: ~
-articles: {}
-last_built: 2022-06-22T04:58Z
+articles:
+  use-linear-glm: use-linear-glm.html
+last_built: 2022-06-22T06:23Z
 

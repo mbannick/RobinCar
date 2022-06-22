@@ -1,18 +1,16 @@
+#' Covariate adjustment using generalized linear working model
+#'
 #' Estimate treatment-group-specific response means and (optionally)
-#' treatment group contrasts.
+#' treatment group contrasts using a generalized linear working model.
 #'
 #' @param df A data.frame with the required columns
 #' @param treat_col Name of column in df with treatment variable
 #' @param response_col Name of the column in df with response variable
 #' @param strata_cols Names of columns in df with strata variables
 #' @param covariate_cols Names of columns in df with covariate variables
-#' @param car_scheme Name of the type of covariate-adaptive randomization scheme. Options include:
-#'                   * simple
-#'                   * pocock-simon
-#'                   * biased-coin
-#'                   * permuted-block
+#' @param car_scheme Name of the type of covariate-adaptive randomization scheme. One of: "simple", "pocock-simon", "biased-coin", "permuted-block".
 #' @param adj_method Name of adjustment method to use, one of "heterogeneous" (interaction model) or "homogeneous"
-#' @param vcovHC Type of heteroskedasticity-consistent variance estimates
+#' @param vcovHC Type of heteroskedasticity-consistent variance estimates. One of: "HC0", "HC1", "HC3".
 #' @param covariate_to_include_strata Whether to include strata variables in covariate adjustment. Defaults to F for ANOVA and ANCOVA; defaults to T for ANHECOVA. User may override by passing in this argument.
 #' @param contrast An optional function to specify a desired contrast
 #' @param g_family Family that would be supplied to glm(...), e.g., binomial. If no link specified, will use default link, like behavior in glm.
@@ -21,7 +19,6 @@
 #'
 #' @import dplyr
 #' @import magrittr
-#' @import stats
 #' @export
 robincar_glm <- function(df,
                          treat_col, response_col, strata_cols=NULL, covariate_cols=NULL,

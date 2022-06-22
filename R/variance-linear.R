@@ -142,7 +142,7 @@ get.erb <- function(model, data, mod, mu_hat=NULL){
   # vector for a particular strata (vector contains
   # all treatment groups), then dividing by the pi_t
   .get.cond.exp <- function(s) dat %>%
-    filter(strata==s) %>%
+    dplyr::filter(strata==s) %>%
     arrange(treat) %>%
     pull(mean)
 

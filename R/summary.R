@@ -1,9 +1,10 @@
 
+#' @export
 print.LinModelResult <- function(res){
   output <- c()
   output <- c(
     output,
-    sprintf("Treatment group mean estimates using fit from an %s model", 
+    sprintf("Treatment group mean estimates using fit from an %s model",
             class(res$settings)[2])
   )
   if(class(res$settings)[2] != "ANOVA"){
@@ -34,7 +35,7 @@ print.LinModelResult <- function(res){
   }
   output <- c(
     output,
-    sprintf("\n\nUsed %s-type of heteroskedasticity-consistent variance estimates ", 
+    sprintf("\n\nUsed %s-type of heteroskedasticity-consistent variance estimates ",
             res$settings$vcovHC)
   )
   if(!is.null(res$settings$omegaz_func)){
@@ -42,9 +43,9 @@ print.LinModelResult <- function(res){
       strata <- colnames(res$data$strata)
       output <- c(
         output,
-        sprintf("\n  and adjusted variance-covariance matrix for randomization strata consistent with the 
-              %s design: %s.", 
-              res$settings$car_scheme, 
+        sprintf("\n  and adjusted variance-covariance matrix for randomization strata consistent with the
+              %s design: %s.",
+              res$settings$car_scheme,
               paste0(strata, collapse=", "))
       )
     }
@@ -59,6 +60,7 @@ print.LinModelResult <- function(res){
   print(res$varcov)
 }
 
+#' @export
 print.ContrastResult <- function(res){
   if("DIFF" %in% class(res$settings)){
     c_type <- "linear contrast"
@@ -70,7 +72,7 @@ print.ContrastResult <- function(res){
   output <- sprintf("Treatment group contrasts using %s", c_type)
   cat(output)
   cat("\n\n")
-  cat("Contrats:\n")
+  cat("Contrasts:\n")
   print(res$result)
   cat("\nVariance-Covariance Matrix for Contrasts:\n")
   print(res$varcov)

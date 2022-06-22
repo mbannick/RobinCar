@@ -2,8 +2,7 @@
 % Please edit documentation in R/robincar-linear.R
 \name{robincar_linear}
 \alias{robincar_linear}
-\title{Estimate treatment-group-specific response means and (optionally)
-treatment group contrasts.}
+\title{Covariate adjustment using linear working model}
 \usage{
 robincar_linear(
   df,
@@ -31,15 +30,11 @@ robincar_linear(
 
 \item{covariate_cols}{Names of columns in df with covariate variables}
 
-\item{car_scheme}{Name of the type of covariate-adaptive randomization scheme. Options include:
-* simple
-* pocock-simon
-* biased-coin
-* permuted-block}
+\item{car_scheme}{Name of the type of covariate-adaptive randomization scheme. One of: "simple", "pocock-simon", "biased-coin", "permuted-block".}
 
-\item{adj_method}{Name of linear adjustment method to use}
+\item{adj_method}{Name of linear adjustment method to use. One of: "ANOVA", "ANCOVA", "ANHECOVA".}
 
-\item{vcovHC}{Type of heteroskedasticity-consistent variance estimates}
+\item{vcovHC}{Type of heteroskedasticity-consistent variance estimates. One of: "HC0", "HC1", "HC3".}
 
 \item{covariate_to_include_strata}{Whether to include strata variables in covariate adjustment. Defaults to F for ANOVA and ANCOVA; defaults to T for ANHECOVA. User may override by passing in this argument.}
 
@@ -47,5 +42,5 @@ robincar_linear(
 }
 \description{
 Estimate treatment-group-specific response means and (optionally)
-treatment group contrasts.
+treatment group contrasts using a linear working model for continuous outcomes.
 }

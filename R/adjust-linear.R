@@ -40,7 +40,7 @@ linmod.ANHECOVA <- function(model, data, family=gaussian, center=TRUE){
   dmat <- .get.dmat(data, model$adj_vars)
   if(center) dmat <- .center.dmat(dmat)
   df <- cbind(df, dmat)
-  browser()
+
   if(center){
     mod <- glm(response ~ 0 + treat:., data=df, family=family)
   } else {

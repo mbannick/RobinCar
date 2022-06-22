@@ -88,6 +88,7 @@ validate.RoboDataTTE <- function(data){
 # Takes a data frame and converts it to a list with
 # the attributes as specified by the names passed to ...
 .df.toclass <- function(df, classname, ...){
+
   data <- list()
   atts <- list(...)
   for(i in 1:length(atts)){
@@ -137,7 +138,7 @@ validate.RoboDataTTE <- function(data){
 .make.data <- function(df, classname, ...){
 
   # Convert data frame to object
-  data <- .df.toclass(df, classname, ...)
+  data <- .df.toclass(df=df, classname=classname, ...)
 
   if(!is.null(data$treat)){
     data$treat <- as.factor(as.vector(data$treat[[1]]))
