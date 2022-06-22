@@ -85,8 +85,6 @@ validate.RoboDataTTE <- function(data){
   return(list(newform, vars))
 }
 
-# Takes a data frame and converts it to a list with
-# the attributes as specified by the names passed to ...
 .df.toclass <- function(df, classname, ...){
 
   data <- list()

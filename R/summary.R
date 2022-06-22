@@ -1,4 +1,3 @@
-
 #' Print linear model result
 #' @export
 print.LinModelResult <- function(res){

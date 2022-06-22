@@ -89,7 +89,6 @@ predictions.GLMModel <- function(model, data, mod){
   # is passed through the model settings, if not prediction unbiased.
   if(!all(resid == 0)){
     for(func in list(model$pu_funcs)){
-      browser()
       func()
     }
   }

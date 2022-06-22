@@ -15,7 +15,6 @@
 #' @param contrast An optional function to specify a desired contrast
 #'
 #' @import dplyr
-#' vignette(topic = "use-linear-glm", package = "RobinCar")
 #' @export
 robincar_linear <- function(df,
                             treat_col, response_col, strata_cols=NULL, covariate_cols=NULL,

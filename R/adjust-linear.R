@@ -3,6 +3,7 @@
 # that will aid in adjustment for ANCOVA and ANHECOVA, and used
 # to estimate the treatment effects for ANOVA (equivalent to a sample)
 # mean per group.
+
 linmod <- function(model, data, family, center=TRUE){
   UseMethod("linmod", model)
 }

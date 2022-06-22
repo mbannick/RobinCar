@@ -54,6 +54,3 @@ WARNING: this function is still under development.
 Estimate treatment-group-specific response means and (optionally)
 treatment group contrasts using a generalized linear working model.
 }
-\details{
-WARNING: this function is still under development.
-}

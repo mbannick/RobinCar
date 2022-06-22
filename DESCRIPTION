@@ -15,7 +15,6 @@ Imports:
     tidyr,
     emulator,
     numDeriv,
-    rlang,
     tidyverse
 Depends: 
     R (>= 2.10)
