@@ -31,7 +31,11 @@ robincar_linear(
 
 \item{covariate_cols}{Names of columns in df with covariate variables}
 
-\item{car_scheme}{Name of the type of covariate-adaptive randomization scheme}
+\item{car_scheme}{Name of the type of covariate-adaptive randomization scheme. Options include:
+* simple
+* pocock-simon
+* biased-coin
+* permuted-block}
 
 \item{adj_method}{Name of linear adjustment method to use}
 

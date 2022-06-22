@@ -1,16 +1,21 @@
 Package: RobinCar
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Robust Estimation and Inference in Covariate-Adaptive Randomization
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Author: Ting Ye, Yanyao Yi, Marlena Bannick, Faith Bian
+Maintainer: Marlena Bannick <mnorwood@uw.edu>
+Description: Performs robust estimation and inference when using covariate adjustment and/or covariate-adaptive randomization in randomized controlled trials.
+License: MIT
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.2
 Imports: 
-    magrittr
+    magrittr,
+    dplyr,
+    tidyr,
+    emulator,
+    numDeriv,
+    rlang,
+    tidyverse
 Depends: 
     R (>= 2.10)

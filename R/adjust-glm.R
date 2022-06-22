@@ -97,13 +97,10 @@ predictions.GLMModel <- function(model, data, mod){
   return(mutilde)
 }
 
-#' Perform GLM adjustment, based on the classes
-#' of the model. Will perform adjustment based on the linear
-#' model type of `model` and also do G-computation or AIPW
-#' based on the second model type of `model`.
-#'
-#' @inheritParams adjust
-#' @param model Object of class GLMModel
+# Perform GLM adjustment, based on the classes
+# of the model. Will perform adjustment based on the linear
+# model type of `model` and also do G-computation or AIPW
+# based on the second model type of `model`.
 adjust.GLMModel <- function(model, data){
 
   # Get the generalized linear model and estimates by AIPW

@@ -6,7 +6,11 @@
 #' @param response_col Name of the column in df with response variable
 #' @param strata_cols Names of columns in df with strata variables
 #' @param covariate_cols Names of columns in df with covariate variables
-#' @param car_scheme Name of the type of covariate-adaptive randomization scheme
+#' @param car_scheme Name of the type of covariate-adaptive randomization scheme. Options include:
+#'                   * simple
+#'                   * pocock-simon
+#'                   * biased-coin
+#'                   * permuted-block
 #' @param adj_method Name of linear adjustment method to use
 #' @param vcovHC Type of heteroskedasticity-consistent variance estimates
 #' @param covariate_to_include_strata Whether to include strata variables in covariate adjustment. Defaults to F for ANOVA and ANCOVA; defaults to T for ANHECOVA. User may override by passing in this argument.

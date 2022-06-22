@@ -6,8 +6,12 @@
 #' @param response_col Name of the column in df with response variable
 #' @param strata_cols Names of columns in df with strata variables
 #' @param covariate_cols Names of columns in df with covariate variables
-#' @param car_scheme Name of the type of covariate-adaptive randomization scheme
-#' @param adj_method Name of adjustment method to use, one of "heterogeneous" or "homogeneous"
+#' @param car_scheme Name of the type of covariate-adaptive randomization scheme. Options include:
+#'                   * simple
+#'                   * pocock-simon
+#'                   * biased-coin
+#'                   * permuted-block
+#' @param adj_method Name of adjustment method to use, one of "heterogeneous" (interaction model) or "homogeneous"
 #' @param vcovHC Type of heteroskedasticity-consistent variance estimates
 #' @param covariate_to_include_strata Whether to include strata variables in covariate adjustment. Defaults to F for ANOVA and ANCOVA; defaults to T for ANHECOVA. User may override by passing in this argument.
 #' @param contrast An optional function to specify a desired contrast

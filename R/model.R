@@ -1,18 +1,10 @@
-#' Generic function for making model
-#'
-#' @param data Object of class Data
 .make.model <- function(data, ...){
   UseMethod(".make.model", data)
 }
 
-#' Makes a model class for the specified linear adjustment method
-#' with settings for covariate randomization
-#' scheme and vcovHC type.
-#'
-#' @param adj_method Type of adjustment method
-#' @param car_scheme Type of covariate adaptive randomization
-#' @param vcovHC Type of heteroskedasticity-consistent SE's
-#' @param covariate_to_include_strata Include strata as covariates
+# Makes a model class for the specified linear adjustment method
+# with settings for covariate randomization
+# scheme and vcovHC type.
 .make.model.RoboDataLinear <- function(data, adj_method, car_scheme, vcovHC,
                                        covariate_to_include_strata) {
 
@@ -48,16 +40,9 @@
   return(model)
 }
 
-#' Makes a model class for the specified glm adjustment method
-#' with settings for covariate randomization
-#' scheme and vcovHC type.
-#'
-#' @param adj_method Type of adjustment method
-#' @param car_scheme Type of covariate adaptive randomization
-#' @param vcovHC Type of heteroskedasticity-consistent SE's
-#' @param covariate_to_include_strata Include strata as covariates
-#' @param g_family Family for GLM model
-#' @param g_accuracy Accuracy tolerance for prediction unbiasedness
+# Makes a model class for the specified glm adjustment method
+# with settings for covariate randomization
+# scheme and vcovHC type.
 .make.model.RoboDataGLM <- function(data, adj_method, car_scheme, vcovHC,
                                     covariate_to_include_strata,
                                     g_family, g_accuracy) {

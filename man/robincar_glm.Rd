@@ -34,9 +34,13 @@ robincar_glm(
 
 \item{covariate_cols}{Names of columns in df with covariate variables}
 
-\item{car_scheme}{Name of the type of covariate-adaptive randomization scheme}
+\item{car_scheme}{Name of the type of covariate-adaptive randomization scheme. Options include:
+* simple
+* pocock-simon
+* biased-coin
+* permuted-block}
 
-\item{adj_method}{Name of adjustment method to use, one of "heterogeneous" or "homogeneous"}
+\item{adj_method}{Name of adjustment method to use, one of "heterogeneous" (interaction model) or "homogeneous"}
 
 \item{vcovHC}{Type of heteroskedasticity-consistent variance estimates}
 

@@ -1,8 +1,8 @@
-#' Compute the Omega(Z) matrix
-#' based on the given covariate adaptive randomization scheme.
-#'
-#' This function returns a function to obtain the correct matrix
-#' for a specified vector of randomization probabilities pi_t.
+# Compute the Omega(Z) matrix
+# based on the given covariate adaptive randomization scheme.
+#
+# This function returns a function to obtain the correct matrix
+# for a specified vector of randomization probabilities pi_t.
 omegaz.closure <- function(car_scheme){
 
   omegaz.func <- function(pi_t){

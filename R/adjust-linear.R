@@ -1,19 +1,12 @@
-#' Fits a linear model with settings based on model and data.
-#' The linear model is not the "true" model, but it's the linear model
-#' that will aid in adjustment for ANCOVA and ANHECOVA, and used
-#' to estimate the treatment effects for ANOVA (equivalent to a sample)
-#' mean per group.
-#'
-#' @param model Object of class LinModel
-#' @param data Object of class RoboDataLinear
-#' @importFrom stats glm
+# Fits a linear model with settings based on model and data.
+# The linear model is not the "true" model, but it's the linear model
+# that will aid in adjustment for ANCOVA and ANHECOVA, and used
+# to estimate the treatment effects for ANOVA (equivalent to a sample)
+# mean per group.
 linmod <- function(model, data, family, center=TRUE){
   UseMethod("linmod", model)
 }
 
-#' Fits a linear model to use in ANOVA
-#'
-#' @inheritParams linmod
 linmod.ANOVA <- function(model, data, family=gaussian, center=TRUE){
   df <- data.frame(
     treat=data$treat,
@@ -23,9 +16,6 @@ linmod.ANOVA <- function(model, data, family=gaussian, center=TRUE){
   return(mod)
 }
 
-#' Fits a linear model to use in ANCOVA
-#'
-#' @inheritParams linmod
 linmod.ANCOVA <- function(model, data, family=gaussian, center=TRUE){
   df <- data.frame(
     treat=data$treat,
@@ -42,9 +32,6 @@ linmod.ANCOVA <- function(model, data, family=gaussian, center=TRUE){
   return(mod)
 }
 
-#' Fits a linear model to use in ANHECOVA
-#'
-#' @inheritParams linmod
 linmod.ANHECOVA <- function(model, data, family=gaussian, center=TRUE){
   df <- data.frame(
     treat=data$treat,
@@ -62,11 +49,6 @@ linmod.ANHECOVA <- function(model, data, family=gaussian, center=TRUE){
   return(mod)
 }
 
-#' Fits a custom GLM model using the user-specified
-#' formula.
-#'
-#' @inheritParams linmod
-#' @importFrom stats as.formula
 linmod.CUSTOM <- function(model, data, family=gaussian, center=TRUE){
   df <- data.frame(
     treat=data$treat,
@@ -79,12 +61,8 @@ linmod.CUSTOM <- function(model, data, family=gaussian, center=TRUE){
   return(mod)
 }
 
-#' Perform adjustment for linear models, including ANOVA, ANCOVA,
-#' and ANHECOVA, with or without covariate-adaptive randomization.
-#'
-#' @param model A LinModel object and of class ANOVA, ANCOVA, or ANHECOVA
-#' @param data A RobinDataLinear object
-#' @importFrom stats coef
+# Perform adjustment for linear models, including ANOVA, ANCOVA,
+# and ANHECOVA, with or without covariate-adaptive randomization.
 adjust.LinModel <- function(model, data){
 
   # Fit a model with the settings in model

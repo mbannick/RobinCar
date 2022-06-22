@@ -1,7 +1,5 @@
 
-#' Function to format results.
-#'
-#' @importFrom stats pnorm
+# Function to format results.
 format.results <- function(labels, estimates, varcov, label_name="treat"){
 
   # Extract estimates and create results data

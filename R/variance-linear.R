@@ -1,8 +1,8 @@
 # FUNCTIONS TO COMPUTE THE ASYMPTOTIC VARIANCE
 # OF ESTIMATES FROM SIMPLE AND COVARIATE-ADAPTIVE RANDOMIZATION
 
-#' Gets the diagonal sandwich variance component
-#' for all linear models in the asymptotic variance formula.
+# Gets the diagonal sandwich variance component
+# for all linear models in the asymptotic variance formula.
 .vcov_sr.diag <- function(data, mod, residual=NULL){
   # Calculate the SD of the residuals from the model fit,
   # in order to compute sandwich variance -- this is
@@ -20,9 +20,8 @@
   return(diag(c(result$se)**2))
 }
 
-#' Gets the B matrix for ANCOVA models
-#' in the asymptotic variance formula.
-#' @importFrom stats coef
+# Gets the B matrix for ANCOVA models
+# in the asymptotic variance formula.
 .vcov_sr.B <- function(data, mod){
 
   xbeta <- coef(mod)[-c(1:data$k)]
@@ -32,9 +31,8 @@
   return(coefmat)
 }
 
-#' Gets the Script B matrix for AN(HE)COVA models
-#' in the asymptotic variance formula.
-#' @importFrom stats coef
+# Gets the Script B matrix for AN(HE)COVA models
+# in the asymptotic variance formula.
 .vcov_sr.ScriptB <- function(data, model){
   # Create an ANHECOVA model to get coefficients for the variance
   # calculation, that adjusts for whatever the adjustment variables were.
@@ -49,20 +47,19 @@
   return(coefmat)
 }
 
-#' Generic function for getting the asymptotic variance-covariance
-#' matrix under simple randomization.
+# Generic function for getting the asymptotic variance-covariance
+# matrix under simple randomization.
 vcov_sr <- function(model, data, mod){
   UseMethod("vcov_sr", model)
 }
 
-#' Gets ANOVA asymptotic variance under simple randomization
+# Gets ANOVA asymptotic variance under simple randomization
 vcov_sr.ANOVA <- function(model, data, mod){
   varcov <- .vcov_sr.diag(data, mod)
   return(varcov)
 }
 
-#' Gets ANCOVA asymptotic variance under simple randomization
-#' @importFrom stats cov
+# Gets ANCOVA asymptotic variance under simple randomization
 vcov_sr.ANCOVA <- function(model, data, mod){
   diagmat <- .vcov_sr.diag(data, mod)
   dmat <- .get.dmat(data, model$adj_vars) %>% .center.dmat
@@ -88,7 +85,7 @@ vcov_sr.ANCOVA <- function(model, data, mod){
   return(varcov)
 }
 
-#' Gets ANHECOVA asymptotic variance under simple randomization
+# Gets ANHECOVA asymptotic variance under simple randomization
 vcov_sr.ANHECOVA <- function(model, data, mod){
 
   diagmat <- .vcov_sr.diag(data, mod)
@@ -109,7 +106,6 @@ vcov_sr.ANHECOVA <- function(model, data, mod){
   return(varcov)
 }
 
-#' @importFrom dplyr filter
 get.erb <- function(model, data, mod, mu_hat=NULL){
 
   if(is.null(mu_hat)){
@@ -179,8 +175,7 @@ vcov_car.LinModel <- function(model, data, mod){
   return(v)
 }
 
-#' Gets AIPW asymptotic variance under simple randomization
-#' @importFrom stats cov
+# Gets AIPW asymptotic variance under simple randomization
 vcov_car.GLMModel <- function(model, data, mod, mutilde){
 
   # Get predictions for observed treatment group

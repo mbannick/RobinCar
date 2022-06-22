@@ -1,8 +1,4 @@
-#' Gets the vcovHC weights for the sample size and number of parameters
-#'
-#' @param vcovHC vcovHC option
-#' @param n Number of data points
-#' @param p Number of coefficients
+# Gets the vcovHC weights for the sample size and number of parameters
 .get.vcovHC <- function(vcovHC, n, p){
   if(vcovHC == "HC0"){
     wgt <- 1
@@ -16,8 +12,8 @@
   return(wgt)
 }
 
-#' Get design matrix for the specified adjustment variables
-#' using the data stored.
+# Get design matrix for the specified adjustment variables
+# using the data stored.
 .get.dmat <- function(data, adj_vars){
   if(is.null(adj_vars)){
     dmat <- NULL
@@ -38,10 +34,6 @@
   return(dmat)
 }
 
-#' Get design matrix for the specified adjustment variables
-#' using the data stored.
-#'
-#' @importFrom stats model.matrix
 .center.dmat <- function(dmat){
   modmat <- model.matrix(~ 0 + ., data=data.frame(dmat))
   modmat <- t(t(modmat) - colMeans(modmat))

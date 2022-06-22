@@ -29,16 +29,10 @@
   }
 }
 
-#' Generic function for data validation
-#'
-#' @param data Object of class Data
 validate <- function (data) {
   UseMethod("validate", data)
 }
 
-#' Validate linear model data
-#'
-#' @param data Object of class RoboDataLinear
 validate.RoboDataLinear <- function(data){
 
   errors <- character()
@@ -49,9 +43,6 @@ validate.RoboDataLinear <- function(data){
   .return.error(errors)
 }
 
-#' Validate GLM model data
-#'
-#' @param data Object of class RoboDataGLM
 validate.RoboDataGLM <- function(data){
 
   errors <- character()
@@ -59,9 +50,6 @@ validate.RoboDataGLM <- function(data){
 
 }
 
-#' Validate time-to-event data
-#'
-#' @param data Object of class RoboDataTTE
 validate.RoboDataTTE <- function(data){
 
   errors <- character()
@@ -73,13 +61,6 @@ validate.RoboDataTTE <- function(data){
   .return.error(errors)
 }
 
-#' Edits user-specified formula
-#'
-#' # TODO: This needs tests!
-#' @param form Formula specified by user, either character or as formula
-#' @param response_col Name of response column
-#' @param treat_col Name of treatment column
-#' @importFrom stats as.formula
 .edit.formula <- function(form, response_col, treat_col){
 
   # Convert formula to character
@@ -104,13 +85,8 @@ validate.RoboDataTTE <- function(data){
   return(list(newform, vars))
 }
 
-#' Takes a data frame and converts it to a list with
-#' the attributes as specified by the names passed to ...
-#'
-#' @param df data.frame with columns to extract
-#' @param classname name of class
-#' @param ... Additional names of columns to extract, or vector of names,
-#'            e.g., treat_col="treatment", or strata_cols=c("s_1", "s_2")
+# Takes a data frame and converts it to a list with
+# the attributes as specified by the names passed to ...
 .df.toclass <- function(df, classname, ...){
   data <- list()
   atts <- list(...)
