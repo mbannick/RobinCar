@@ -8,3 +8,7 @@ reference:
 - contents:
   - robincar_linear
   - robincar_glm
+- title: "Summary printing functions."
+- contents:
+  - print.LinModelResult
+  - print.ContrastResult

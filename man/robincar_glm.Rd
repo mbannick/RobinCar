@@ -50,6 +50,10 @@ robincar_glm(
 \item{contrast}{An optional function to specify a desired contrast}
 }
 \description{
+WARNING: this function is still under development.
 Estimate treatment-group-specific response means and (optionally)
 treatment group contrasts using a generalized linear working model.
+}
+\details{
+WARNING: this function is still under development.
 }

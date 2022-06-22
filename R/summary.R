@@ -1,4 +1,5 @@
 
+#' Print linear model result
 #' @export
 print.LinModelResult <- function(res){
   output <- c()
@@ -60,6 +61,7 @@ print.LinModelResult <- function(res){
   print(res$varcov)
 }
 
+#' Print contrast result
 #' @export
 print.ContrastResult <- function(res){
   if("DIFF" %in% class(res$settings)){

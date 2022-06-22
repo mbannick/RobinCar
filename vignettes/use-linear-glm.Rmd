@@ -2,7 +2,7 @@
 title: "Continuous and GLM-Type Outcomes"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{use-linear-glm}
+  %\VignetteIndexEntry{Continuous and GLM-Type Outcomes}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

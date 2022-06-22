@@ -1,7 +1,10 @@
 #' Covariate adjustment using generalized linear working model
 #'
+#' WARNING: this function is still under development.
 #' Estimate treatment-group-specific response means and (optionally)
 #' treatment group contrasts using a generalized linear working model.
+#'
+#' WARNING: this function is still under development.
 #'
 #' @param df A data.frame with the required columns
 #' @param treat_col Name of column in df with treatment variable
