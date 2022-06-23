@@ -5,7 +5,7 @@
 # for all linear models in the asymptotic variance formula.
 #' @importFrom rlang .data
 #' @import dplyr
-.vcov_sr.diag <- function(data, mod, residual=NULL){
+vcov_sr.diag <- function(data, mod, residual=NULL){
   # Calculate the SD of the residuals from the model fit,
   # in order to compute sandwich variance -- this is
   # the asymptotic variance, not yet divided by n.
@@ -24,7 +24,7 @@
 
 # Gets the B matrix for ANCOVA models
 # in the asymptotic variance formula.
-.vcov_sr.B <- function(data, mod){
+vcov_sr.B <- function(data, mod){
 
   xbeta <- stats::coef(mod)[-c(1:data$k)]
   # if(length(xbeta) > data$k) stop("You don't need to calculate B for ANHECOVA model.")
@@ -35,7 +35,7 @@
 
 # Gets the Script B matrix for AN(HE)COVA models
 # in the asymptotic variance formula.
-.vcov_sr.ScriptB <- function(data, model){
+vcov_sr.ScriptB <- function(data, model){
   # Create an ANHECOVA model to get coefficients for the variance
   # calculation, that adjusts for whatever the adjustment variables were.
   anhecova <- structure(list(adj_vars=model$adj_vars),
@@ -57,18 +57,18 @@ vcov_sr <- function(model, data, mod){
 
 # Gets ANOVA asymptotic variance under simple randomization
 vcov_sr.ANOVA <- function(model, data, mod){
-  varcov <- .vcov_sr.diag(data, mod)
+  varcov <- vcov_sr.diag(data, mod)
   return(varcov)
 }
 
 # Gets ANCOVA asymptotic variance under simple randomization
 vcov_sr.ANCOVA <- function(model, data, mod){
-  diagmat <- .vcov_sr.diag(data, mod)
-  dmat <- .get.dmat(data, model$adj_vars) %>% .center.dmat
+  diagmat <- vcov_sr.diag(data, mod)
+  dmat <- get.dmat(data, model$adj_vars) %>% .center.dmat
   covX <- stats::cov(dmat)
 
-  B <- .vcov_sr.B(data, mod)
-  ScriptB <- .vcov_sr.ScriptB(data, model)
+  B <- vcov_sr.B(data, mod)
+  ScriptB <- vcov_sr.ScriptB(data, model)
 
   # Get rid of variables that were collinear
   # in the regression
@@ -90,11 +90,11 @@ vcov_sr.ANCOVA <- function(model, data, mod){
 # Gets ANHECOVA asymptotic variance under simple randomization
 vcov_sr.ANHECOVA <- function(model, data, mod){
 
-  diagmat <- .vcov_sr.diag(data, mod)
-  dmat <- .get.dmat(data, model$adj_vars) %>% .center.dmat
+  diagmat <- vcov_sr.diag(data, mod)
+  dmat <- get.dmat(data, model$adj_vars) %>% .center.dmat
   covX <- stats::cov(dmat)
 
-  ScriptB <- .vcov_sr.ScriptB(data, model)
+  ScriptB <- vcov_sr.ScriptB(data, model)
   C <- apply(is.na(ScriptB), FUN=any, MARGIN=1)
 
   if(length(C) > 1){
@@ -192,7 +192,7 @@ vcov_car.GLMModel <- function(model, data, mod, mutilde){
   residual <- data$response - preds
 
   # Diagonal matrix of residuals for first component
-  diagmat <- .vcov_sr.diag(data, mod, residual=residual)
+  diagmat <- vcov_sr.diag(data, mod, residual=residual)
 
   # Get covariance between observed Y and predicted \mu counterfactuals
   get.cov.Ya <- function(a){

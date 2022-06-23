@@ -12,7 +12,7 @@ print.LinModelResult <- function(x, ...){
   )
   if(class(x$settings)[2] != "ANOVA"){
     k <- length(x$data$treat_levels)
-    mat <- .get.dmat(x$data, x$settings$adj_vars)
+    mat <- get.dmat(x$data, x$settings$adj_vars)
     name <- colnames(mat)
     cov_name <- name[name != "joint_strata"]
     if("joint_strata" %in% name){

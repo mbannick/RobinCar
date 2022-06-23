@@ -1,5 +1,5 @@
 # Gets the vcovHC weights for the sample size and number of parameters
-.get.vcovHC <- function(vcovHC, n, p){
+get.vcovHC <- function(vcovHC, n, p){
   if(vcovHC == "HC0"){
     wgt <- 1
   } else if(vcovHC == "HC1") {
@@ -14,7 +14,7 @@
 
 # Get design matrix for the specified adjustment variables
 # using the data stored.
-.get.dmat <- function(data, adj_vars){
+get.dmat <- function(data, adj_vars){
   if(is.null(adj_vars)){
     dmat <- NULL
   } else if(adj_vars == "x"){

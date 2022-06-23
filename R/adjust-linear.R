@@ -25,7 +25,7 @@ linmod.ANCOVA <- function(model, data, family=stats::gaussian, center=TRUE){
     treat=data$treat,
     response=data$response
   )
-  dmat <- .get.dmat(data, model$adj_vars)
+  dmat <- get.dmat(data, model$adj_vars)
   if(center) dmat <- .center.dmat(dmat)
   df <- cbind(df, dmat)
   if(center){
@@ -41,7 +41,7 @@ linmod.ANHECOVA <- function(model, data, family=stats::gaussian, center=TRUE){
     treat=data$treat,
     response=data$response
   )
-  dmat <- .get.dmat(data, model$adj_vars)
+  dmat <- get.dmat(data, model$adj_vars)
   if(center) dmat <- .center.dmat(dmat)
   df <- cbind(df, dmat)
 
@@ -58,7 +58,7 @@ linmod.CUSTOM <- function(model, data, family=stats::gaussian, center=TRUE){
     treat=data$treat,
     response=data$response
   )
-  dmat <- .get.dmat(data, model$adj_vars)
+  dmat <- get.dmat(data, model$adj_vars)
   if(center) dmat <- .center.dmat(dmat)
   df <- cbind(df, dmat)
   mod <- stats::glm(stats::as.formula(data$formula), data=df, family=family)
@@ -75,7 +75,7 @@ adjust.LinModel <- function(model, data){
 
   # Get the simple randomization variance and adjust if necessary
   asympt.variance <- vcov_car(model, data, mod)
-  vcov_wt <- .get.vcovHC(model$vcovHC, n=data$n, p=mod$rank)
+  vcov_wt <- get.vcovHC(model$vcovHC, n=data$n, p=mod$rank)
   variance <- asympt.variance * vcov_wt / data$n
 
   # Extract estimates and create results data

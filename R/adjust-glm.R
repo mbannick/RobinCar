@@ -8,13 +8,13 @@ predictions.GLMModel <- function(model, data, mod){
     treat=data$treat,
     response=data$response
   )
-  dmat <- .get.dmat(data, model$adj_vars)
+  dmat <- get.dmat(data, model$adj_vars)
   df <- cbind(df, dmat)
   preds <- stats::predict(mod, newdata=df, type="response")
   return(preds)
 }
 
-.get.muhat <- function(model, data, mod){
+get.muhat <- function(model, data, mod){
 
   set.treat <- function(a){
     dat <- data
@@ -31,13 +31,13 @@ predictions.GLMModel <- function(model, data, mod){
   return(pred_cols)
 }
 
-.get.mutilde <- function(model, data, mod){
+get.mutilde <- function(model, data, mod){
 
   # Get response
   y <- data$response
 
   # Get g-computation predictions
-  muhat <- .get.muhat(model, data, mod)
+  muhat <- get.muhat(model, data, mod)
 
   # Get treatment group indicators and outcome
   t_ids <- sapply(data$treat_levels, function(x) data$treat == x)
@@ -107,12 +107,12 @@ adjust.GLMModel <- function(model, data){
 
   # Get mutilde from the GLM model, then estimate the treatment means by
   # taking the mean over all of the potential outcomes
-  mutilde <- .get.mutilde(model, data, glmod)
+  mutilde <- get.mutilde(model, data, glmod)
   estimate <- colMeans(mutilde)
 
   # Compute the asymptotic variance
   asympt.variance <- vcov_car(model, data, glmod, mutilde)
-  vcov_wt <- .get.vcovHC(model$vcovHC, n=data$n, p=glmod$rank)
+  vcov_wt <- get.vcovHC(model$vcovHC, n=data$n, p=glmod$rank)
   variance <- asympt.variance * vcov_wt / data$n
 
   result <- format.results(data$treat_levels, estimate, variance)
