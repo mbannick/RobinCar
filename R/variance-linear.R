@@ -3,19 +3,21 @@
 
 # Gets the diagonal sandwich variance component
 # for all linear models in the asymptotic variance formula.
+#' @importFrom rlang .data
+#' @import dplyr
 .vcov_sr.diag <- function(data, mod, residual=NULL){
   # Calculate the SD of the residuals from the model fit,
   # in order to compute sandwich variance -- this is
   # the asymptotic variance, not yet divided by n.
   if(is.null(residual)){
-    residual <- residuals(mod)
+    residual <- stats::residuals(mod)
   }
 
   result <- mod$data %>%
-    mutate(resid=residual) %>%
-    group_by(treat) %>%
-    summarize(se=sd(resid), .groups="drop") %>%
-    mutate(se=se*sqrt(1/data$pie))
+    dplyr::mutate(resid=residual) %>%
+    dplyr::group_by(.data$treat) %>%
+    dplyr::summarize(se=stats::sd(.data$resid), .groups="drop") %>%
+    dplyr::mutate(se=.data$se*sqrt(1/data$pie))
 
   return(diag(c(result$se)**2))
 }
@@ -24,7 +26,7 @@
 # in the asymptotic variance formula.
 .vcov_sr.B <- function(data, mod){
 
-  xbeta <- coef(mod)[-c(1:data$k)]
+  xbeta <- stats::coef(mod)[-c(1:data$k)]
   # if(length(xbeta) > data$k) stop("You don't need to calculate B for ANHECOVA model.")
   coefmat <- rep(xbeta, data$k) %>% matrix(byrow=FALSE, ncol=data$k)
 
@@ -41,7 +43,7 @@
   )
   mod.anhecova <- linmod(anhecova, data)
 
-  xbeta <- coef(mod.anhecova)[-c(1:data$k)]
+  xbeta <- stats::coef(mod.anhecova)[-c(1:data$k)]
   coefmat <- matrix(xbeta, byrow=TRUE, ncol=data$k)
 
   return(coefmat)
@@ -63,7 +65,7 @@ vcov_sr.ANOVA <- function(model, data, mod){
 vcov_sr.ANCOVA <- function(model, data, mod){
   diagmat <- .vcov_sr.diag(data, mod)
   dmat <- .get.dmat(data, model$adj_vars) %>% .center.dmat
-  covX <- cov(dmat)
+  covX <- stats::cov(dmat)
 
   B <- .vcov_sr.B(data, mod)
   ScriptB <- .vcov_sr.ScriptB(data, model)
@@ -90,7 +92,7 @@ vcov_sr.ANHECOVA <- function(model, data, mod){
 
   diagmat <- .vcov_sr.diag(data, mod)
   dmat <- .get.dmat(data, model$adj_vars) %>% .center.dmat
-  covX <- cov(dmat)
+  covX <- stats::cov(dmat)
 
   ScriptB <- .vcov_sr.ScriptB(data, model)
   C <- apply(is.na(ScriptB), FUN=any, MARGIN=1)
@@ -106,10 +108,11 @@ vcov_sr.ANHECOVA <- function(model, data, mod){
   return(varcov)
 }
 
+#' @importFrom rlang .data
 get.erb <- function(model, data, mod, mu_hat=NULL){
 
   if(is.null(mu_hat)){
-    mu_hat <- predict(mod)
+    mu_hat <- stats::predict(mod)
   }
   residual <- data$response - mu_hat
 
@@ -125,13 +128,13 @@ get.erb <- function(model, data, mod, mu_hat=NULL){
 
   # Calculate the expectation of the residuals within each level of
   # strata variables Z
-  dat <- tibble(
+  dat <- dplyr::tibble(
     treat=data$treat,
     strata=data$joint_strata,
     resid=residual
   ) %>%
-    group_by(treat, strata) %>%
-    summarize(mean=mean(resid), .groups="drop")
+    dplyr::group_by(.data$treat, .data$strata) %>%
+    dplyr::summarize(mean=mean(.data$resid), .groups="drop")
 
   # Calculate strata levels and proportions for
   # the outer expectation
@@ -142,9 +145,9 @@ get.erb <- function(model, data, mod, mu_hat=NULL){
   # vector for a particular strata (vector contains
   # all treatment groups), then dividing by the pi_t
   .get.cond.exp <- function(s) dat %>%
-    dplyr::filter(strata==s) %>%
-    arrange(treat) %>%
-    pull(mean)
+    dplyr::filter(.data$strata==s) %>%
+    dplyr::arrange(.data$treat) %>%
+    dplyr::pull(mean)
 
   .get.rb <- function(s) diag(.get.cond.exp(s) / c(data$pie))
 
@@ -194,14 +197,14 @@ vcov_car.GLMModel <- function(model, data, mod, mutilde){
   # Get covariance between observed Y and predicted \mu counterfactuals
   get.cov.Ya <- function(a){
     t_group <- data$treat == a
-    cv <- cov(data$response[t_group], mutilde[t_group, ])
+    cv <- stats::cov(data$response[t_group], mutilde[t_group, ])
     return(cv)
   }
   # Covariance matrix between Y and \mu
   cov_Ymu <- t(sapply(data$treat_levels, get.cov.Ya))
 
   # Sum of terms to compute simple randomization variance
-  v <- diagmat + cov_Ymu + t(cov_Ymu) - var(mutilde)
+  v <- diagmat + cov_Ymu + t(cov_Ymu) - stats::var(mutilde)
 
   # Adjust for Z if necessary
   if(!is.null(model$omegaz_func)) v <- v - get.erb(model, data, mod, mu_hat=preds)

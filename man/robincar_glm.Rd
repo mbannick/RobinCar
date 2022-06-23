@@ -14,10 +14,9 @@ robincar_glm(
   adj_method = "heterogeneous",
   vcovHC = "HC0",
   covariate_to_include_strata = NULL,
-  g_family = gaussian,
+  g_family = stats::gaussian,
   g_accuracy = 7,
   formula = NULL,
-  conf_level = 0.95,
   contrast_h = NULL,
   contrast_dh = NULL
 )
@@ -47,7 +46,9 @@ robincar_glm(
 
 \item{formula}{An optional formula to use for adjustment specified using as.formula("..."). This overrides strata_cols and covariate_cols.}
 
-\item{contrast}{An optional function to specify a desired contrast}
+\item{contrast_h}{An optional function to specify a desired contrast}
+
+\item{contrast_dh}{An optional jacobian function for the contrast (otherwise use numerical derivative)}
 }
 \description{
 WARNING: this function is still under development.

@@ -27,13 +27,13 @@ jacobian.RATIO <- function(settings, est){
   jacob <- cbind(col1, mat1)
   return(jacob)
 }
-    
+
 jacobian.CUSTOM <- function(settings, est){
   if(!is.null(settings$dh)){
     jacob <- settings$dh(est)
   } else {
     jacob <- numDeriv::jacobian(
-      func=settings$h, 
+      func=settings$h,
       x=est
     )
   }
@@ -42,7 +42,7 @@ jacobian.CUSTOM <- function(settings, est){
 
 # Create contrast settings based on a contrast function
 contrast.settings <- function(k, contrast_h, contrast_dh=NULL){
-  
+
   if(is.function(contrast_h)){
     h <- contrast_h
     type <- "CUSTOM"
@@ -59,7 +59,7 @@ contrast.settings <- function(k, contrast_h, contrast_dh=NULL){
   } else {
     stop("Unrecognized contrast function name.")
   }
-  
+
   obj <- structure(
     list(
       h=h,
@@ -73,27 +73,30 @@ contrast.settings <- function(k, contrast_h, contrast_dh=NULL){
 
 # Run a contrast using settings specified and estimates from a model
 contrast <- function(settings, treat, est, varcov){
-  
+
   # Get labels
   lab <- settings$name(treat)
-  
+
   # Get transformed estimate
   c_est <- settings$h(est)
-  
+
   # Get Jacobian matrix
   jac <- jacobian(settings, est)
-  
+
   # Get new variance covariance matrix based on old one & Jacobian
   vcv <- quad.tform(varcov, jac)
-  
+
   # Format results
   result <- format.results(lab, c_est, vcv, label_name="contrast")
-  
+
   return(list(result=result, varcov=vcv, settings=settings))
 }
 
-# Create a contrast using a result object (that has both result and varcov)
-# 
+#' Create a contrast using a result object (that has both result and varcov)
+#'
+#' @param result A LinModelResult or GLMModelResult
+#' @param contrast_h An optional function to specify a desired contrast
+#' @param contrast_dh An optional jacobian function for the contrast
 #' @import dplyr
 #' @import numDeriv
 #' @import emulator
@@ -104,21 +107,21 @@ robincar_contrast <- function(result, contrast_h, contrast_dh=NULL){
 
   # Get input dimension
   k <- nrow(result$result)
-  
+
   # Create contrast settings
   settings <- contrast.settings(k, contrast_h, contrast_dh)
-  
+
   # Run the contrast function
   c_result <- contrast(
-    settings, 
-    treat=result$result$treat, 
-    est=result$result$estimate, 
+    settings,
+    treat=result$result$treat,
+    est=result$result$estimate,
     varcov=result$varcov
   )
   return(
     structure(
       class="ContrastResult",
-      list(result=c_result$result, 
+      list(result=c_result$result,
            varcov=c_result$varcov,
            settings=settings)
     )

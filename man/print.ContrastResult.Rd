@@ -4,7 +4,12 @@
 \alias{print.ContrastResult}
 \title{Print contrast result}
 \usage{
-\method{print}{ContrastResult}(res)
+\method{print}{ContrastResult}(x, ...)
+}
+\arguments{
+\item{x}{A ContrastResult object}
+
+\item{...}{Additional arguments}
 }
 \description{
 Print contrast result

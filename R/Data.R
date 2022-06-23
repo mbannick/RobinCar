@@ -64,7 +64,7 @@ validate.RoboDataTTE <- function(data){
 .edit.formula <- function(form, response_col, treat_col){
 
   # Convert formula to character
-  form <- deparse(as.formula(form))
+  form <- deparse(stats::as.formula(form))
 
   # Replace formula with proper names for response and treatment
   newform <- gsub(response_col, "response", form)

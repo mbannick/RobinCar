@@ -4,7 +4,7 @@
 format.results <- function(labels, estimates, varcov, label_name="treat"){
 
   # Extract estimates and create results data
-  result <- tibble(
+  result <- dplyr::tibble(
     label=labels,
     estimate=c(estimates),
     se=diag(varcov**0.5)
@@ -12,8 +12,8 @@ format.results <- function(labels, estimates, varcov, label_name="treat"){
   colnames(result) <- c(label_name, "estimate", "se")
 
   # Compute p-values based on the correct variance estimates
-  result <- result %>% mutate(
-    `pval (2-sided)`=2*pnorm(abs(estimate/se), lower.tail=F)
+  result <- result %>% dplyr::mutate(
+    `pval (2-sided)`=2*stats::pnorm(abs(.data$estimate/.data$se), lower.tail=F)
   )
   return(result)
 }

@@ -4,7 +4,12 @@
 \alias{print.LinModelResult}
 \title{Print linear model result}
 \usage{
-\method{print}{LinModelResult}(res)
+\method{print}{LinModelResult}(x, ...)
+}
+\arguments{
+\item{x}{A LinModelResult object}
+
+\item{...}{Additional arguments}
 }
 \description{
 Print linear model result

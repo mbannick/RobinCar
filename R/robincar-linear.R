@@ -12,15 +12,14 @@
 #' @param adj_method Name of linear adjustment method to use. One of: "ANOVA", "ANCOVA", "ANHECOVA".
 #' @param vcovHC Type of heteroskedasticity-consistent variance estimates. One of: "HC0", "HC1", "HC3".
 #' @param covariate_to_include_strata Whether to include strata variables in covariate adjustment. Defaults to F for ANOVA and ANCOVA; defaults to T for ANHECOVA. User may override by passing in this argument.
-#' @param contrast An optional function to specify a desired contrast
-#'
+#' @param contrast_h An optional function to specify a desired contrast
+#' @param contrast_dh An optional jacobian function for the contrast (otherwise use numerical derivative)
 #' @import dplyr
 #' @export
 robincar_linear <- function(df,
                             treat_col, response_col, strata_cols=NULL, covariate_cols=NULL,
                             car_scheme="simple", adj_method="ANOVA", vcovHC="HC0",
                             covariate_to_include_strata=NULL,
-                            conf_level=0.95,
                             contrast_h=NULL, contrast_dh=NULL){
 
   .check.car_scheme(car_scheme)

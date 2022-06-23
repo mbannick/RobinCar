@@ -35,7 +35,7 @@
 }
 
 .center.dmat <- function(dmat){
-  modmat <- model.matrix(~ 0 + ., data=data.frame(dmat))
+  modmat <- stats::model.matrix(~ 0 + ., data=data.frame(dmat))
   modmat <- t(t(modmat) - colMeans(modmat))
   return(modmat)
 }

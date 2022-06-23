@@ -4,20 +4,23 @@
 # to estimate the treatment effects for ANOVA (equivalent to a sample)
 # mean per group.
 
+#' @importFrom stats gaussian
 linmod <- function(model, data, family, center=TRUE){
   UseMethod("linmod", model)
 }
 
-linmod.ANOVA <- function(model, data, family=gaussian, center=TRUE){
+#' @importFrom stats gaussian
+linmod.ANOVA <- function(model, data, family=stats::gaussian, center=TRUE){
   df <- data.frame(
     treat=data$treat,
     response=data$response
   )
-  mod <- glm(response ~ 0 + treat, data=df, family=family)
+  mod <- stats::glm(response ~ 0 + treat, data=df, family=family)
   return(mod)
 }
 
-linmod.ANCOVA <- function(model, data, family=gaussian, center=TRUE){
+#' @importFrom stats gaussian
+linmod.ANCOVA <- function(model, data, family=stats::gaussian, center=TRUE){
   df <- data.frame(
     treat=data$treat,
     response=data$response
@@ -26,14 +29,14 @@ linmod.ANCOVA <- function(model, data, family=gaussian, center=TRUE){
   if(center) dmat <- .center.dmat(dmat)
   df <- cbind(df, dmat)
   if(center){
-    mod <- glm(response ~ 0 + treat + ., data=df, family=family)
+    mod <- stats::glm(response ~ 0 + treat + ., data=df, family=family)
   } else {
-    mod <- glm(response ~ 1 + treat + ., data=df, family=family)
+    mod <- stats::glm(response ~ 1 + treat + ., data=df, family=family)
   }
   return(mod)
 }
 
-linmod.ANHECOVA <- function(model, data, family=gaussian, center=TRUE){
+linmod.ANHECOVA <- function(model, data, family=stats::gaussian, center=TRUE){
   df <- data.frame(
     treat=data$treat,
     response=data$response
@@ -43,14 +46,14 @@ linmod.ANHECOVA <- function(model, data, family=gaussian, center=TRUE){
   df <- cbind(df, dmat)
 
   if(center){
-    mod <- glm(response ~ 0 + treat:., data=df, family=family)
+    mod <- stats::glm(response ~ 0 + treat:., data=df, family=family)
   } else {
-    mod <- glm(response ~ 1 + treat:., data=df, family=family)
+    mod <- stats::glm(response ~ 1 + treat:., data=df, family=family)
   }
   return(mod)
 }
 
-linmod.CUSTOM <- function(model, data, family=gaussian, center=TRUE){
+linmod.CUSTOM <- function(model, data, family=stats::gaussian, center=TRUE){
   df <- data.frame(
     treat=data$treat,
     response=data$response
@@ -58,7 +61,8 @@ linmod.CUSTOM <- function(model, data, family=gaussian, center=TRUE){
   dmat <- .get.dmat(data, model$adj_vars)
   if(center) dmat <- .center.dmat(dmat)
   df <- cbind(df, dmat)
-  mod <- glm(as.formula(data$formula), data=df, family=family)
+  mod <- stats::glm(stats::as.formula(data$formula), data=df, family=family)
+
   return(mod)
 }
 
@@ -75,7 +79,7 @@ adjust.LinModel <- function(model, data){
   variance <- asympt.variance * vcov_wt / data$n
 
   # Extract estimates and create results data
-  est <- coef(mod)[1:data$k]
+  est <- stats::coef(mod)[1:data$k]
   result <- format.results(data$treat_levels, est, variance)
 
   return(

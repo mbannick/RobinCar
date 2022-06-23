@@ -10,7 +10,7 @@ predictions.GLMModel <- function(model, data, mod){
   )
   dmat <- .get.dmat(data, model$adj_vars)
   df <- cbind(df, dmat)
-  preds <- predict(mod, newdata=df, type="response")
+  preds <- stats::predict(mod, newdata=df, type="response")
   return(preds)
 }
 
