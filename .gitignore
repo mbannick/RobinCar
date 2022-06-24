@@ -5,3 +5,5 @@ RobinCar.Rproj
 .RData
 .Ruserdata
 .DS_Store
+inst/doc
+docs

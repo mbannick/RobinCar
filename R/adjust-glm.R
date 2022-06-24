@@ -15,7 +15,6 @@ predictions.GLMModel <- function(model, data, mod){
 }
 
 get.muhat <- function(model, data, mod){
-
   set.treat <- function(a){
     dat <- data
     dat$treat <- rep(a, data$n)
@@ -32,7 +31,6 @@ get.muhat <- function(model, data, mod){
 }
 
 get.mutilde <- function(model, data, mod){
-
   # Get response
   y <- data$response
 
@@ -47,6 +45,7 @@ get.mutilde <- function(model, data, mod){
     center_ids <- as.list(data.frame(t_ids))
     center_mus <- as.list(data.frame(muhat))
   } else {
+
     # Will create matrix for combination of strata and treatment groups
     sl <- data$joint_strata_levels
     tl <- data$treat_levels
@@ -70,6 +69,15 @@ get.mutilde <- function(model, data, mod){
   mutilde <- mapply(FUN=recenter,
                     u=center_mus,
                     i=center_ids)
+
+  if(model$pu_joint_z){
+    new_mutilde <- matrix(data=NA, nrow=data$n, ncol=ncol(muhat))
+    for(s_col in 1:ncol(s_ids)){
+      scol_seq <- seq(s_col, ncol(mutilde), by=2)
+      new_mutilde[s_ids[, s_col], ] <- mutilde[s_ids[, s_col], scol_seq]
+      mutilde <- new_mutilde
+    }
+  }
 
   # Check prediction un-biasedness for the original muhat
   # g-computation just for warning/error reporting,
@@ -117,5 +125,11 @@ adjust.GLMModel <- function(model, data){
 
   result <- format.results(data$treat_levels, estimate, variance)
 
-  return(list(result=result, varcov=variance, mutilde=mutilde, settings=model))
+  return(
+    structure(
+      class="GLMModelResult",
+      list(result=result, varcov=variance, settings=model,
+           data=data, mod=glmod)
+    )
+  )
 }

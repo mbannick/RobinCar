@@ -144,6 +144,9 @@ validate.RoboDataTTE <- function(data){
   if(!is.null(data$response)){
     data$response <- as.vector(data$response[[1]])
   }
+  if(ncol(data$strata) == 0){
+    data$strata <- NULL
+  }
   if(!is.null(data$strata)){
     # Create joint strata levels
     data$joint_strata <- joint.strata(data$strata)
@@ -153,6 +156,9 @@ validate.RoboDataTTE <- function(data){
     for(col in colnames(data$strata)){
       data$strata[col] <- as.factor(data$strata[[col]])
     }
+  }
+  if(ncol(data$covariate) == 0){
+    data$covariate <- NULL
   }
   if(!is.null(data$covariate)){
     # Center x variables
