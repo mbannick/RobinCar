@@ -87,7 +87,25 @@ test_that("GLM Settings", {
   expect_equal(non$settings$adj_se_z, TRUE)
 })
 
-test_that("GLM full function -- binomial", {
+test_that("GLM full function -- binomial, permuted block", {
+  non <- robincar_glm(
+    df=DATA2,
+    response_col="y",
+    treat_col="A",
+    strata_cols=c("z1"),
+    covariate_cols=c("x1"),
+    car_scheme="permuted-block",
+    g_family=binomial(link="logit"),
+    g_accuracy=7,
+    adj_method="heterogeneous",
+    covariate_to_include_strata=TRUE,
+    vcovHC="HC3")
+  expect_equal(class(non), "GLMModelResult")
+  expect_equal(non$result$estimate,
+               c(X1=0.20774694, X2=0.15547416), tolerance=1e-5)
+})
+
+test_that("GLM full function -- binomial, pocock simon", {
   non <- robincar_glm(
     df=DATA2,
     response_col="y",
@@ -99,6 +117,46 @@ test_that("GLM full function -- binomial", {
     g_accuracy=7,
     adj_method="heterogeneous",
     covariate_to_include_strata=TRUE,
-    vcovHC="HC3")
+    vcovHC="HC0")
   expect_equal(class(non), "GLMModelResult")
+  expect_equal(non$result$estimate,
+               c(0.20774694, 0.15547416), tolerance=1e-5)
 })
+
+test_that("GLM -- no covariates", {
+  non <- robincar_glm(
+    df=DATA2,
+    response_col="y",
+    treat_col="A",
+    strata_cols=c("z1"),
+    covariate_to_include_strata=FALSE,
+    car_scheme="biased-coin",
+    g_family=binomial(link="logit"),
+    g_accuracy=7,
+    adj_method="homogeneous",
+    vcovHC="HC0")
+  expect_equal(class(non), "GLMModelResult")
+  expect_equal(non$varcov[1, 2], 0)
+  expect_equal(non$varcov[2, 1], 0)
+  expect_equal(length(non$mod$coefficients), 2)
+})
+
+# TEST FOR THE DMAT.
+test_that("GLM -- no covariates except strata", {
+  non <- robincar_glm(
+    df=DATA2,
+    response_col="y",
+    treat_col="A",
+    car_scheme="biased-coin",
+    strata_cols=c("z1"),
+    covariate_to_include_strata=TRUE,
+    g_family=binomial(link="logit"),
+    g_accuracy=7,
+    adj_method="heterogeneous",
+    vcovHC="HC0")
+  expect_equal(length(non$mod$coefficients), 4)
+})
+
+
+
+# CHECK DESIGN MATRIX

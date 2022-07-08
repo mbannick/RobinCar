@@ -9,7 +9,9 @@ predictions.GLMModel <- function(model, data, mod){
     response=data$response
   )
   dmat <- get.dmat(data, model$adj_vars)
-  df <- cbind(df, dmat)
+  if(!is.null(dmat)){
+    df <- cbind(df, dmat)
+  }
   preds <- stats::predict(mod, newdata=df, type="response")
   return(preds)
 }
@@ -65,7 +67,10 @@ get.mutilde <- function(model, data, mod){
 
   # Compute AIPW estimator by re-centering predictions
   # within treatment groups
-  recenter <- function(u, i) u - sum(u[i])/sum(i) + sum(y[i])/sum(i)
+  recenter <- function(u, i){
+    cent <- sum(u[i])/sum(i) - sum(y[i])/sum(i)
+    return(u - cent)
+  }
   mutilde <- mapply(FUN=recenter,
                     u=center_mus,
                     i=center_ids)
@@ -75,8 +80,8 @@ get.mutilde <- function(model, data, mod){
     for(s_col in 1:ncol(s_ids)){
       scol_seq <- seq(s_col, ncol(mutilde), by=2)
       new_mutilde[s_ids[, s_col], ] <- mutilde[s_ids[, s_col], scol_seq]
-      mutilde <- new_mutilde
     }
+    mutilde <- new_mutilde
   }
 
   # Check prediction un-biasedness for the original muhat
