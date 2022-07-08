@@ -22,7 +22,8 @@ get.dmat <- function(data, adj_vars){
   } else if(adj_vars == "z"){
     dmat <- data$strata
   } else if(adj_vars == "joint_z"){
-    dmat <- data$joint_strata
+    dmat <- as.matrix(data$joint_strata, ncol=1)
+    colnames(dmat) <- "joint_strata"
   } else if(adj_vars == "joint_z_x"){
     joint_strata <- data$joint_strata
     dmat <- cbind(data$covariate, joint_strata)

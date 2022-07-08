@@ -16,10 +16,10 @@ glmlogic <- function(adj_method, x_exists, z_exists, car_scheme, cov_strata,
     method <- "ANCOVA"
   }
   adj_vars <- NULL
-  
+
   aipw <- TRUE
   adj_se_z <- FALSE
-  
+
   # Whether to check prediction un-biasedness in all joint levels
   # of Z, or just overall, and whether to report an error or warning
   pu_joint_z <- FALSE
@@ -71,7 +71,7 @@ glmlogic <- function(adj_method, x_exists, z_exists, car_scheme, cov_strata,
       }
     }
     if(car_scheme %in% APPLICABLE.SCHEMES){
-      
+
       if(z_exists){
         adj_se_z <- TRUE
         if(x_exists){

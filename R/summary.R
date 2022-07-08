@@ -63,6 +63,76 @@ print.LinModelResult <- function(x, ...){
   print(x$varcov)
 }
 
+#' Print glm model result
+#'
+#' @param x A GLMModelResult object
+#' @param ... Additional arguments
+#' @export
+print.GLMModelResult <- function(x, ...){
+  output <- c()
+  if("AIPW" %in% class(x$settings)){
+    etype <- "aipw-type"
+  } else {
+    etype <- "g-computation-type"
+  }
+  output <- c(
+    output,
+    sprintf("Treatment group mean estimates using a %s estimator",
+            etype),
+    sprintf("\n  from a GLM working model of family %s",
+            x$settings$g_family$family)
+  )
+  k <- length(x$data$treat_levels)
+  mat <- get.dmat(x$data, x$settings$adj_vars)
+  name <- colnames(mat)
+  cov_name <- name[name != "joint_strata"]
+  if("joint_strata" %in% name){
+    cov_name <- c(
+      cov_name,
+      sprintf("joint levels of %s",
+              paste0(names(x$data$strata), collapse=", "))
+    )
+  }
+  output <- c(
+    output,
+    sprintf("\n  using adjustment variables: %s",
+            paste0(cov_name, collapse=", "))
+  )
+  if(class(x$settings)[2] == "heterogeneous"){
+    output <- c(
+      output,
+      "\n  and their interactions with treatment."
+    )
+  } else {
+    output <- c(output, ".")
+  }
+  output <- c(
+    output,
+    sprintf("\n\nUsed %s-type of heteroskedasticity-consistent variance estimates ",
+            x$settings$vcovHC)
+  )
+  if(!is.null(x$settings$omegaz_func)){
+    if(all(x$settings$omegaz_func(x$data$pie) == 0)){
+      strata <- colnames(x$data$strata)
+      output <- c(
+        output,
+        sprintf("\n  and adjusted variance-covariance matrix for randomization strata consistent with the
+              %s design: %s.",
+              x$settings$car_scheme,
+              paste0(strata, collapse=", "))
+      )
+    }
+  }
+  for(o in output){
+    cat(o)
+  }
+  cat("\n\n")
+  cat("Estimates:\n")
+  print(x$result)
+  cat("\nVariance-Covariance Matrix:\n")
+  print(x$varcov)
+}
+
 #' Print contrast result
 #'
 #' @param x A ContrastResult object

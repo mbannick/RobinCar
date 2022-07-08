@@ -81,13 +81,13 @@ glm.homogeneous<-robincar_glm(df = data,
                               response_col="y_bin",
                               treat_col="A",
                               strata_cols=c("z1"),
-                              covariate_cols=c("x1"),
-                              car_scheme="biased-coin",
+                              car_scheme="pocock-simon",
                               g_family=binomial(link="logit"),
                               g_accuracy=7,
-                              covariate_to_include_strata=FALSE,
-                              adj_method="homogeneous",
+                              adj_method="heterogeneous",
+                              covariate_to_include_strata=TRUE,
                               vcovHC="HC3")
+glm.homogeneous
 ```
 
 ### Heterogeneous working model with permuted-block randomization
@@ -97,12 +97,14 @@ glm.heterogeneous<-robincar_glm(df = data,
                               response_col="y_bin",
                               treat_col="A",
                               strata_cols=c("z2"),
+                              covariate_cols=c("x1"),
                               car_scheme="biased-coin",
                               g_family=binomial(link="logit"),
                               g_accuracy=7,
                               covariate_to_include_strata=TRUE,
                               adj_method="heterogeneous",
-                              vcovHC="HC0")
+                              vcovHC="HC1")
+glm.heterogeneous
 ```
 
 ### Heterogeneous working model with biased-coin randomization
@@ -120,4 +122,5 @@ glm.heterogeneous<-robincar_glm(df = data,
                               adj_method="heterogeneous",
                               vcovHC="HC0",
                               contrast_h="diff")
+glm.heterogeneous
 ```
