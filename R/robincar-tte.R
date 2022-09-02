@@ -14,7 +14,7 @@ robincar_tte <- function(df,
                          treat_col, response_col, event_col,
                          adj_method,
                          strata_cols=NULL, covariate_cols=NULL,
-                         p_trt=0.5, ref_arm=NULL, sparse_remove=sparse_remove,
+                         p_trt=0.5, ref_arm=NULL, sparse_remove=FALSE,
                          car_scheme="simple"){
 
   .check.car_scheme(car_scheme)
