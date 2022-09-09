@@ -170,7 +170,7 @@ validate.RoboDataTTE <- function(data){
   # Add additional data attributes
   data$n <- nrow(df)
   data$k <- length(levels(data$treat))
-  data$treat_levels <- levels(data$treat) %>% as.numeric
+  data$treat_levels <- levels(data$treat)
 
   # Estimate treatment allocation proportion
   data$pie <- table(data$treat) %>%

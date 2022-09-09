@@ -136,8 +136,8 @@ test_that("GLM -- no covariates", {
     adj_method="homogeneous",
     vcovHC="HC0")
   expect_equal(class(non), "GLMModelResult")
-  expect_equal(non$varcov[1, 2], 0)
-  expect_equal(non$varcov[2, 1], 0)
+  expect_equal(non$varcov[1, 2][1], c("0"=0))
+  expect_equal(non$varcov[2, 1], c("1"=0))
   expect_equal(length(non$mod$coefficients), 2)
 })
 
@@ -157,26 +157,6 @@ test_that("GLM -- no covariates except strata", {
   expect_equal(length(non$mod$coefficients), 4)
 })
 
-DATA3 <- DATA2
-DATA3$A <- sample(c(1, 2, 3), size=nrow(DATA3), replace=TRUE)
-DATA3$A <- as.factor(DATA3$A)
-
-# TEST MORE THAN TWO TREATMENT GROUPS
-test_that("GLM -- 3 treatment groups", {
-  res <- robincar_glm(
-    df=DATA3,
-    response_col="y",
-    treat_col="A",
-    car_scheme="biased-coin",
-    covariate_cols=c("x1"),
-    strata_cols=c("z1"),
-    covariate_to_include_strata=TRUE,
-    g_family=binomial(link="logit"),
-    g_accuracy=7,
-    adj_method="heterogeneous",
-    vcovHC="HC0")
-})
-
 n <- 2000
 DATA4 <- data.frame(
   y=rbinom(n=n, prob=0.5, size=1),
@@ -184,9 +164,6 @@ DATA4 <- data.frame(
   BWTGR1=rbinom(n=n, prob=0.1, size=1)
 )
 DATA4$TRT01P <- factor(DATA4$TRT01P)
-# DATA4$TRT01P <- factor(DATA4$TRT01P,
-#                        levels=1:3,
-#                        labels=c("placebo", "trt1", "trt2"))
 
 test_that("GLM -- test g_family types in print function", {
   # Test with character
@@ -224,6 +201,37 @@ test_that("GLM -- test g_family types in print function", {
   print(res3)
   expect_equal(res1$result, res2$result)
   expect_equal(res1$result, res3$result)
+})
+
+DATA5 <- DATA4
+DATA5$TRT01P <- factor(DATA5$TRT01P,
+                       levels=1:3,
+                       labels=c("placebo", "trt1", "trt2"))
+
+test_that("GLM -- test that it does not matter if treatment levels
+          are labeled or not.", {
+  # Un-labeled treatment groups
+  res1 <- robincar_glm(
+    df=DATA4,
+    response_col="y",
+    treat_col="TRT01P",
+    car_scheme="simple",
+    covariate_cols=c("BWTGR1"),
+    g_family=binomial(link="logit"),
+    adj_method="homogeneous"
+  )
+  # Labeled treatment groups
+  res2 <- robincar_glm(
+    df=DATA5,
+    response_col="y",
+    treat_col="TRT01P",
+    car_scheme="simple",
+    covariate_cols=c("BWTGR1"),
+    g_family=binomial(link="logit"),
+    adj_method="homogeneous"
+  )
+  expect_equal(res1$result$estimate, res2$result$estimate)
+  expect_equal(res1$result$se, res2$result$se)
 })
 
 # CHECK DESIGN MATRIX
