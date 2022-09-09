@@ -16,3 +16,26 @@ omegaz.closure <- function(car_scheme){
   }
   return(omegaz.func)
 }
+
+#' @title Calculate nu_d for the randomization design
+#' @export
+nu_d <- function(car_scheme, p_trt=0.5){
+
+  if(length(car_scheme) > 1 | length(car_scheme) == 0){
+    nu_d <- NA
+  }else{
+    if(is.na(car_scheme)){
+      nu_d <- NA
+    }else{
+      if(car_scheme %in% c("permuted-block", "biased-coin")){
+        nu_d <- 0
+      }else if(car_scheme == "simple"){
+        nu_d <- p_trt * (1 - p_trt)
+      }
+      else{
+        nu_d <- NA
+      }
+    }
+  }
+  return(nu_d)
+}

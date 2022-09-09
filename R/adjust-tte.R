@@ -6,7 +6,8 @@ create.tte.df <- function(model, data){
   df <- data.frame(
     treat=data$treat,
     response=data$response,
-    event=data$event
+    event=data$event,
+    nu_d=nu_d(model$car_scheme)
   )
   # Adjust for x-covariates
   if(model$adj_cov){

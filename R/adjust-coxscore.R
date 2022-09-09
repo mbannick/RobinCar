@@ -96,7 +96,8 @@ adjust.CoxScore <- function(model, data){
   # If there are covariates to adjust for,
   # fit a Cox model to get linear predictor
   if(model$adj_cov){
-    lin_preds <- get.linear.predictor(df, covnames=colnames(data$covariate))
+    lin_preds <- get.linear.predictor(df,
+                                      covnames=colnames(data$covariate))
     df <- df %>% mutate(lin_pred=lin_preds)
   } else {
     df <- df %>% mutate(lin_pred=0)
@@ -111,7 +112,11 @@ adjust.CoxScore <- function(model, data){
   denominator <- sqrt(sum(strata_sum$z_var) * data$n)
   statistic <- numerator / denominator
 
-  result <- ...
+  result <- list(
+    numerator=numerator,
+    denominator=denominator,
+    statistic=statistic
+  )
 
   return(
     structure(
