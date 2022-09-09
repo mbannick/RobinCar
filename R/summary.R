@@ -76,7 +76,9 @@ print.GLMModelResult <- function(x, ...){
     etype <- "g-computation-type"
   }
   if(is.character(x$settings$g_family)){
-    family <- get(x$settings$g_family)
+    family <- get(x$settings$g_family)()
+  } else if(is.function(x$settings$g_family)){
+    family <- (x$settings$g_family)()
   } else {
     family <- x$settings$g_family
   }
@@ -85,7 +87,7 @@ print.GLMModelResult <- function(x, ...){
     sprintf("Treatment group mean estimates using a %s estimator",
             etype),
     sprintf("\n  from a GLM working model of family %s and link %s",
-            family()$family, family()$link)
+            family$family, family$link)
   )
   k <- length(x$data$treat_levels)
   mat <- get.dmat(x$data, x$settings$adj_vars)

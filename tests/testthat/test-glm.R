@@ -157,6 +157,73 @@ test_that("GLM -- no covariates except strata", {
   expect_equal(length(non$mod$coefficients), 4)
 })
 
+DATA3 <- DATA2
+DATA3$A <- sample(c(1, 2, 3), size=nrow(DATA3), replace=TRUE)
+DATA3$A <- as.factor(DATA3$A)
 
+# TEST MORE THAN TWO TREATMENT GROUPS
+test_that("GLM -- 3 treatment groups", {
+  res <- robincar_glm(
+    df=DATA3,
+    response_col="y",
+    treat_col="A",
+    car_scheme="biased-coin",
+    covariate_cols=c("x1"),
+    strata_cols=c("z1"),
+    covariate_to_include_strata=TRUE,
+    g_family=binomial(link="logit"),
+    g_accuracy=7,
+    adj_method="heterogeneous",
+    vcovHC="HC0")
+})
+
+n <- 2000
+DATA4 <- data.frame(
+  y=rbinom(n=n, prob=0.5, size=1),
+  TRT01P=sample(1:3, replace=TRUE, size=n),
+  BWTGR1=rbinom(n=n, prob=0.1, size=1)
+)
+DATA4$TRT01P <- factor(DATA4$TRT01P)
+# DATA4$TRT01P <- factor(DATA4$TRT01P,
+#                        levels=1:3,
+#                        labels=c("placebo", "trt1", "trt2"))
+
+test_that("GLM -- test g_family types in print function", {
+  # Test with character
+  res1 <- robincar_glm(
+    df=DATA4,
+    response_col="y",
+    treat_col="TRT01P",
+    car_scheme="simple",
+    covariate_cols=c("BWTGR1"),
+    g_family="binomial",
+    adj_method="homogeneous"
+  )
+  print(res1)
+  # Test with function
+  res2 <- robincar_glm(
+    df=DATA4,
+    response_col="y",
+    treat_col="TRT01P",
+    car_scheme="simple",
+    covariate_cols=c("BWTGR1"),
+    g_family=binomial,
+    adj_method="homogeneous"
+  )
+  print(res2)
+  # Test with object
+  res3 <- robincar_glm(
+    df=DATA4,
+    response_col="y",
+    treat_col="TRT01P",
+    car_scheme="simple",
+    covariate_cols=c("BWTGR1"),
+    g_family=binomial(link="logit"),
+    adj_method="homogeneous"
+  )
+  print(res3)
+  expect_equal(res1$result, res2$result)
+  expect_equal(res1$result, res3$result)
+})
 
 # CHECK DESIGN MATRIX
