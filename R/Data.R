@@ -160,12 +160,6 @@ validate.RoboDataTTE <- function(data){
   if(ncol(data$covariate) == 0){
     data$covariate <- NULL
   }
-  if(!is.null(data$covariate)){
-    # Center x variables
-    for(col in colnames(data$covariate)){
-      data$covariate[col] <- data$covariate[col] - mean(data$covariate[[col]])
-    }
-  }
 
   # Add additional data attributes
   data$n <- nrow(df)
