@@ -144,6 +144,9 @@ validate.RoboDataTTE <- function(data){
   if(!is.null(data$response)){
     data$response <- as.vector(data$response[[1]])
   }
+  if(!is.null(data$event)){
+    data$event <- as.vector(data$event[[1]])
+  }
   if(ncol(data$strata) == 0){
     data$strata <- NULL
   }

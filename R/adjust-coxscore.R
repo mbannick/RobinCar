@@ -1,3 +1,6 @@
+#' @importFrom survival coxph Surv
+#' @import survival
+#' @import stats
 get.linear.predictor <- function(df, covnames){
 
   coxdf <- df[, c("response", "event", covnames)]
@@ -7,68 +10,33 @@ get.linear.predictor <- function(df, covnames){
   beta <- fit$coefficients
 
   # Get the design matrix with only the covariates
-  design <- model.matrix(~ 0 + ., data=coxdf[, -c(1, 2)])
+  design <- stats::model.matrix(~ 0 + ., data=coxdf[, -c(1, 2)])
   lin_preds <- as.numeric(design %*% beta)
 
   return(lin_preds)
 }
 
-get.ordered.data <- function(df, ref_arm){
-
-  df <- df %>%
-    group_by(car_strata) %>%
-    mutate(
-      mu_t            = Y1 / Y,
-
-      O.hat           = event * (trt1 - mu_t) -
-                        trt1 * cumsum(event / Y) +
-                        cumsum(event * Y1 / Y^2),
-
-      s0_seq          = exp(lin_pred),
-      s1_seq          = s0_seq * trt1,
-
-      s0              = cumsum(s0_seq[n():1])[n():1]/n(),
-      s1              = cumsum(s1_seq[n():1])[n():1]/n(),
-
-      mu_t            = s1 / s0,
-
-      mean_at_risk    = event / (n()*s0),
-      cumsum_at_risk  = cumsum(mean_at_risk),
-
-      mean_at_risk2   = event / (n()*s0) * mu_t,
-      cumsum_at_risk2 = cumsum(mean_at_risk2),
-
-      O_i             = event * (trt1 - mu_t) -
-                        s1_seq * cumsum_at_risk +
-                        s0_seq * cumsum_at_risk2,
-
-      u_i             = event * (trt1 - mu_t)
-    ) %>% mutate(
-      O.hat           = -O.hat * (trt0 == 1) + O.hat * (trt1 == 1)
-    ) %>% ungroup()
-
-  return(df)
-}
-
+#' @import stats
+#' @import dplyr
 get.strata.sum <- function(df, sparse_remove=FALSE){
 
   ss <- df %>%
-    group_by(carcov_z, .drop=TRUE) %>%
+    group_by(.data$carcov_z, .drop=TRUE) %>%
     summarise(
-      cond_var0       = var(O_i[trt0 == 1]),
-      cond_var1       = var(O_i[trt1 == 1]),
-      cond_mean0      = mean(-O_i[trt0 == 1]),
-      cond_mean1      = mean(O_i[trt1 == 1]),
-      prob_z          = n() / n,
-      nu_d            = unique(nu_d),
+      cond_var0       = stats::var(.data$O_i[.data$trt0 == 1]),
+      cond_var1       = stats::var(.data$O_i[.data$trt1 == 1]),
+      cond_mean0      = mean(-.data$O_i[.data$trt0 == 1]),
+      cond_mean1      = mean(.data$O_i[.data$trt1 == 1]),
+      prob_z          = n() / .data$n,
+      nu_d            = unique(.data$nu_d),
       .groups = "drop"
     ) %>%
-    mutate(na_ind=is.na(cond_var0 + cond_var1))
+    mutate(na_ind=is.na(.data$cond_var0 + .data$cond_var1))
 
   if(sparse_remove){
     if(any(ss$na_ind)){
       .sparse.strata.warn()
-      ss <- ss %>% filter(!na_ind)
+      ss <- ss %>% filter(!.data$na_ind)
     } else {
       ss <- ss %>% tidyr::replace_na(
         list(cond_var0 = 0, cond_var1 = 0)
@@ -78,9 +46,9 @@ get.strata.sum <- function(df, sparse_remove=FALSE){
 
   ss <- ss %>%
     mutate(
-      z_var = prob_z * (p_trt * cond_var0 +
-                        (1 - p_trt) * cond_var1 +
-                        nu_d * (cond_mean0 + cond_mean1)^2)
+      z_var = .data$prob_z * (.data$p_trt * .data$cond_var0 +
+                        (1 - .data$p_trt) * .data$cond_var1 +
+                        .data$nu_d * (.data$cond_mean0 + .data$cond_mean1)^2)
     )
 
   return(ss)
@@ -91,7 +59,7 @@ adjust.CoxScore <- function(model, data){
   # Creates data
   df <- create.tte.df(model, data)
   # Risk set and failure time times
-  df <- process.tte.df(model, data)
+  df <- process.tte.df(df, ref_arm=model$ref_arm)
 
   # If there are covariates to adjust for,
   # fit a Cox model to get linear predictor

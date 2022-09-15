@@ -33,31 +33,71 @@ create.tte.df <- function(model, data){
 # Pre-process the time to event dataset by calculating
 # the risk set size, and fixing ties in the failure times.
 process.tte.df <- function(df, ref_arm=NULL){
-
+  browser()
   # Get the treatment column and set the reference group
-  trts <- unique(data$treat)
+  trts <- levels(df$treat)
   if(!is.null(ref_arm)){
-    trts <- c(ref_arm, trts[trts!=ref_arm])
+    index <- which(trts == ref_arm)
+    trts <- c(ref_arm, trts[-index])
   }
 
   # Calculate risk set sizes at each failure time
-  data <- data %>%
-    dplyr::arrange(car_strata, response) %>%
-    group_by(car_strata) %>%
+  df <- df %>%
+    dplyr::arrange(.data$strata, .data$response) %>%
+    group_by(.data$strata) %>%
     mutate(Y=n():1,
-           trt0=as.integer(treat == trts[1]),
-           trt1=as.integer(treat == trts[2]),
-           Y0=cumsum(trt0[n():1])[n():1],
-           Y1=cumsum(trt1[n():1])[n():1])
+           trt0=as.integer(.data$treat == trts[1]),
+           trt1=as.integer(.data$treat == trts[2]),
+           Y0=cumsum(.data$trt0[n():1])[n():1],
+           Y1=cumsum(.data$trt1[n():1])[n():1])
 
   # Fix ties
-  ties <- which(diff(data[, response]) == 0) + 1
+  ties <- which(diff(df$response) == 0) + 1
   if(length(ties) > 0){
     for(i in ties){
-      data[i, c("Y0", "Y1")] <- data[i-1, c("Y0", "Y1")]
+      df[i, c("Y0", "Y1")] <- df[i-1, c("Y0", "Y1")]
     }
   }
-  data <- data %>% ungroup()
+  df <- df %>% ungroup()
 
-  return(data)
+  return(df)
+}
+
+#' @import dplyr
+get.ordered.data <- function(df, ref_arm){
+
+  df <- df %>%
+    group_by(.data$strata) %>%
+    mutate(
+      mu_t            = .data$Y1 / .data$Y,
+
+      O.hat           = .data$event * (.data$trt1 - .data$mu_t) -
+        .data$trt1 * cumsum(.data$event / .data$Y) +
+        cumsum(.data$event * .data$Y1 / .data$Y^2),
+
+      s0_seq          = exp(.data$lin_pred),
+      s1_seq          = .data$s0_seq * .data$trt1,
+
+      s0              = cumsum(.data$s0_seq[n():1])[n():1]/n(),
+      s1              = cumsum(.data$s1_seq[n():1])[n():1]/n(),
+
+      mu_t            = .data$s1 / .data$s0,
+
+      mean_at_risk    = .data$event / (n()*.data$s0),
+      cumsum_at_risk  = cumsum(.data$mean_at_risk),
+
+      mean_at_risk2   = .data$event / (n()*.data$s0) * .data$mu_t,
+      cumsum_at_risk2 = cumsum(.data$mean_at_risk2),
+
+      O_i             = .data$event * (.data$trt1 - .data$mu_t) -
+        .data$s1_seq * .data$cumsum_at_risk +
+        .data$s0_seq * .data$cumsum_at_risk2,
+
+      u_i             = .data$event * (.data$trt1 - .data$mu_t)
+    ) %>% mutate(
+      O.hat           = -.data$O.hat * (.data$trt0 == 1) +
+        .data$O.hat * (.data$trt1 == 1)
+    ) %>% ungroup()
+
+  return(df)
 }

@@ -42,7 +42,7 @@ ttelogic <- function(x_exists, z_exists,
       adj_strata <- TRUE
     }
   } else{
-    .tte.nomethod.warn()
+    .tte.nomethod.error()
   }
 
   if(adj_method == "CSL"){
