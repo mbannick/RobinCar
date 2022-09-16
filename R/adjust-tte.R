@@ -33,7 +33,7 @@ create.tte.df <- function(model, data){
 # Pre-process the time to event dataset by calculating
 # the risk set size, and fixing ties in the failure times.
 process.tte.df <- function(df, ref_arm=NULL){
-  browser()
+
   # Get the treatment column and set the reference group
   trts <- levels(df$treat)
   if(!is.null(ref_arm)){

@@ -28,3 +28,6 @@
 .cox.carscheme.error <- function() stop("No applicable robust score test for the specified car_scheme, try to use robtest_logrank() function.")
 .tte.nomethod.error <- function() stop("No applicable adjustment methods for the specified adj_method.")
 .sparse.strata.warn <- function() warning("Conditional variance in some strata equals 0, removing these strata.")
+
+.lin.dep.error <- function() warning("Removing model variables that are linearly dependent with the stratification variables.")
+.lin.dep.strat.error <- function() warning("The adjusted covariates are linearly dependent on strata, covariate stratified logrank test reduces to the stratified logrank test.")
