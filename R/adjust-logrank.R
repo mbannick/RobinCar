@@ -1,7 +1,7 @@
 
 #' @import dplyr
 #' @import stats
-append.design.matrix <- function(df, covnames){
+get.design.matrix <- function(df, covnames){
 
   formula <- as.formula(
     paste0("~ 0 + ", paste0(covnames, collapse="+"))
@@ -16,14 +16,16 @@ append.design.matrix <- function(df, covnames){
   # they should already be centered in the .make.data function,
   # but this will center the strata variables also, if they are included.
   mat <- data.frame(mat) %>%
+    mutate(strata=df$strata) %>%
+    group_by(strata, ) %>%
     mutate(across(
       .cols=everything(),
       .fns=list(center=~scale(., center=TRUE, scale=FALSE)),
       .names="{col}_{fn}"
-    ))
-
-  df <- cbind(df, mat)
-  return(df)
+    )) %>%
+    ungroup() %>%
+    subset(select=-strata)
+  return(mat)
 }
 
 check.collinearity <- function(df, covnames, stratified){
@@ -98,14 +100,15 @@ calculate.adjustment <- function(df, betas, covnames, stratified){
 
   # If there are some covariates:
   if(length(covnames_use > 0)){
-    covnames_c <- paste0("xmat_", covnames_use, "_center")
+    covnames_x <- paste0("xmat_", covnames_use)
+    covnames_xc <- paste0("xmat_", covnames_use, "_center")
     beta1_names <- paste0("trt1_1_xmat_", covnames_use)
     beta0_names <- paste0("trt1_0_xmat_", covnames_use)
 
     dat <- dat %>% group_by(.data$strata) %>%
       group_modify(~ {
-        matcx   <- select(.x, all_of(covnames_c)) %>% as.matrix(ncol=p)
-        matx    <- select(.x, all_of(covnames)) %>% as.matrix(ncol=p)
+        matcx   <- select(.x, all_of(covnames_xc)) %>% as.matrix(ncol=p)
+        matx    <- select(.x, all_of(covnames_x)) %>% as.matrix(ncol=p)
         b1      <- select(.x, all_of(beta1_names)) %>% head(n=1) %>% as.matrix(ncol=p)
         b0      <- select(.x, all_of(beta0_names)) %>% head(n=1) %>% as.matrix(ncol=p)
         adjust1 <- matcx %*% t(b1)
@@ -149,13 +152,22 @@ adjust.LogRank <- function(model, data){
     if(model$adj_cov){
       covnames <- c(covnames, names(data$covariate))
     }
-    # Get centered versions of variables
-    df <- append.design.matrix(df, covnames)
+    # Get design matrix and centered versions of variables
+    xmat <- get.design.matrix(df, covnames)
+    df <- cbind(df, xmat)
 
     # Regress to Ohat -- get betas, then calculate adjustment using betas
     betas <- regress.to.Ohat(df, stratified=(model$method == "CSL"))
+
+    # Get new covariate names based on the design matrix (helpful for factors)
+    new_covnames <- colnames(xmat)
+    new_covnames <- gsub("xmat_", "", new_covnames)
+    new_covnames <- gsub("_center", "", new_covnames)
+    new_covnames <- unique(new_covnames)
+
+    # Calculate adjustment using betas
     df <- calculate.adjustment(df, betas,
-                               covnames=covnames,
+                               covnames=new_covnames,
                                stratified=(model$method == "CSL"))
   } else {
     df <- df %>%
@@ -180,7 +192,7 @@ adjust.LogRank <- function(model, data){
     summarise(
       U_SL_z  = sum(.data$uu_cl),
       var_adj = model$p_trt * (1 - model$p_trt) * unique(.data$bsigb) * n(),
-      .groups="drop"
+      .groups = "drop"
     ) %>%
     arrange(strata)
 
