@@ -105,10 +105,14 @@ validate.RoboDataTTE <- function(data, ref_arm){
 
   data <- list()
   atts <- list(...)
+
   for(i in 1:length(atts)){
 
     att_name <- names(atts)[i]
     att <- atts[[i]]
+
+    # save the original names of the attributes
+    data[[att_name]] <- att
 
     if(att_name == "formula"){
 
@@ -144,6 +148,8 @@ validate.RoboDataTTE <- function(data, ref_arm){
 
     }
   }
+  argnames <- list(...)
+
   class(data) <- c("Data", classname)
 
   return(data)

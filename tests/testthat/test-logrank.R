@@ -158,7 +158,7 @@ test_that("X yes Z yes, case1, CL",{
 
 test_that("X yes Z yes, case1, CSL",{
 
-  set.seed(10)
+  set.seed(100)
   n <- 100
 
   data.simu01 <- data_gen2(

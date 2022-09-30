@@ -6,15 +6,15 @@ ALLOWED_COX_CARSCHEME <- c("simple", "permuted-block", "biased-coin")
 #'         to account for covariate-adaptive randomization
 #'
 #' @examples
-#' logic_CL <- robtest_tte_logic(x_exists=TRUE, z_exists=TRUE,
+#' logic_CL <- ttelogic(x_exists=TRUE, z_exists=TRUE,
 #'                               car_scheme="permuted-block",
 #'                               adj_method="CL")
 #'
-#' logic_CSL <- robtest_tte_logic(x_exists=TRUE, z_exists=TRUE,
+#' logic_CSL <- ttelogic(x_exists=TRUE, z_exists=TRUE,
 #'                                car_scheme="permuted-block",
 #'                                adj_method="CSL")
 #'
-#' logic_coxscore <- robtest_tte_logic(x_exists=TRUE, z_exists=TRUE,
+#' logic_coxscore <- ttelogic(x_exists=TRUE, z_exists=TRUE,
 #'                                     car_scheme="permuted-block",
 #'                                     adj_method="coxscore")
 ttelogic <- function(x_exists, z_exists,
