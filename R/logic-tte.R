@@ -45,7 +45,7 @@ ttelogic <- function(x_exists, z_exists,
     .tte.nomethod.error()
   }
 
-  if(adj_method == "CSL"){
+  if(adj_method == "CSL" & car_scheme != "simple"){
     car_strata <- TRUE
   } else {
     car_strata <- FALSE

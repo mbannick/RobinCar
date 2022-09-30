@@ -18,7 +18,7 @@ get.linear.predictor <- function(df, covnames){
 
 #' @import stats
 #' @import dplyr
-get.strata.sum <- function(df, sparse_remove=FALSE){
+get.strata.sum <- function(df, n, p_trt, sparse_remove=FALSE){
 
   ss <- df %>%
     group_by(.data$carcov_z, .drop=TRUE) %>%
@@ -27,7 +27,7 @@ get.strata.sum <- function(df, sparse_remove=FALSE){
       cond_var1       = stats::var(.data$O_i[.data$trt1 == 1]),
       cond_mean0      = mean(-.data$O_i[.data$trt0 == 1]),
       cond_mean1      = mean(.data$O_i[.data$trt1 == 1]),
-      prob_z          = n() / .data$n,
+      prob_z          = n() / n,
       nu_d            = unique(.data$nu_d),
       .groups = "drop"
     ) %>%
@@ -46,8 +46,8 @@ get.strata.sum <- function(df, sparse_remove=FALSE){
 
   ss <- ss %>%
     mutate(
-      z_var = .data$prob_z * (.data$p_trt * .data$cond_var0 +
-                        (1 - .data$p_trt) * .data$cond_var1 +
+      z_var = .data$prob_z * (p_trt * .data$cond_var0 +
+                        (1 - p_trt) * .data$cond_var1 +
                         .data$nu_d * (.data$cond_mean0 + .data$cond_mean1)^2)
     )
 
@@ -72,7 +72,10 @@ adjust.CoxScore <- function(model, data){
   }
 
   df <- get.ordered.data(df, ref_arm=model$ref_arm)
-  strata_sum <- get.strata.sum(df, sparse_remove=model$sparse_remove)
+  strata_sum <- get.strata.sum(df,
+                               n=data$n,
+                               p_trt=model$p_trt,
+                               sparse_remove=model$sparse_remove)
 
   # If there's stratification this calculates the
   # Robust Stratified Score Test (EQ #21)
@@ -81,14 +84,14 @@ adjust.CoxScore <- function(model, data){
   statistic <- numerator / denominator
 
   result <- list(
-    numerator=numerator,
-    denominator=denominator,
+    U=numerator,
+    se=denominator,
     statistic=statistic
   )
 
   return(
     structure(
-      class="CoxScoreResult",
+      class="TTEResult",
       list(result=result, settings=model, data=data)
     )
   )

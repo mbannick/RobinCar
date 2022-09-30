@@ -7,7 +7,7 @@ create.tte.df <- function(model, data){
     treat=data$treat,
     response=data$response,
     event=data$event,
-    nu_d=nu_d(model$car_scheme)
+    nu_d=nu.d(model$car_scheme)
   )
   # Adjust for x-covariates
   if(model$adj_cov){
@@ -28,6 +28,14 @@ create.tte.df <- function(model, data){
 
   return(df)
 
+}
+
+fix.ties <- function(df){
+  ties <- which(base::diff(df$response) == 0) + 1
+  for(i in ties){
+    df[i, c("Y0", "Y1")] <- df[i-1, c("Y0", "Y1")]
+  }
+  return(df)
 }
 
 # Pre-process the time to event dataset by calculating
@@ -52,12 +60,7 @@ process.tte.df <- function(df, ref_arm=NULL){
            Y1=cumsum(.data$trt1[n():1])[n():1])
 
   # Fix ties
-  ties <- which(diff(df$response) == 0) + 1
-  if(length(ties) > 0){
-    for(i in ties){
-      df[i, c("Y0", "Y1")] <- df[i-1, c("Y0", "Y1")]
-    }
-  }
+  df <- fix.ties(df)
   df <- df %>% ungroup()
 
   return(df)

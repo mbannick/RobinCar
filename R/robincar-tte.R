@@ -14,20 +14,21 @@ robincar_tte <- function(df,
                          treat_col, response_col, event_col,
                          adj_method,
                          strata_cols=NULL, covariate_cols=NULL,
-                         p_trt=0.5, ref_arm=NULL, sparse_remove=FALSE,
+                         p_trt=0.5, ref_arm=NULL, sparse_remove=TRUE,
                          car_scheme="simple"){
 
   .check.car_scheme(car_scheme)
 
   data <- .make.data(
-    df=df, classname="RoboDataTTE",
+    df=df,
+    classname="RoboDataTTE",
     treat_col=treat_col,
     response_col=response_col,
     event_col=event_col,
     strata_cols=strata_cols,
     covariate_cols=covariate_cols
   )
-  validate(data)
+  validate(data, ref_arm)
 
   # Create model object
   model <- .make.model(

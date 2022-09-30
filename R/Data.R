@@ -29,7 +29,7 @@
   }
 }
 
-validate <- function (data) {
+validate <- function (data, ...) {
   UseMethod("validate", data)
 }
 
@@ -50,13 +50,29 @@ validate.RoboDataGLM <- function(data){
 
 }
 
-validate.RoboDataTTE <- function(data){
+validate.RoboDataTTE <- function(data, ref_arm){
 
   errors <- character()
   errors <- c(errors, .check.attributes(data, "treat", "response", "event"))
   errors <- c(errors, .check.response(data))
   errors <- c(errors, .check.event(data))
   errors <- c(errors, .check.treat(data))
+
+  if(length(data$treat_levels) != 2){
+    errors <- c(errors, "Need to have only two treatment levels.")
+  }
+  if(!is.null(ref_arm)){
+    if(!ref_arm %in% data$treat_levels){
+      errors <- c(
+        errors,
+        sprintf(
+          "The reference group %s is not in the treatment levels %s",
+          ref_arm,
+          data$treat_levels
+        )
+      )
+    }
+  }
 
   .return.error(errors)
 }

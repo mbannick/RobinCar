@@ -162,3 +162,10 @@ print.ContrastResult <- function(x, ...){
   print(x$varcov)
 }
 
+#' Print TTE result
+#'
+#' @param x A TTEResult object
+#' @param ... Additional arguments
+print.TTEResult <- function(x, ...){
+
+}

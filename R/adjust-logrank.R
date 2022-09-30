@@ -211,7 +211,7 @@ adjust.LogRank <- function(model, data){
 
   return(
     structure(
-      class="LogRankResult",
+      class="TTEResult",
       list(result=result, settings=model, data=data)
     )
   )
