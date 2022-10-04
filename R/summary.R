@@ -184,17 +184,9 @@ print.TTEResult <- function(x, ...){
     }
   }
   if((x$settings$method == "CL") | (x$settings$method == "CSL" & !x$settings$car_strata)){
-    if((x$settings$adj_cov)){
+    if((x$settings$adj_cov) | x$settings$adj_strata){
       cat("Performed covariate-adjusted logrank test with covariates ",
-          paste0(c(covariates), sep=", "))
-      if(x$settings$adj_strata){
-        cat(" adjusting for strata ",
-            paste0(c(strata), sep=", "), ".")
-      }
-    } else if(x$settings$adj_strata){
-      cat("Performed adjusted logrank test ",
-          "adjusting for strata ",
-          paste0(c(strata), sep=", "), ".")
+          paste0(c(covariates, strata), sep=", "))
     } else {
       cat("Performed logrank test.")
     }
@@ -213,7 +205,7 @@ print.TTEResult <- function(x, ...){
       cat("adjusting for covariates ", paste0(covariates, sep=", "))
     }
     if(x$settings$adj_strata){
-      cat("adjusting for strata ", paste0(strata, sep=", "))
+      cat("adjusting SE for strata ", paste0(strata, sep=", "))
     }
   }
   cat("\n----------------------------\n\n")
@@ -229,20 +221,22 @@ print.TTEResult <- function(x, ...){
   if(x$settings$car_strata){
     df$strata <- x$data$joint_strata
     id.cols <- c(id.cols, "strata")
-    setorder(df, treat, strata)
-    txtitle <- "Treatment x Strata Group"
+    setorder(df, strata, treat)
   }
   summ <- df[, lapply(.SD, sum), by=id.cols, .SDcols=c("N", "observed")]
+  summ[, name := paste0(x$data$treat_col, " = ", treat)]
 
-  summ[, add := ""]
-  summ[treat == as.character(x$settings$ref_arm), add := "(ref)"]
-  summ[, name := paste0(add, " ", x$data$treat_col, " = ", treat)]
   if(x$settings$car_strata){
-    summ[, name := paste0(name, ", ", "strata = ", strata)]
+    summ[, strata_col := paste0("strata = ", strata)]
+    summ <- summ[, .(strata_col, name, N, observed)]
+    setnames(summ, c("Strata", "Treatment", "N.total", "N.events"))
+  } else {
+    summ <- summ[, .(name, N, observed)]
+    setnames(summ, c("Treatment", "N.total", "N.events"))
   }
-  summ <- summ[, .(name, N, observed)]
-  setnames(summ, c(txtitle, "N", "observed"))
+
   print(summ)
+  cat("\nReference arm is ", x$data$treat_col, "=", x$settings$ref_arm, "\n")
   cat("\nScore function:", x$result$U,
       "\nStandard error:", x$result$se,
       "\nTest statistic:", x$result$statistic,

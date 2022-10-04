@@ -35,10 +35,10 @@ check.collinearity <- function(df, covnames, stratified){
       .lin.dep.error()
     }
   } else {
-    names <- colnames(df)
+    names <- unique(df$term)
     x_covnames <- names[grepl("^xmat_", names)]
     x_covnames <- x_covnames[!grepl("carcov_z", x_covnames)]
-    if(all(is.na(df %>% filter(grepl("xmat_robcarx_",term)) %>% .$estimate))){
+    if(all(is.na(df %>% filter(grepl("xmat_",term)) %>% .$estimate))){
       .lin.dep.strat.error()
     }
   }
