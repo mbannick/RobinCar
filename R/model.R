@@ -63,7 +63,8 @@
       adj_se_z=logic$adj_se_z,
       adj_vars=logic$adj_vars,
       pu_joint_z=logic$pu_joint_z,
-      pu_funcs=logic$pu_funcs
+      pu_funcs=logic$pu_funcs,
+      omegaz_func=logic$omegaz_func
     ),
     class=c(logic$method)
   )

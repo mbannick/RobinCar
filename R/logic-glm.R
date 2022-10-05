@@ -26,6 +26,8 @@ glmlogic <- function(adj_method, x_exists, z_exists, car_scheme, cov_strata,
   # Biased action will be one of "", "warning", "error"
   pu_funcs <- function(){}
 
+  omegaz_func <- NULL
+
   if(!is.null(formula)){
     method <- "CUSTOM"
     adj_vars <- "formula"
@@ -52,6 +54,7 @@ glmlogic <- function(adj_method, x_exists, z_exists, car_scheme, cov_strata,
     if(car_scheme == "pocock-simon"){
       if(adj_method == "heterogeneous"){
         if(z_exists){
+          omegaz_func <- omegaz.closure(car_scheme)
           if(!cov_strata){
             .z.include.warn()
           }
@@ -73,6 +76,8 @@ glmlogic <- function(adj_method, x_exists, z_exists, car_scheme, cov_strata,
     if(car_scheme %in% APPLICABLE.SCHEMES){
 
       if(z_exists){
+        omegaz_func <- omegaz.closure(car_scheme)
+
         adj_se_z <- TRUE
         if(x_exists){
           if(cov_strata){
@@ -105,6 +110,7 @@ glmlogic <- function(adj_method, x_exists, z_exists, car_scheme, cov_strata,
     adj_vars=adj_vars,
     adj_se_z=adj_se_z,
     pu_joint_z=pu_joint_z,
-    pu_funcs=pu_funcs
+    pu_funcs=pu_funcs,
+    omegaz_func=omegaz_func
   ))
 }

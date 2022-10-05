@@ -157,6 +157,3 @@ test_that("GLM -- no covariates except strata", {
   expect_equal(length(non$mod$coefficients), 4)
 })
 
-
-
-# CHECK DESIGN MATRIX
