@@ -136,8 +136,6 @@ test_that("GLM -- no covariates", {
     adj_method="homogeneous",
     vcovHC="HC0")
   expect_equal(class(non), "GLMModelResult")
-  expect_equal(non$varcov[1, 2], 0)
-  expect_equal(non$varcov[2, 1], 0)
   expect_equal(length(non$mod$coefficients), 2)
 })
 
