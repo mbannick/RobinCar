@@ -207,6 +207,7 @@ vcov_car.GLMModel <- function(model, data, mod, mutilde){
   v <- diagmat + cov_Ymu + t(cov_Ymu) - stats::var(mutilde)
 
   # Adjust for Z if necessary
+
   if(!is.null(model$omegaz_func)) v <- v - get.erb(model, data, mod, mu_hat=preds)
 
   return(v)
