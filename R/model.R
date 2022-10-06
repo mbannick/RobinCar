@@ -60,6 +60,7 @@
       vcovHC=vcovHC,
       g_family=g_family,
       g_accuracy=g_accuracy,
+      car_scheme=car_scheme,
       adj_se_z=logic$adj_se_z,
       adj_vars=logic$adj_vars,
       pu_joint_z=logic$pu_joint_z,
