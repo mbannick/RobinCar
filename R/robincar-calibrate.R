@@ -10,8 +10,8 @@
 #' @param vcovHC Which type of heteroskedasticity-consistent
 #'               standard error estimates to use.
 #' @export
-robincar_calibrate <- function(result, joint,
-                               add_x, vcovHC="HC0"){
+robincar_calibrate <- function(result, joint=FALSE,
+                               add_x=NULL, vcovHC="HC0"){
 
   # Get the g-computation predictions
   mu_names <- paste0("mu_", result$data$treat_levels)
@@ -34,6 +34,8 @@ robincar_calibrate <- function(result, joint,
     newdat <- cbind(newdat, result$data$strata)
   }
 
+  # Run robincar_glm using the heterogeneous
+  # working model and identity link
   cal_result <- robincar_glm(
     df=newdat,
     response_col="response",
@@ -47,6 +49,16 @@ robincar_calibrate <- function(result, joint,
     g_accuracy=result$settings$g_accuracy,
     vcovHC=vcovHC
   )
+  # Designate as calibration result
+  # for the print statement to work
+  class(cal_result) <- c(
+    "CalibrationResult",
+    class(cal_result)
+  )
+  # Save additional settings
+  cal_result[["original"]] <- result
+  cal_result[["joint"]] <- joint
+  cal_result[["add_x"]] <- add_x
 
   return(cal_result)
 }

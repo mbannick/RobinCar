@@ -12,7 +12,7 @@ test_that("test calibration", {
     response_col="y",
     treat_col="A",
     strata_cols=c("z1"),
-    covariate_cols=c("x1"),
+    covariate_cols=c("x3"),
     covariate_to_include_strata=FALSE,
     car_scheme="biased-coin",
     g_family=binomial(link="logit"),
@@ -24,7 +24,7 @@ test_that("test calibration", {
     robin.data=DATA,
     car.scheme="stratified_biased_coin",
     car.z=c("z1"),
-    robin.x=c("x1"),
+    robin.x=c("x3"),
     robin.x_to_include_z=FALSE,
     robin.g_family=binomial(link="logit"),
     robin.g_accuracy=7,
@@ -34,7 +34,7 @@ test_that("test calibration", {
   )
 
   for(joint in c(FALSE, TRUE)){
-    for(add_x in c("x1", NULL)){
+    for(add_x in c("x3", NULL)){
 
       calib_this <- robincar_calibrate(
         result=this,
