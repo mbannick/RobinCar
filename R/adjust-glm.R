@@ -134,7 +134,7 @@ adjust.GLMModel <- function(model, data){
     structure(
       class="GLMModelResult",
       list(result=result, varcov=variance, settings=model,
-           data=data, mod=glmod)
+           data=data, mod=glmod, mu_a=mutilde)
     )
   )
 }

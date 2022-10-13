@@ -136,8 +136,6 @@ test_that("GLM -- no covariates", {
     adj_method="homogeneous",
     vcovHC="HC0")
   expect_equal(class(non), "GLMModelResult")
-  expect_equal(non$varcov[1, 2][1], c("0"=0))
-  expect_equal(non$varcov[2, 1], c("1"=0))
   expect_equal(length(non$mod$coefficients), 2)
 })
 
@@ -233,5 +231,3 @@ test_that("GLM -- test that it does not matter if treatment levels
   expect_equal(res1$result$estimate, res2$result$estimate)
   expect_equal(res1$result$se, res2$result$se)
 })
-
-# CHECK DESIGN MATRIX

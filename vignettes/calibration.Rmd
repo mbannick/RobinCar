@@ -1,0 +1,75 @@
+---
+title: "Continuous and GLM-Type Outcomes"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Continuous and GLM-Type Outcomes}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+rm(list=ls())
+library(RobinCar)
+```
+
+## Linear and Joint Calibration for Guaranteed Efficiency Gain and Universality
+
+The dataset that we will use for this is included in the package.
+
+```{r}
+data <- RobinCar:::data_sim
+data$A <- as.factor(data$A)
+```
+
+## Adjustment with Binary Outcomes
+
+Dichotomize the continuous outcome.
+```{r}
+data$y_bin <- ifelse(data$y > 2, 1, 0)
+```
+
+Fit a heterogeneous working model with biased coin randomization,
+then perform linear and joint calibration.
+
+```{r}
+result <- robincar_glm(
+  df=data,
+  response_col="y_bin",
+  treat_col="A",
+  strata_cols=c("z1"),
+  covariate_cols=c("x3"),
+  car_scheme="biased-coin",
+  g_family=binomial(link="logit"),
+  covariate_to_include_strata=TRUE,
+  g_accuracy=7,
+  adj_method="homogeneous"
+)
+print(result)
+```
+
+### Calibration
+
+Use `joint = FALSE` to indicate linear calibration. This fits a model with the predicted potential outcomes as covariates.
+
+```{r}
+robincar_calibrate(
+  result=result,
+  joint=FALSE
+)
+```
+
+Use `joint = TRUE` to indicate joint calibration. This fits a model with the predicted potential outcomes *and* the joint strata variables.
+
+```{r}
+robincar_calibrate(
+  result=result,
+  joint=TRUE
+)
+```
