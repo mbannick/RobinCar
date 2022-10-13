@@ -1,6 +1,8 @@
 # Compare to legacy code from Yanyao Yi
 
 test_that("GLM -- no covariates", {
+  source("../../legacy/robin-g.R")
+
   n <- 10000
   set.seed(10)
   DATA2 <- data.frame(A=rbinom(n, size=1, prob=0.5),
@@ -48,7 +50,6 @@ test_that("GLM -- no covariates", {
               adj_method=meth,
               vcovHC="HC0")
 
-            source("../../legacy/robin-g.R")
             that <- Robin_g(
               robin.data=DATA2,
               car.scheme=scheme,

@@ -4,58 +4,7 @@
 #' @param ... Additional arguments
 #' @export
 print.LinModelResult <- function(x, ...){
-  output <- c()
-  output <- c(
-    output,
-    sprintf("Treatment group mean estimates using fit from an %s model",
-            class(x$settings)[2])
-  )
-  if(class(x$settings)[2] != "ANOVA"){
-    k <- length(x$data$treat_levels)
-    mat <- get.dmat(x$data, x$settings$adj_vars)
-    name <- colnames(mat)
-    cov_name <- name[name != "joint_strata"]
-    if("joint_strata" %in% name){
-      cov_name <- c(
-        cov_name,
-        sprintf("joint levels of %s",
-                paste0(names(x$data$strata), collapse=", "))
-      )
-    }
-    output <- c(
-      output,
-      sprintf("\n  using adjustment variables: %s",
-              paste0(cov_name, collapse=", "))
-    )
-    if(class(x$settings)[2] == "ANHECOVA"){
-      output <- c(
-        output,
-        "\n  and their interactions with treatment."
-      )
-    } else {
-      output <- c(output, ".")
-    }
-  }
-  output <- c(
-    output,
-    sprintf("\n\nUsed %s-type of heteroskedasticity-consistent variance estimates ",
-            x$settings$vcovHC)
-  )
-  if(!is.null(x$settings$omegaz_func)){
-    if(all(x$settings$omegaz_func(x$data$pie) == 0)){
-      strata <- colnames(x$data$strata)
-      output <- c(
-        output,
-        sprintf("\n  and adjusted variance-covariance matrix for randomization strata consistent with the
-              %s design: %s.",
-              x$settings$car_scheme,
-              paste0(strata, collapse=", "))
-      )
-    }
-  }
-  for(o in output){
-    cat(o)
-  }
+  descript(x)
   cat("\n\n")
   cat("Estimates:\n")
   print(x$result)
@@ -69,70 +18,7 @@ print.LinModelResult <- function(x, ...){
 #' @param ... Additional arguments
 #' @export
 print.GLMModelResult <- function(x, ...){
-  output <- c()
-  if("AIPW" %in% class(x$settings)){
-    etype <- "aipw-type"
-  } else {
-    etype <- "g-computation-type"
-  }
-  if(is.character(x$settings$g_family)){
-    family <- get(x$settings$g_family)()
-  } else if(is.function(x$settings$g_family)){
-    family <- (x$settings$g_family)()
-  } else {
-    family <- x$settings$g_family
-  }
-  output <- c(
-    output,
-    sprintf("Treatment group mean estimates using a %s estimator",
-            etype),
-    sprintf("\n  from a GLM working model of family %s and link %s",
-            family$family, family$link)
-  )
-  k <- length(x$data$treat_levels)
-  mat <- get.dmat(x$data, x$settings$adj_vars)
-  name <- colnames(mat)
-  cov_name <- name[name != "joint_strata"]
-  if("joint_strata" %in% name){
-    cov_name <- c(
-      cov_name,
-      sprintf("joint levels of %s",
-              paste0(names(x$data$strata), collapse=", "))
-    )
-  }
-  output <- c(
-    output,
-    sprintf("\n  using adjustment variables: %s",
-            paste0(cov_name, collapse=", "))
-  )
-  if(class(x$settings)[2] == "heterogeneous"){
-    output <- c(
-      output,
-      "\n  and their interactions with treatment."
-    )
-  } else {
-    output <- c(output, ".")
-  }
-  output <- c(
-    output,
-    sprintf("\n\nUsed %s-type of heteroskedasticity-consistent variance estimates ",
-            x$settings$vcovHC)
-  )
-  if(!is.null(x$settings$omegaz_func)){
-    if(all(x$settings$omegaz_func(x$data$pie) == 0)){
-      strata <- colnames(x$data$strata)
-      output <- c(
-        output,
-        sprintf("\n  and adjusted variance-covariance matrix for randomization strata consistent with the
-              %s design: %s.",
-              x$settings$car_scheme,
-              paste0(strata, collapse=", "))
-      )
-    }
-  }
-  for(o in output){
-    cat(o)
-  }
+  descript(x)
   cat("\n\n")
   cat("Estimates:\n")
   print(x$result)
@@ -162,3 +48,34 @@ print.ContrastResult <- function(x, ...){
   print(x$varcov)
 }
 
+#' Print calibration result
+#'
+#' @param x A GLMModel result. If you'd like to calibrate a linear
+#'          adjustment, use `robincar_glm` instead of `robincar_linear`.
+#' @param ... Additional arguments
+#' @export
+print.CalibrationResult <- function(x, ...){
+  if(x$joint){
+    type <- "Joint calibration"
+  } else {
+    type <- "Linear calibration"
+  }
+
+  if(!is.null(x$add_x)){
+    add_x_text <- paste0(", additionally adjusting for covariates",
+                  paste0(add_x, sep=", "), ",")
+  } else {
+    add_x_text <- ""
+  }
+  output <- sprintf("%s%s on the following model result:",
+                    type, add_x_text)
+
+  cat(output)
+  cat("\n")
+  cat("--------------------------------------------\n")
+  descript(x$original)
+  cat("\n\nEstimates:\n")
+  print(x$result)
+  cat("\nVariance-Covariance Matrix:\n")
+  print(x$varcov)
+}
