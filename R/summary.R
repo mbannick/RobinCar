@@ -52,6 +52,9 @@ print.ContrastResult <- function(x, ...){
 #'
 #' @param x A TTEResult object
 #' @param ... Additional arguments
+#'
+#' @import data.table
+#' @export
 print.TTEResult <- function(x, ...){
 
   if(!is.null(x$data$covariate)){
@@ -86,28 +89,28 @@ print.TTEResult <- function(x, ...){
           paste0(c(strata), sep=", "))
     }
   } else if(x$settings$method == "coxscore"){
-    cat("Performed coxscore test ")
+    cat("Performed coxscore test")
     if(x$settings$adj_cov){
-      cat("adjusting for covariates ", paste0(covariates, sep=", "))
+      cat(", \n  adjusting for covariates", paste0(covariates, collapse=", "))
     }
     if(x$settings$adj_strata){
-      cat("adjusting SE for strata ", paste0(strata, sep=", "))
+      cat(", \n  adjusting SE for strata", paste0(strata, collapse=", "))
     }
   }
-  cat("\n----------------------------\n\n")
+  cat("\n------------------------------------\n")
 
-  df <- data.table(observed=x$data$event, treat=x$data$treat)
+  df <- data.table::data.table(observed=x$data$event, treat=x$data$treat)
   df[, treat := as.character(treat)]
 
   df[, N := 1]
   id.cols <- c("treat")
-  setorder(df, treat)
+  data.table::setorder(df, treat)
   txtitle <- "Treatment Group"
 
   if(x$settings$car_strata){
     df$strata <- x$data$joint_strata
     id.cols <- c(id.cols, "strata")
-    setorder(df, strata, treat)
+    data.table::setorder(df, strata, treat)
   }
   summ <- df[, lapply(.SD, sum), by=id.cols, .SDcols=c("N", "observed")]
   summ[, name := paste0(x$data$treat_col, " = ", treat)]
@@ -115,10 +118,10 @@ print.TTEResult <- function(x, ...){
   if(x$settings$car_strata){
     summ[, strata_col := paste0("strata = ", strata)]
     summ <- summ[, .(strata_col, name, N, observed)]
-    setnames(summ, c("Strata", "Treatment", "N.total", "N.events"))
+    data.table::setnames(summ, c("Strata", "Treatment", "N.total", "N.events"))
   } else {
     summ <- summ[, .(name, N, observed)]
-    setnames(summ, c("Treatment", "N.total", "N.events"))
+    data.table::setnames(summ, c("Treatment", "N.total", "N.events"))
   }
 
   print(summ)

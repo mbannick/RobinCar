@@ -1,5 +1,5 @@
 library(survival)
-library(dplyr)
+# library(dplyr)
 
 test_that("No X no Z case under SR, CL = logrank test", {
   set.seed(0)
@@ -53,11 +53,11 @@ test_that("No X yes Z case under CAR, CSL = stratified logrank test",{
       names_prefix="strata",
       names_to="strt"
     ) %>%
-    filter(value == 1) %>%
-    select(-value) %>%
-    mutate(strt = forcats::as_factor(strt)) %>%
-    select(t, strt) %>%
-    left_join(data.simu0, .)
+    dplyr::filter(value == 1) %>%
+    dplyr::select(-value) %>%
+    dplyr::mutate(strt = forcats::as_factor(strt)) %>%
+    dplyr::select(t, strt) %>%
+    dplyr::left_join(data.simu0, .)
 
   out1 <- robincar_logrank(
     df=data.simu,
@@ -98,11 +98,11 @@ test_that("X yes Z yes, case1, CL",{
       names_prefix="strata",
       names_to="strt"
     ) %>%
-    filter(value == 1) %>%
-    select(-value) %>%
-    mutate(strt = forcats::as_factor(strt)) %>%
-    select(t, strt) %>%
-    left_join(data.simu0, .)
+    dplyr::filter(value == 1) %>%
+    dplyr::select(-value) %>%
+    dplyr::mutate(strt = forcats::as_factor(strt)) %>%
+    dplyr::select(t, strt) %>%
+    dplyr::left_join(data.simu0, .)
 
   test1 <- robincar_logrank(
     df=data.simu,
@@ -133,11 +133,11 @@ test_that("X yes Z yes, case1, CL",{
       names_prefix="strata",
       names_to="strt"
     ) %>%
-    filter(value == 1) %>%
-    select(-value) %>%
-    mutate(strt=forcats::as_factor(strt)) %>%
-    select(t, strt) %>%
-    left_join(data.simu01, .)
+    dplyr::filter(value == 1) %>%
+    dplyr::select(-value) %>%
+    dplyr::mutate(strt=forcats::as_factor(strt)) %>%
+    dplyr::select(t, strt) %>%
+    dplyr::left_join(data.simu01, .)
 
   test12 <- robincar_logrank(
     df=data.simu1,
@@ -175,9 +175,9 @@ test_that("X yes Z yes, case1, CSL",{
       names_prefix="strata",
       names_to="strt"
     ) %>%
-    filter(value == 1) %>% select(-value) %>%
-    mutate(strt=forcats::as_factor(strt)) %>% select(t, strt) %>%
-    left_join(data.simu01, .)
+    dplyr::filter(value == 1) %>% select(-value) %>%
+    dplyr::mutate(strt=forcats::as_factor(strt)) %>% select(t, strt) %>%
+    dplyr::left_join(data.simu01, .)
 
   test12 <- robincar_logrank(
     df=data.simu1,

@@ -1,0 +1,100 @@
+---
+title: "Robust Testing for Time-to-Event Data"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Robust Testing for Time-to-Event Data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+rm(list=ls())
+library(RobinCar)
+```
+
+## Robust Cox Score
+
+### Simulate data
+
+Simulate data with permuted block randomization scheme using helper functions.
+```{r}
+set.seed(10)
+n <- 100
+
+# Simulate data
+data.simu0 <- data_gen2(
+  n=n,
+  theta=0,
+  randomization="permuted_block",
+  p_trt=0.5,
+  case="case1"
+)
+
+# Restructure data
+data.simu <- data.simu0 %>%
+  tidyr::pivot_longer(
+    cols=starts_with("strata"),
+    names_prefix="strata",
+    names_to="strt"
+  ) %>%
+  dplyr::filter(value == 1) %>%
+  dplyr::select(-value) %>%
+  dplyr::mutate(strt=forcats::as_factor(strt)) %>%
+  dplyr::select(t, strt) %>%
+  dplyr::left_join(data.simu0, .)
+```
+
+### Fit a Cox score model
+```{r}
+cox <- robincar_coxscore(
+  df=data.simu,
+  treat_col="I1",
+  response_col="t",
+  event_col="delta",
+  strata_cols="strt",
+  covariate_cols=c("model_w3"),
+  car_scheme="permuted-block",
+  ref_arm=0
+)
+print(cox)
+```
+### Fit a covariate-adjusted (stratified) logrank test
+
+Use `adj_method = "CL"` for covariate-adjusted logrank test.
+```{r}
+cl <- robincar_logrank(
+  df=data.simu,
+  treat_col="I1",
+  response_col="t",
+  event_col="delta",
+  strata_cols="strt",
+  covariate_cols=c("model_w3"),
+  car_scheme="permuted-block",
+  adj_method="CL",
+  ref_arm=0
+)
+print(cl)
+```
+
+Use `adj_method = "CL"` for covariate-adjusted logrank test.
+```{r}
+csl <- robincar_logrank(
+  df=data.simu,
+  treat_col="I1",
+  response_col="t",
+  event_col="delta",
+  strata_cols="strt",
+  covariate_cols=c("model_w3"),
+  car_scheme="permuted-block",
+  adj_method="CSL",
+  ref_arm=0
+)
+print(csl)
+```

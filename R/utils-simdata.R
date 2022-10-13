@@ -5,9 +5,6 @@
 #' @param p_trt proportion of treatment arm
 #' @param case simulation case in the paper
 #' @export
-#'
-#' @example
-#' data_gen(100, 0, "permuted_block", 0.5, case="case3")
 data_gen <- function(n, theta, randomization, p_trt,
                      case=c("case1", "case2", "case3", "case4", "case5")){
   if(case=="case1") {

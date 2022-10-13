@@ -49,6 +49,15 @@ robincar_glm(
 \item{contrast_h}{An optional function to specify a desired contrast}
 
 \item{contrast_dh}{An optional jacobian function for the contrast (otherwise use numerical derivative)}
+
+\item{centering}{WARNING: Advanced use only. By default is NULL, so will perform expected behavior
+         in documentation.
+If centering = 'none', then this will force it to be a g-computation estimator,
+   even if prediction unbiasedness does not hold.
+If centering = 'tx', then this will center within treatment groups, which is the
+   AIPW estimator (equivalent to g-computation if prediction unbiasedness holds).
+TODO: If centering = 'tx-strata', then this will center within treatment group and
+   within joint strata, which allows for the AIPW estimator to be used with Pocock-Simon.}
 }
 \description{
 WARNING: this function is still under development.

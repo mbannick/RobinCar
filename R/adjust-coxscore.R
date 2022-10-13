@@ -17,12 +17,11 @@ get.linear.predictor <- function(df, covnames){
 }
 
 #' @import stats
-#' @import dplyr
 get.strata.sum <- function(df, n, p_trt, sparse_remove=FALSE){
 
   ss <- df %>%
-    group_by(.data$carcov_z, .drop=TRUE) %>%
-    summarise(
+    dplyr::group_by(.data$carcov_z, .drop=TRUE) %>%
+    dplyr::summarise(
       cond_var0       = stats::var(.data$O_i[.data$trt0 == 1]),
       cond_var1       = stats::var(.data$O_i[.data$trt1 == 1]),
       cond_mean0      = mean(-.data$O_i[.data$trt0 == 1]),
@@ -31,12 +30,12 @@ get.strata.sum <- function(df, n, p_trt, sparse_remove=FALSE){
       nu_d            = unique(.data$nu_d),
       .groups = "drop"
     ) %>%
-    mutate(na_ind=is.na(.data$cond_var0 + .data$cond_var1))
+    dplyr::mutate(na_ind=is.na(.data$cond_var0 + .data$cond_var1))
 
   if(sparse_remove){
     if(any(ss$na_ind)){
       .sparse.strata.warn()
-      ss <- ss %>% filter(!.data$na_ind)
+      ss <- ss %>% dplyr::filter(!.data$na_ind)
     } else {
       ss <- ss %>% tidyr::replace_na(
         list(cond_var0 = 0, cond_var1 = 0)
@@ -45,7 +44,7 @@ get.strata.sum <- function(df, n, p_trt, sparse_remove=FALSE){
   }
 
   ss <- ss %>%
-    mutate(
+    dplyr::mutate(
       z_var = .data$prob_z * (p_trt * .data$cond_var0 +
                         (1 - p_trt) * .data$cond_var1 +
                         .data$nu_d * (.data$cond_mean0 + .data$cond_mean1)^2)
@@ -66,9 +65,9 @@ adjust.CoxScore <- function(model, data){
   if(model$adj_cov){
     lin_preds <- get.linear.predictor(df,
                                       covnames=colnames(data$covariate))
-    df <- df %>% mutate(lin_pred=lin_preds)
+    df <- df %>% dplyr::mutate(lin_pred=lin_preds)
   } else {
-    df <- df %>% mutate(lin_pred=0)
+    df <- df %>% dplyr::mutate(lin_pred=0)
   }
 
   df <- get.ordered.data(df, ref_arm=model$ref_arm)

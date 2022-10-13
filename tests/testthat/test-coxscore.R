@@ -19,11 +19,11 @@ test_that("X yes Z yes, permuted-block, coxscore",{
       names_prefix="strata",
       names_to="strt"
     ) %>%
-    filter(value == 1) %>%
-    select(-value) %>%
-    mutate(strt=forcats::as_factor(strt)) %>%
-    select(t, strt) %>%
-    left_join(data.simu0, .)
+    dplyr::filter(value == 1) %>%
+    dplyr::select(-value) %>%
+    dplyr::mutate(strt=forcats::as_factor(strt)) %>%
+    dplyr::select(t, strt) %>%
+    dplyr::left_join(data.simu0, .)
 
   test1 <- robincar_coxscore(
     df=data.simu,
@@ -56,11 +56,11 @@ test_that("X yes Z yes, permuted-block, coxscore",{
       names_prefix="strata",
       names_to="strt"
     ) %>%
-    filter(value == 1) %>%
-    select(-value) %>%
-    mutate(strt=forcats::as_factor(strt)) %>%
-    select(t, strt) %>%
-    left_join(data.simu01, .)
+    dplyr::filter(value == 1) %>%
+    dplyr::select(-value) %>%
+    dplyr::mutate(strt=forcats::as_factor(strt)) %>%
+    dplyr::select(t, strt) %>%
+    dplyr::left_join(data.simu01, .)
 
   test2 <- robincar_coxscore(
     df=data.simu1,
@@ -101,11 +101,11 @@ test_that("No X no Z case under SR, coxscore",{
       names_prefix="strata",
       names_to="strt"
     ) %>%
-    filter(value == 1) %>%
-    select(-value) %>%
-    mutate(strt=forcats::as_factor(strt)) %>%
-    select(t, strt) %>%
-    left_join(data.simu0, .)
+    dplyr::filter(value == 1) %>%
+    dplyr::select(-value) %>%
+    dplyr::mutate(strt=forcats::as_factor(strt)) %>%
+    dplyr::select(t, strt) %>%
+    dplyr::left_join(data.simu0, .)
 
   test1 <- robincar_coxscore(
     df=data.simu,

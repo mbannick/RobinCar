@@ -16,14 +16,14 @@ get.design.matrix <- function(df, covnames){
   # they should already be centered in the .make.data function,
   # but this will center the strata variables also, if they are included.
   mat <- data.frame(mat) %>%
-    mutate(strata=df$strata) %>%
-    group_by(strata, ) %>%
-    mutate(across(
+    dplyr::mutate(strata=df$strata) %>%
+    dplyr::group_by(strata, ) %>%
+    dplyr::mutate(across(
       .cols=everything(),
       .fns=list(center=~scale(., center=TRUE, scale=FALSE)),
       .names="{col}_{fn}"
     )) %>%
-    ungroup() %>%
+    dplyr::ungroup() %>%
     subset(select=-strata)
   return(mat)
 }
@@ -38,12 +38,12 @@ check.collinearity <- function(df, covnames, stratified){
     names <- unique(df$term)
     x_covnames <- names[grepl("^xmat_", names)]
     x_covnames <- x_covnames[!grepl("carcov_z", x_covnames)]
-    if(all(is.na(df %>% filter(grepl("xmat_",term)) %>% .$estimate))){
+    if(all(is.na(df %>% dplyr::filter(grepl("xmat_",term)) %>% .$estimate))){
       .lin.dep.strat.error()
     }
   }
 
-  df <- df %>% mutate(
+  df <- df %>% dplyr::mutate(
     estimate=tidyr::replace_na(estimate, 0)
   )
 
@@ -60,8 +60,8 @@ regress.to.Ohat <- function(df, stratified){
 
   # Perform a linear regression by treatment group
   res <- df %>%
-    group_by(.data$trt1) %>%
-    group_modify(~broom::tidy(
+    dplyr::group_by(.data$trt1) %>%
+    dplyr::group_modify(~broom::tidy(
       lm(O.hat ~ 0 + ., data=.x %>%
            select("O.hat", covnames))
     ))
@@ -69,11 +69,11 @@ regress.to.Ohat <- function(df, stratified){
 
   # Extract the coefficients
   betas <- res %>%
-    ungroup() %>%
+    dplyr::ungroup() %>%
     tidyr::expand_grid(
       # strata-specific betas (same)
       strata=unique(df$strata), .) %>%
-    select(strata,
+    dplyr::select(strata,
            .data$trt1,
            .data$term,
            .data$estimate) %>%
@@ -105,12 +105,13 @@ calculate.adjustment <- function(df, betas, covnames, stratified){
     beta1_names <- paste0("trt1_1_xmat_", covnames_use)
     beta0_names <- paste0("trt1_0_xmat_", covnames_use)
 
-    dat <- dat %>% group_by(.data$strata) %>%
-      group_modify(~ {
-        matcx   <- select(.x, all_of(covnames_xc)) %>% as.matrix(ncol=p)
-        matx    <- select(.x, all_of(covnames_x)) %>% as.matrix(ncol=p)
-        b1      <- select(.x, all_of(beta1_names)) %>% head(n=1) %>% as.matrix(ncol=p)
-        b0      <- select(.x, all_of(beta0_names)) %>% head(n=1) %>% as.matrix(ncol=p)
+    dat <- dat %>%
+      dplyr::group_by(.data$strata) %>%
+      dplyr::group_modify(~ {
+        matcx   <- dplyr::select(.x, all_of(covnames_xc)) %>% as.matrix(ncol=p)
+        matx    <- dplyr::select(.x, all_of(covnames_x)) %>% as.matrix(ncol=p)
+        b1      <- dplyr::select(.x, all_of(beta1_names)) %>% head(n=1) %>% as.matrix(ncol=p)
+        b0      <- dplyr::select(.x, all_of(beta0_names)) %>% head(n=1) %>% as.matrix(ncol=p)
         adjust1 <- matcx %*% t(b1)
         adjust0 <- matcx %*% t(b0)
         bsigb   <- as.numeric((b1+b0) %*% var(matx) %*% t(b1 + b0))
@@ -171,7 +172,7 @@ adjust.LogRank <- function(model, data){
                                stratified=(model$method == "CSL"))
   } else {
     df <- df %>%
-      mutate(
+      dplyr::mutate(
         adjust1 = 0,
         adjust0 = 0,
         bsigb   = 0
@@ -179,7 +180,7 @@ adjust.LogRank <- function(model, data){
   }
 
   df <- df %>%
-    mutate(
+    dplyr::mutate(
       uu_cl  = .data$trt1 * (.data$O.hat - .data$adjust1) -
                .data$trt0 * (.data$O.hat - .data$adjust0),
       ssig_l = .data$event * .data$Y0 * .data$Y1 / .data$Y^2
@@ -187,14 +188,14 @@ adjust.LogRank <- function(model, data){
 
   # Summarize by strata (if CL, then single strata)
   ss <- df %>%
-    filter(!is.na(.data$uu_cl)) %>%
-    group_by(strata) %>%
-    summarise(
+    dplyr::filter(!is.na(.data$uu_cl)) %>%
+    dplyr::group_by(strata) %>%
+    dplyr::summarise(
       U_SL_z  = sum(.data$uu_cl),
       var_adj = model$p_trt * (1 - model$p_trt) * unique(.data$bsigb) * n(),
       .groups = "drop"
     ) %>%
-    arrange(strata)
+    dplyr::arrange(strata)
 
   # Final quantities for the C(S)L statistic
   U_CSL = mean(df$uu_cl)
