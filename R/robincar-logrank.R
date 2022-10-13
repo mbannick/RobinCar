@@ -1,0 +1,65 @@
+#' Robust (potentially stratified) logrank adjustment
+#'
+#' @param inheritParams robincar_coxscore
+#' @param adj_method Adjustment method, one of "CL", "CSL"
+#'
+#' @import dplyr
+#' @import magrittr
+#' @export
+#'
+#' @examples
+#' set.seed(0)
+#' n=100
+#' data.simu0=data_gen(n=n,
+#'                     theta=0,
+#'                     randomization="permuted_block",
+#'                     p_trt=0.5,
+#'                     case="case2") %>% mutate(strata1=sample(letters[1:3],n,replace=TRUE),
+#'                                              strata2=sample(LETTERS[4:5],n,replace=TRUE))
+#'
+#' out <- robincar_logrank(df=data.simu0,
+#'                         treat_col="I1",
+#'                         p_trt=0.5,
+#'                         ref_arm=0,
+#'                         response_col="t",
+#'                         event_col="delta",
+#'                         covariate_cols=c("model_z1", "model_z2"),
+#'                         car_scheme="simple",
+#'                         adj_method=c("CL"))
+#'
+#' set.seed(0)
+#' n=100
+#' data.simu0=data_gen(n=n,
+#'                     theta=0,
+#'                     randomization="permuted_block",
+#'                     p_trt=0.5,
+#'                     case="case1")
+#'
+#' data.simu <- data.simu0 %>%
+#'   tidyr::pivot_longer(cols=starts_with("strata"),
+#'                       names_prefix="strata",
+#'                       names_to="strt") %>%
+#'   filter(value==1) %>% select(-value) %>%
+#'   mutate(strt=forcats::as_factor(strt)) %>%
+#'   select(t,strt) %>%
+#'   left_join(data.simu0, .)
+#'
+#' out1 <- robincar_logrank(df=data.simu,
+#'                          treat_col="I1",
+#'                          p_trt=0.5,
+#'                          ref_arm=0,
+#'                          response_col="t",
+#'                          event_col="delta",
+#'                          strata_cols="strt",
+#'                          covariate_cols=NULL,
+#'                          car_scheme=c("permuted-block"),
+#'                          adj_method=c("CSL")
+#' )
+robincar_logrank <- function(adj_method, ...){
+
+  .check.adj_method.logrank(adj_method)
+  result <- robincar_tte(adj_method, ...)
+
+  return(result)
+
+}

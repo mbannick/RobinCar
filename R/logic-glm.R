@@ -41,7 +41,7 @@ glmlogic <- function(adj_method, x_exists, z_exists, car_scheme, cov_strata,
     }
   } else {
     if(car_scheme == "simple"){
-      if(z_exists) .z.exist.warn()
+      if(z_exists) .z.exist.warn.simple()
       if(x_exists){
         adj_vars <- "x"
         pu_funcs <- .pu.warn
