@@ -3,9 +3,9 @@
 #'
 #' @param result A GLMModelResult
 #' @param joint If true, then performs joint calibration
-#'              with the \mu and Z
+#'              with the mu and Z
 #'              to achieve universality and efficiency gain
-#'              rather than just linear calibration that uses \mu.
+#'              rather than just linear calibration that uses mu.
 #' @param add_x Additional x to use in the calibration
 #' @param vcovHC Which type of heteroskedasticity-consistent
 #'               standard error estimates to use.

@@ -1,8 +1,8 @@
 ---
-title: "Continuous and GLM-Type Outcomes"
+title: "Calibration for GLM Models"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Continuous and GLM-Type Outcomes}
+  %\VignetteIndexEntry{Calibration for GLM Models}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

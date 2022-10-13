@@ -1,7 +1,7 @@
 # Defines allowable arguments to the functions available to users
 
 .check.options <- function(name, var, options){
-  if(!var %in% options) stop(paste0(name, " must be one of: ", 
+  if(!var %in% options) stop(paste0(name, " must be one of: ",
                                     paste0(options, collapse = ", ")))
 }
 
@@ -12,6 +12,12 @@
                "biased-coin",
                "urn")
   .check.options("car_scheme", car_scheme, OPTIONS)
+}
+
+.check.adj_method.logrank <- function(adj_method){
+  OPTIONS <- c("CL",
+               "CSL")
+  .check.options("adj_method", adj_method, OPTIONS)
 }
 
 .check.adj_method.glm <- function(adj_method){
@@ -28,7 +34,7 @@
 }
 
 .check.vcovHC <- function(vcovHC){
-  OPTIONS <- c("HC0", 
+  OPTIONS <- c("HC0",
                "HC1",
                "HC3")
   .check.options("vcovHC", vcovHC, OPTIONS)

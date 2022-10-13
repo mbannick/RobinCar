@@ -72,3 +72,41 @@
 
   return(model)
 }
+
+# Makes a model class for the specified TTE adjustment method
+# with settings for covariate randomization
+# scheme and vcovHC type.
+.make.model.RoboDataTTE <- function(data, adj_method, car_scheme,
+                                    p_trt, ref_arm, sparse_remove) {
+
+  x_exists <- !is.null(data$covariate)
+  z_exists <- !is.null(data$strata)
+
+  # Get logic for adjustment methods
+  logic <- ttelogic(adj_method=adj_method, car_scheme=car_scheme,
+                    x_exists=x_exists, z_exists=z_exists)
+
+  if(adj_method %in% c("CL", "CSL")){
+    classtype <- "LogRank"
+  } else if(adj_method %in% c("coxscore")) {
+    classtype <- "CoxScore"
+  } else {
+    stop("Unrecognized adjustment method.")
+  }
+
+  model <- structure(
+    list(
+      method=logic$method,
+      adj_cov=logic$adj_cov,
+      adj_strata=logic$adj_strata,
+      car_strata=logic$car_strata,
+      car_scheme=car_scheme,
+      p_trt=p_trt,
+      ref_arm=ref_arm,
+      sparse_remove=sparse_remove
+    ),
+    class=c(classtype, logic$method)
+  )
+
+  return(model)
+}

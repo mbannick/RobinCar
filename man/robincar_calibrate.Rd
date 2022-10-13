@@ -11,9 +11,9 @@ robincar_calibrate(result, joint = FALSE, add_x = NULL, vcovHC = "HC0")
 \item{result}{A GLMModelResult}
 
 \item{joint}{If true, then performs joint calibration
-with the \mu and Z
+with the mu and Z
 to achieve universality and efficiency gain
-rather than just linear calibration that uses \mu.}
+rather than just linear calibration that uses mu.}
 
 \item{add_x}{Additional x to use in the calibration}
 
