@@ -2,6 +2,8 @@
 
 Ting Ye, Yanyao Yi, Marlena Bannick, and Faith Bian
 
+Documentation: https://marlenabannick.com/RobinCar/.
+
 ## Installation
 
 You can install the package with `devtools`:
