@@ -71,7 +71,7 @@ contrast.settings <- function(k, contrast_h, contrast_dh=NULL){
   return(obj)
 }
 
-# Run a contrast using settings specified and estimates from a model
+#' @importFrom emulator quad.tform
 contrast <- function(settings, treat, est, varcov){
 
   # Get labels
@@ -97,10 +97,6 @@ contrast <- function(settings, treat, est, varcov){
 #' @param result A LinModelResult or GLMModelResult
 #' @param contrast_h An optional function to specify a desired contrast
 #' @param contrast_dh An optional jacobian function for the contrast
-#' @import dplyr
-#' @import numDeriv
-#' @import emulator
-#' @import tidyverse
 #' @importFrom rlang .data
 #' @export
 robincar_contrast <- function(result, contrast_h, contrast_dh=NULL){

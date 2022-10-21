@@ -1,14 +1,25 @@
-#' Covariate adjustment using generalized linear working model
+#' Covariate adjustment for time to event data
 #'
-#' WARNING: this function is still under development.
-#' Estimate treatment-group-specific response means and (optionally)
-#' treatment group contrasts using a generalized linear working model.
+#' Perform a covariate-adjusted logrank test (`adj_method="CL"`),
+#' covariate-adjusted stratified logrank test (`adj_method="CSL"`),
+#' or a covariate-adjusted robust Cox score test (`adj_method="coxscore"`).
 #'
-#' @param inheritParams robincar_coxscore
+#' `robincar_coxscore` and `robincar_logrank` are wrapper functions around
+#' `robincar_tte`.
+#'
+#' @param df A data.frame with the required columns
+#' @param treat_col Name of column in df with treatment variable
+#' @param response_col Name of the column in df with response variable
+#' @param event_col Name of column in df with event indicator
+#'                  (0/FALSE=no event, 1/TRUE=event)
+#' @param strata_cols Names of columns in df with strata variables
+#' @param covariate_cols Names of columns in df with covariate variables
+#' @param car_scheme Name of the type of covariate-adaptive randomization scheme. One of: "simple", "pocock-simon", "biased-coin", "permuted-block".
+#' @param ref_arm Reference arm of the treatment group, defaults to NULL,
+#'                which results in using the first element of `unique(data[, treat_col])`.
+#' @param p_trt Treatment allocation ratio for the reference arm.
 #' @param adj_method Adjustment method (one of "CL", "CSL", or "coxscore")
 #'
-#' @import dplyr
-#' @import magrittr
 #' @export
 robincar_tte <- function(df,
                          treat_col, response_col, event_col,

@@ -34,7 +34,13 @@ treatment group contrasts using a generalized linear working model."><!-- mathja
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/calibration.html">Calibration for GLM Models</a>
+    </li>
+    <li>
       <a href="../articles/use-linear-glm.html">Continuous and GLM-Type Outcomes</a>
+    </li>
+    <li>
+      <a href="../articles/use-survival.html">Robust Testing for Time-to-Event Data</a>
     </li>
   </ul></li>
       </ul><ul class="nav navbar-nav navbar-right"></ul></div><!--/.nav-collapse -->
@@ -68,10 +74,9 @@ treatment group contrasts using a generalized linear working model.</p>
   adj_method <span class="op">=</span> <span class="st">"heterogeneous"</span>,
   vcovHC <span class="op">=</span> <span class="st">"HC0"</span>,
   covariate_to_include_strata <span class="op">=</span> <span class="cn">NULL</span>,
-  g_family <span class="op">=</span> <span class="va">gaussian</span>,
+  g_family <span class="op">=</span> <span class="fu">stats</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/stats/family.html" class="external-link">gaussian</a></span>,
   g_accuracy <span class="op">=</span> <span class="fl">7</span>,
   formula <span class="op">=</span> <span class="cn">NULL</span>,
-  conf_level <span class="op">=</span> <span class="fl">0.95</span>,
   contrast_h <span class="op">=</span> <span class="cn">NULL</span>,
   contrast_dh <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span></code></pre></div>
@@ -127,8 +132,23 @@ treatment group contrasts using a generalized linear working model.</p>
 <dd><p>An optional formula to use for adjustment specified using as.formula("..."). This overrides strata_cols and covariate_cols.</p></dd>
 
 
-<dt>contrast</dt>
+<dt>contrast_h</dt>
 <dd><p>An optional function to specify a desired contrast</p></dd>
+
+
+<dt>contrast_dh</dt>
+<dd><p>An optional jacobian function for the contrast (otherwise use numerical derivative)</p></dd>
+
+
+<dt>centering</dt>
+<dd><p>WARNING: Advanced use only. By default is NULL, so will perform expected behavior
+         in documentation.
+If centering = 'none', then this will force it to be a g-computation estimator,
+   even if prediction unbiasedness does not hold.
+If centering = 'tx', then this will center within treatment groups, which is the
+   AIPW estimator (equivalent to g-computation if prediction unbiasedness holds).
+TODO: If centering = 'tx-strata', then this will center within treatment group and
+   within joint strata, which allows for the AIPW estimator to be used with Pocock-Simon.</p></dd>
 
 </dl></div>
 

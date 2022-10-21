@@ -28,8 +28,6 @@
 #'                  TODO: If centering = 'tx-strata', then this will center within treatment group and
 #'                     within joint strata, which allows for the AIPW estimator to be used with Pocock-Simon.
 #'
-#' @import dplyr
-#' @import magrittr
 #' @export
 robincar_glm <- function(df,
                          treat_col, response_col, strata_cols=NULL, covariate_cols=NULL,
@@ -65,6 +63,8 @@ robincar_glm <- function(df,
 
   # Perform adjustment
   result <- adjust(model, data)
+  # This is to save the original dataset for calibration add_x later on
+  result$original <- df
 
   # Create transformation object
   if(!is.null(contrast_h)){

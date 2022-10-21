@@ -1,6 +1,6 @@
 
-#' @import dplyr
-#' @import stats
+#' @importFrom dplyr mutate group_by ungroup everything
+#' @importFrom stats model.matrix
 get.design.matrix <- function(df, covnames){
 
   formula <- as.formula(
@@ -28,6 +28,8 @@ get.design.matrix <- function(df, covnames){
   return(mat)
 }
 
+#' @importFrom dplyr mutate
+#' @importFrom tidyr replace_na
 check.collinearity <- function(df, covnames, stratified){
 
   if(!stratified){
@@ -51,7 +53,8 @@ check.collinearity <- function(df, covnames, stratified){
 }
 
 #' @import broom
-#' @import dplyr
+#' @importFrom dplyr group_by group_modify ungroup select
+#' @importFrom tidyr pivot_wider
 regress.to.Ohat <- function(df, stratified){
 
   # Get design matrix covariate variables, using uncentered variables
@@ -86,7 +89,7 @@ regress.to.Ohat <- function(df, stratified){
   return(betas)
 }
 
-#' @import dplyr
+#' @importFrom dplyr left_join mutate group_by group_modify
 calculate.adjustment <- function(df, betas, covnames, stratified){
 
   dat <- dplyr::left_join(df, betas, by="strata")
@@ -128,7 +131,7 @@ calculate.adjustment <- function(df, betas, covnames, stratified){
   return(dat)
 }
 
-#' @import dplyr
+#' @importFrom dplyr mutate group_by summarise arrange
 adjust.LogRank <- function(model, data){
 
   # Creates data

@@ -2,7 +2,6 @@
 #'
 #' @param x A GLMModelResult object
 #' @param ... Additional arguments
-#' @export
 descript.GLMModelResult <- function(x, ...){
   output <- c()
   if("AIPW" %in% class(x$settings)){
@@ -40,13 +39,15 @@ descript.GLMModelResult <- function(x, ...){
     sprintf("\nusing adjustment variables: %s",
             paste0(cov_name, collapse=", "))
   )
-  if(class(x$settings)[2] == "heterogeneous"){
+  if("ANHECOVA" %in% class(x$settings)){
     output <- c(
       output,
       "\nand their interactions with treatment."
     )
-  } else {
+  } else if("ANCOVA" %in% class(x$settings)){
     output <- c(output, ".")
+  } else {
+    stop("Error with the type of model.")
   }
   output <- c(
     output,

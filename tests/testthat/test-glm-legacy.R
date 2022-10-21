@@ -35,39 +35,50 @@ test_that("GLM -- no covariates", {
             }
 
             if(scheme != "SR" & is.null(zs)) next
-            if(scheme == "minimization" & meth == "homogeneous") next
 
-            this <- robincar_glm(
-              df=DATA2,
-              response_col="y",
-              treat_col="A",
-              strata_cols=zs,
-              covariate_cols=cov,
-              covariate_to_include_strata=ctis,
-              car_scheme=scheme0,
-              g_family=binomial(link="logit"),
-              g_accuracy=7,
-              adj_method=meth,
-              vcovHC="HC0")
+            runthis <- function(){
+              return(robincar_glm(
+                df=DATA2,
+                response_col="y",
+                treat_col="A",
+                strata_cols=zs,
+                covariate_cols=cov,
+                covariate_to_include_strata=ctis,
+                car_scheme=scheme0,
+                g_family=binomial(link="logit"),
+                g_accuracy=7,
+                adj_method=meth,
+                vcovHC="HC0"
+              ))
+            }
 
-            that <- Robin_g(
-              robin.data=DATA2,
-              car.scheme=scheme,
-              car.z=zs,
-              robin.x=cov,
-              robin.x_to_include_z=ctis,
-              robin.g_family=binomial(link="logit"),
-              robin.g_accuracy=7,
-              robin.formula=NULL,
-              robin.vcovHC="HC0",
-              robin.adj_method=meth
-            )
-            this_est <- this$result$estimate
-            this_se <- this$result$se
-            names(this_est) <- NULL
-            names(this_se) <- NULL
-            expect_equal(this_est, that$estimation$estimate)
-            expect_equal(this_se, that$estimation$se)
+            runthat <- function(){
+              return(Robin_g(
+                robin.data=DATA2,
+                car.scheme=scheme,
+                car.z=zs,
+                robin.x=cov,
+                robin.x_to_include_z=ctis,
+                robin.g_family=binomial(link="logit"),
+                robin.g_accuracy=7,
+                robin.formula=NULL,
+                robin.vcovHC="HC0",
+                robin.adj_method=meth
+              ))
+            }
+            if(scheme == "minimization" & meth == "homogeneous"){
+              expect_warning(runthis())
+              expect_error(runthat())
+            } else {
+              this <- runthis()
+              that <- runthat()
+              this_est <- this$result$estimate
+              this_se <- this$result$se
+              names(this_est) <- NULL
+              names(this_se) <- NULL
+              expect_equal(this_est, that$estimation$estimate)
+              expect_equal(this_se, that$estimation$se)
+            }
           }
         }
       }

@@ -2,7 +2,6 @@
 #'
 #' @param x A LinModelResult object
 #' @param ... Additional arguments
-#' @export
 descript.LinModelResult <- function(x, ...){
   output <- c()
   output <- c(

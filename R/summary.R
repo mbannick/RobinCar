@@ -53,7 +53,7 @@ print.ContrastResult <- function(x, ...){
 #' @param x A TTEResult object
 #' @param ... Additional arguments
 #'
-#' @import data.table
+#' @importFrom data.table data.table setorder setnames
 #' @export
 print.TTEResult <- function(x, ...){
 
@@ -147,7 +147,7 @@ print.CalibrationResult <- function(x, ...){
 
   if(!is.null(x$add_x)){
     add_x_text <- paste0(", additionally adjusting for covariates",
-                  paste0(add_x, sep=", "), ",")
+                  paste0(x$add_x, sep=", "), ",")
   } else {
     add_x_text <- ""
   }

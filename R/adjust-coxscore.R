@@ -1,6 +1,5 @@
 #' @importFrom survival coxph Surv
-#' @import survival
-#' @import stats
+#' @importFrom stats model.matrix
 get.linear.predictor <- function(df, covnames){
 
   coxdf <- df[, c("response", "event", covnames)]
@@ -16,7 +15,7 @@ get.linear.predictor <- function(df, covnames){
   return(lin_preds)
 }
 
-#' @import stats
+#' @importFrom stats var
 get.strata.sum <- function(df, n, p_trt, sparse_remove=FALSE){
 
   ss <- df %>%

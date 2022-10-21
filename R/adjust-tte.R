@@ -66,7 +66,7 @@ process.tte.df <- function(df, ref_arm=NULL){
   return(df)
 }
 
-#' @import dplyr
+#' @importFrom dplyr group_by mutate ungroup
 get.ordered.data <- function(df, ref_arm){
 
   df <- df %>%

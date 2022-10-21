@@ -2,7 +2,7 @@
 % Please edit documentation in R/robincar-tte.R
 \name{robincar_tte}
 \alias{robincar_tte}
-\title{Covariate adjustment using generalized linear working model}
+\title{Covariate adjustment for time to event data}
 \usage{
 robincar_tte(
   df,
@@ -19,12 +19,34 @@ robincar_tte(
 )
 }
 \arguments{
+\item{df}{A data.frame with the required columns}
+
+\item{treat_col}{Name of column in df with treatment variable}
+
+\item{response_col}{Name of the column in df with response variable}
+
+\item{event_col}{Name of column in df with event indicator
+(0/FALSE=no event, 1/TRUE=event)}
+
 \item{adj_method}{Adjustment method (one of "CL", "CSL", or "coxscore")}
 
-\item{inheritParams}{robincar_coxscore}
+\item{strata_cols}{Names of columns in df with strata variables}
+
+\item{covariate_cols}{Names of columns in df with covariate variables}
+
+\item{p_trt}{Treatment allocation ratio for the reference arm.}
+
+\item{ref_arm}{Reference arm of the treatment group, defaults to NULL,
+which results in using the first element of `unique(data[, treat_col])`.}
+
+\item{car_scheme}{Name of the type of covariate-adaptive randomization scheme. One of: "simple", "pocock-simon", "biased-coin", "permuted-block".}
 }
 \description{
-WARNING: this function is still under development.
-Estimate treatment-group-specific response means and (optionally)
-treatment group contrasts using a generalized linear working model.
+Perform a covariate-adjusted logrank test (`adj_method="CL"`),
+covariate-adjusted stratified logrank test (`adj_method="CSL"`),
+or a covariate-adjusted robust Cox score test (`adj_method="coxscore"`).
+}
+\details{
+`robincar_coxscore` and `robincar_logrank` are wrapper functions around
+`robincar_tte`.
 }

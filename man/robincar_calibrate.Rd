@@ -15,7 +15,8 @@ with the mu and Z
 to achieve universality and efficiency gain
 rather than just linear calibration that uses mu.}
 
-\item{add_x}{Additional x to use in the calibration}
+\item{add_x}{Additional x to use in the calibration. Must have been in
+the original dataset that robincar_glm was called on.}
 
 \item{vcovHC}{Which type of heteroskedasticity-consistent
 standard error estimates to use.}

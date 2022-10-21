@@ -9,7 +9,25 @@ reference:
 - contents:
   - robincar_linear
   - robincar_glm
+  - robincar_calibrate
+  - robincar_contrast
+  - robincar_logrank
+  - robincar_coxscore
+  - robincar_tte
 - title: "Summary printing functions."
 - contents:
   - print.LinModelResult
+  - print.GLMModelResult
   - print.ContrastResult
+  - print.CalibrationResult
+  - print.TTEResult
+- title: "Simulation"
+- contents:
+  - data_gen
+  - data_gen2
+- title: "Testing"
+- contents:
+  - nu.d
+  - descript.GLMModelResult
+  - descript.LinModelResult
+  - ttelogic

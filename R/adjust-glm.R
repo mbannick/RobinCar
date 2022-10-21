@@ -101,7 +101,12 @@ get.mutilde <- function(model, data, mod){
   # Report warning or error messages, whatever
   # is passed through the model settings, if not prediction unbiased.
   if(!all(resid == 0)){
-    for(func in list(model$pu_funcs)){
+    if(!is.list(model$pu_funcs)){
+      funcs <- list(model$pu_funcs)
+    } else {
+      funcs <- model$pu_funcs
+    }
+    for(func in funcs){
       func()
     }
   }

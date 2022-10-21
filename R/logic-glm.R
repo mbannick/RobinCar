@@ -33,7 +33,7 @@ glmlogic <- function(adj_method, x_exists, z_exists, car_scheme, cov_strata,
     adj_vars <- "formula"
     if(x_exists) .form.warn()
     if(z_exists & car_scheme == "pocock-simon"){
-      pu_funcs <- c(.pu.z.calibrate, .pu.z.err)
+      pu_funcs <- c(.pu.z.calibrate, .pu.z.warn)
       pu_joint_z <- TRUE
     } else {
       pu_funcs <- .pu.warn
@@ -52,25 +52,21 @@ glmlogic <- function(adj_method, x_exists, z_exists, car_scheme, cov_strata,
       }
     }
     if(car_scheme == "pocock-simon"){
-      if(adj_method == "heterogeneous"){
-        if(z_exists){
-          omegaz_func <- omegaz.closure(car_scheme)
-          if(!cov_strata){
-            .z.include.warn()
-          }
-          pu_joint_z <- TRUE
-          if(x_exists){
-            adj_vars <- "joint_z_x"
-            pu_funcs <- .pu.z.err
-          } else {
-            adj_vars <- "joint_z"
-            pu_funcs <- c(.pu.z.calibrate, .pu.z.err)
-          }
-        } else {
-          .z.miss.err()
-        }
+      if(!z_exists){
+        .z.miss.err()
       } else {
-        .homogeneous.min.error()
+        omegaz_func <- omegaz.closure(car_scheme)
+        if(!cov_strata){
+          .z.include.warn()
+        }
+        pu_joint_z <- TRUE
+        if(x_exists){
+          adj_vars <- "joint_z_x"
+          pu_funcs <- .pu.z.warn
+        } else {
+          adj_vars <- "joint_z"
+          pu_funcs <- c(.pu.z.calibrate, .pu.z.warn)
+        }
       }
     }
     if(car_scheme %in% APPLICABLE.SCHEMES){

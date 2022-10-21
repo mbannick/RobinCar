@@ -4,7 +4,7 @@
 # Gets the diagonal sandwich variance component
 # for all linear models in the asymptotic variance formula.
 #' @importFrom rlang .data
-#' @import dplyr
+#' @importFrom dplyr mutate group_by summarize
 vcov_sr.diag <- function(data, mod, residual=NULL){
   # Calculate the SD of the residuals from the model fit,
   # in order to compute sandwich variance -- this is
@@ -109,6 +109,7 @@ vcov_sr.ANHECOVA <- function(model, data, mod){
 }
 
 #' @importFrom rlang .data
+#' @importFrom dplyr filter
 get.erb <- function(model, data, mod, mu_hat=NULL){
 
   if(is.null(mu_hat)){

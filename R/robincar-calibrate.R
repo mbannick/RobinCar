@@ -6,7 +6,8 @@
 #'              with the mu and Z
 #'              to achieve universality and efficiency gain
 #'              rather than just linear calibration that uses mu.
-#' @param add_x Additional x to use in the calibration
+#' @param add_x Additional x to use in the calibration. Must have been in
+#'              the original dataset that robincar_glm was called on.
 #' @param vcovHC Which type of heteroskedasticity-consistent
 #'               standard error estimates to use.
 #' @export
@@ -29,6 +30,10 @@ robincar_calibrate <- function(result, joint=FALSE,
   # robincar_glm function call
   if(!is.null(result$data$covariate)){
     newdat <- cbind(newdat, result$data$covariate)
+  }
+  if(!is.null(add_x)){
+    if(!add_x %in% colnames(data)) .miss.covariate.calibrate()
+    newdat <- cbind(newdat, result$original[add_x])
   }
   if(!is.null(result$data$strata)){
     newdat <- cbind(newdat, result$data$strata)

@@ -32,7 +32,13 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/calibration.html">Calibration for GLM Models</a>
+    </li>
+    <li>
       <a href="../articles/use-linear-glm.html">Continuous and GLM-Type Outcomes</a>
+    </li>
+    <li>
+      <a href="../articles/use-survival.html">Robust Testing for Time-to-Event Data</a>
     </li>
   </ul></li>
       </ul><ul class="nav navbar-nav navbar-right"></ul></div><!--/.nav-collapse -->
@@ -59,6 +65,27 @@
           <p><code><a href="robincar_glm.html">robincar_glm()</a></code> </p>
         </td>
         <td><p>Covariate adjustment using generalized linear working model</p></td>
+      </tr><tr><td>
+          <p><code><a href="robincar_calibrate.html">robincar_calibrate()</a></code> </p>
+        </td>
+        <td><p>Run a linear or joint calibration on
+a GLMModelResult object.</p></td>
+      </tr><tr><td>
+          <p><code><a href="robincar_contrast.html">robincar_contrast()</a></code> </p>
+        </td>
+        <td><p>Create a contrast using a result object (that has both result and varcov)</p></td>
+      </tr><tr><td>
+          <p><code><a href="robincar_logrank.html">robincar_logrank()</a></code> </p>
+        </td>
+        <td><p>Robust (potentially stratified) logrank adjustment</p></td>
+      </tr><tr><td>
+          <p><code><a href="robincar_coxscore.html">robincar_coxscore()</a></code> </p>
+        </td>
+        <td><p>Robust cox score adjustment</p></td>
+      </tr><tr><td>
+          <p><code><a href="robincar_tte.html">robincar_tte()</a></code> </p>
+        </td>
+        <td><p>Covariate adjustment for time to event data</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="summary-printing-functions-">Summary printing functions. <a href="#summary-printing-functions-" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p>
@@ -68,9 +95,53 @@
         </td>
         <td><p>Print linear model result</p></td>
       </tr><tr><td>
+          <p><code><a href="print.GLMModelResult.html">print(<i>&lt;GLMModelResult&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Print glm model result</p></td>
+      </tr><tr><td>
           <p><code><a href="print.ContrastResult.html">print(<i>&lt;ContrastResult&gt;</i>)</a></code> </p>
         </td>
         <td><p>Print contrast result</p></td>
+      </tr><tr><td>
+          <p><code><a href="print.CalibrationResult.html">print(<i>&lt;CalibrationResult&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Print calibration result</p></td>
+      </tr><tr><td>
+          <p><code><a href="print.TTEResult.html">print(<i>&lt;TTEResult&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Print TTE result</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="simulation">Simulation <a href="#simulation" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="data_gen.html">data_gen()</a></code> </p>
+        </td>
+        <td><p>Data generation function from JRSS-B paper</p></td>
+      </tr><tr><td>
+          <p><code><a href="data_gen2.html">data_gen2()</a></code> </p>
+        </td>
+        <td><p>Data generation function from covariate adjusted log-rank paper</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="testing">Testing <a href="#testing" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="nu.d.html">nu.d()</a></code> </p>
+        </td>
+        <td><p>Calculate nu_d for the randomization design</p></td>
+      </tr><tr><td>
+          <p><code><a href="descript.GLMModelResult.html">descript(<i>&lt;GLMModelResult&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Generate description for glm model result</p></td>
+      </tr><tr><td>
+          <p><code><a href="descript.LinModelResult.html">descript(<i>&lt;LinModelResult&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Generate description for linear model result</p></td>
+      </tr><tr><td>
+          <p><code><a href="ttelogic.html">ttelogic()</a></code> </p>
+        </td>
+        <td><p>Logic for performing robincar_coxscore or robincar_logrank for time to event endpoints</p></td>
       </tr></tbody></table></div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

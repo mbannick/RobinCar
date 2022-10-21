@@ -14,7 +14,6 @@
 #' @param covariate_to_include_strata Whether to include strata variables in covariate adjustment. Defaults to F for ANOVA and ANCOVA; defaults to T for ANHECOVA. User may override by passing in this argument.
 #' @param contrast_h An optional function to specify a desired contrast
 #' @param contrast_dh An optional jacobian function for the contrast (otherwise use numerical derivative)
-#' @import dplyr
 #' @export
 robincar_linear <- function(df,
                             treat_col, response_col, strata_cols=NULL, covariate_cols=NULL,

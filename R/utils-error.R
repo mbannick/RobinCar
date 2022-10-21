@@ -18,10 +18,12 @@
 .form.warn <- function() warning("Formula specified; ignoring arguments for covariate variables and overriding adjustment method.")
 
 .pu.warn <- function() warning("Prediction unbiasedness does not hold.")
-.pu.z.err <- function() stop("Prediction unbiasedness does not hold in all joint levels of Z.")
+.pu.z.warn <- function() warning("Prediction unbiasedness does not hold in all joint levels of Z.")
 .pu.z.calibrate <- function() warning("We suggest you try out robin_calibrate.")
 
 .homogeneous.min.error <- function() stop("Inapplicable settings. Try method = 'heterogeneous', include strata as covariates, and a g-family with canonical link.")
+
+.miss.covariate.calibrate <- function() stop("Cannot find add_x covariate in original dataset.")
 
 # ERRORS FOR TTE
 .csl.nostrata.warn <- function() warning("If stratified test needs to be performed under simple randomization, please specify car_scheme as permuted-block or biased-coin.")

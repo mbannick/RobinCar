@@ -12,8 +12,6 @@
 #'                which results in using the first element of `unique(data[, treat_col])`.
 #' @param p_trt Treatment allocation ratio for the reference arm.
 #'
-#' @import dplyr
-#' @import magrittr
 #' @export
 robincar_coxscore <- function(...){
 

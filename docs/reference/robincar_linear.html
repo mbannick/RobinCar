@@ -33,7 +33,13 @@ treatment group contrasts using a linear working model for continuous outcomes."
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/calibration.html">Calibration for GLM Models</a>
+    </li>
+    <li>
       <a href="../articles/use-linear-glm.html">Continuous and GLM-Type Outcomes</a>
+    </li>
+    <li>
+      <a href="../articles/use-survival.html">Robust Testing for Time-to-Event Data</a>
     </li>
   </ul></li>
       </ul><ul class="nav navbar-nav navbar-right"></ul></div><!--/.nav-collapse -->
@@ -66,7 +72,6 @@ treatment group contrasts using a linear working model for continuous outcomes.<
   adj_method <span class="op">=</span> <span class="st">"ANOVA"</span>,
   vcovHC <span class="op">=</span> <span class="st">"HC0"</span>,
   covariate_to_include_strata <span class="op">=</span> <span class="cn">NULL</span>,
-  conf_level <span class="op">=</span> <span class="fl">0.95</span>,
   contrast_h <span class="op">=</span> <span class="cn">NULL</span>,
   contrast_dh <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span></code></pre></div>
@@ -110,8 +115,12 @@ treatment group contrasts using a linear working model for continuous outcomes.<
 <dd><p>Whether to include strata variables in covariate adjustment. Defaults to F for ANOVA and ANCOVA; defaults to T for ANHECOVA. User may override by passing in this argument.</p></dd>
 
 
-<dt>contrast</dt>
+<dt>contrast_h</dt>
 <dd><p>An optional function to specify a desired contrast</p></dd>
+
+
+<dt>contrast_dh</dt>
+<dd><p>An optional jacobian function for the contrast (otherwise use numerical derivative)</p></dd>
 
 </dl></div>
 
