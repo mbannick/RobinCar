@@ -17,7 +17,7 @@ test_that("GLM -- no covariates", {
 
   for(cov in list(c("x1"), NULL)){
     for(ctis in list(TRUE, FALSE)){
-      for(zs in list(c("z1"), NULL)){
+      for(zs in list(c("z1", "z2"), c("z1"), NULL)){
         for(meth in c("homogeneous", "heterogeneous")){
           for(scheme in c("SR",
                           "PB",

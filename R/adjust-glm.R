@@ -78,7 +78,7 @@ get.mutilde <- function(model, data, mod){
   if(model$pu_joint_z){
     new_mutilde <- matrix(data=NA, nrow=data$n, ncol=ncol(muhat))
     for(s_col in 1:ncol(s_ids)){
-      scol_seq <- seq(s_col, ncol(mutilde), by=2)
+      scol_seq <- seq(s_col, ncol(mutilde), by=length(sl))
       new_mutilde[s_ids[, s_col], ] <- mutilde[s_ids[, s_col], scol_seq]
     }
     mutilde <- new_mutilde
