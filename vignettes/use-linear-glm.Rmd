@@ -1,5 +1,5 @@
 ---
-title: "Continuous and GLM-Type Outcomes"
+title: "(1) Continuous and GLM-Type Outcomes"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Continuous and GLM-Type Outcomes}
@@ -107,7 +107,22 @@ glm.heterogeneous<-robincar_glm(df = data,
 glm.heterogeneous
 ```
 
-### Heterogeneous working model with biased-coin randomization
+### Working model specified using a formula, with biased-coin randomization
+
+```{r}
+glm.formula<-robincar_glm(df = data,
+                          response_col="y_bin",
+                          treat_col="A",
+                          formula="y_bin ~ A + z2:x1",
+                          strata_cols=c("z2"),
+                          car_scheme="biased-coin",
+                          g_family=binomial(link="logit"),
+                          g_accuracy=7,
+                          vcovHC="HC0")
+glm.formula
+```
+
+### Heterogeneous working model with biased-coin randomization, differences contrast
 
 ```{r}
 glm.heterogeneous<-robincar_glm(df = data,

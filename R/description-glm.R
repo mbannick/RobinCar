@@ -16,38 +16,50 @@ descript.GLMModelResult <- function(x, ...){
   } else {
     family <- x$settings$g_family
   }
-  output <- c(
-    output,
-    sprintf("Treatment group mean estimates using a %s estimator",
-            etype),
-    sprintf("\nfrom a GLM working model of family %s and link %s",
-            family$family, family$link)
-  )
-  k <- length(x$data$treat_levels)
-  mat <- get.dmat(x$data, x$settings$adj_vars)
-  name <- colnames(mat)
-  cov_name <- name[name != "joint_strata"]
-  if("joint_strata" %in% name){
-    cov_name <- c(
-      cov_name,
-      sprintf("joint levels of %s",
-              paste0(names(x$data$strata), collapse=", "))
-    )
-  }
-  output <- c(
-    output,
-    sprintf("\nusing adjustment variables: %s",
-            paste0(cov_name, collapse=", "))
-  )
-  if("ANHECOVA" %in% class(x$settings)){
+
+  if(!is.null(x$data$formula)){
+
+    form <- x$mod$formula
     output <- c(
       output,
-      "\nand their interactions with treatment."
+      sprintf("Treatment group mean estimates from a GLM working model of family %s and link %s using formula: \n",
+              family$family, family$link),
+      form
     )
-  } else if("ANCOVA" %in% class(x$settings)){
-    output <- c(output, ".")
   } else {
-    stop("Error with the type of model.")
+    output <- c(
+      output,
+      sprintf("Treatment group mean estimates using a %s estimator",
+              etype),
+      sprintf("\nfrom a GLM working model of family %s and link %s",
+              family$family, family$link)
+    )
+    k <- length(x$data$treat_levels)
+    mat <- get.dmat(x$data, x$settings$adj_vars)
+    name <- colnames(mat)
+    cov_name <- name[name != "joint_strata"]
+    if("joint_strata" %in% name){
+      cov_name <- c(
+        cov_name,
+        sprintf("joint levels of %s",
+                paste0(names(x$data$strata), collapse=", "))
+      )
+    }
+    output <- c(
+      output,
+      sprintf("\nusing adjustment variables: %s",
+              paste0(cov_name, collapse=", "))
+    )
+    if("ANHECOVA" %in% class(x$settings)){
+      output <- c(
+        output,
+        "\nand their interactions with treatment."
+      )
+    } else if("ANCOVA" %in% class(x$settings)){
+      output <- c(output, ".")
+    } else {
+      stop("Error with the type of model.")
+    }
   }
   output <- c(
     output,
@@ -66,6 +78,10 @@ descript.GLMModelResult <- function(x, ...){
     }
   }
   for(o in output){
-    cat(o)
+    if(class(o) == "formula"){
+      print(o, showEnv=FALSE)
+    } else {
+      cat(o)
+    }
   }
 }

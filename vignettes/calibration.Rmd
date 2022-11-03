@@ -1,5 +1,5 @@
 ---
-title: "Calibration for GLM Models"
+title: "(2) Calibration for GLM Models"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Calibration for GLM Models}
