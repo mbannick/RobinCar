@@ -53,6 +53,7 @@ robincar_tte <- function(df,
 
   # Perform adjustment
   result <- adjust(model, data)
+  result$original_df <- df
 
   return(result)
 

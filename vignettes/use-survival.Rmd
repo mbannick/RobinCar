@@ -84,7 +84,7 @@ cl <- robincar_logrank(
 print(cl)
 ```
 
-Use `adj_method = "CL"` for covariate-adjusted logrank test.
+Use `adj_method = "CSL"` for covariate-adjusted stratified logrank test.
 ```{r}
 csl <- robincar_logrank(
   df=data.simu,

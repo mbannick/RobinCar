@@ -46,6 +46,8 @@ robincar_linear <- function(df,
 
   # Perform linear adjustment
   result <- adjust(model, data)
+  # This is to save the original dataset for summary later on
+  result$original_df <- df
 
   # Create transformation object
   if(!is.null(contrast_h)){

@@ -64,7 +64,7 @@ robincar_glm <- function(df,
   # Perform adjustment
   result <- adjust(model, data)
   # This is to save the original dataset for calibration add_x later on
-  result$original <- df
+  result$original_df <- df
 
   # Create transformation object
   if(!is.null(contrast_h)){
