@@ -1,4 +1,12 @@
 url: ~
+articles:
+- title: Vignettes
+  navbar: ~
+  contents:
+  - use-linear-glm
+  - calibration
+  - use-survival
+
 template:
   params:
     bootswatch: yeti

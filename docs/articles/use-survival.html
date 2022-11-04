@@ -50,10 +50,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/calibration.html">Calibration for GLM Models</a>
+      <a href="../articles/use-linear-glm.html">Continuous and GLM-Type Outcomes</a>
     </li>
     <li>
-      <a href="../articles/use-linear-glm.html">Continuous and GLM-Type Outcomes</a>
+      <a href="../articles/calibration.html">Calibration for GLM Models</a>
     </li>
     <li>
       <a href="../articles/use-survival.html">Robust Testing for Time-to-Event Data</a>
@@ -96,6 +96,12 @@
 <span class="co">#&gt; The following objects are masked from 'package:base':</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;     intersect, setdiff, setequal, union</span></code></pre></div>
+<div class="section level4">
+<h4 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h4>
+<p>Ting Ye, Jun Shao, Yanyao Yi. <a href="https://arxiv.org/pdf/2201.11948.pdf" class="external-link">Covariate-Adjusted Log-Rank
+Test: Guaranteed Efficiency Gain and Universal Applicability.</a></p>
+</div>
 <div class="section level2">
 <h2 id="robust-cox-score">Robust Cox Score<a class="anchor" aria-label="anchor" href="#robust-cox-score"></a>
 </h2>
@@ -159,7 +165,23 @@ functions.</p>
 <span class="co">#&gt; Score function: 2.127963 </span>
 <span class="co">#&gt; Standard error: 4.475487 </span>
 <span class="co">#&gt; Test statistic: 0.4754706 </span>
-<span class="co">#&gt; 2-side p-value: 0.6344516</span></code></pre></div>
+<span class="co">#&gt; 2-side p-value: 0.6344516</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Data Structure:</span>
+<span class="co">#&gt;            t delta I1 I0   model_w3 strata1 strata2 strata3 strata4 strata5</span>
+<span class="co">#&gt; 1 0.47072469     1  0  1  1.2155138       0       0       0       1       0</span>
+<span class="co">#&gt; 2 0.52920789     1  0  1  0.3308765       0       1       0       0       0</span>
+<span class="co">#&gt; 3 0.59263253     1  1  0  1.3902751       1       0       0       0       0</span>
+<span class="co">#&gt; 4 0.11815027     1  0  1  0.8720470       0       0       1       0       0</span>
+<span class="co">#&gt; 5 1.56192333     1  1  0 -1.0808170       0       0       0       1       0</span>
+<span class="co">#&gt; 6 0.03916098     1  1  0  0.4958216       0       0       0       0       0</span>
+<span class="co">#&gt;   strata6 strt</span>
+<span class="co">#&gt; 1       0    4</span>
+<span class="co">#&gt; 2       0    2</span>
+<span class="co">#&gt; 3       0    1</span>
+<span class="co">#&gt; 4       0    3</span>
+<span class="co">#&gt; 5       0    4</span>
+<span class="co">#&gt; 6       1    6</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="fit-a-covariate-adjusted-stratified-logrank-test">Fit a covariate-adjusted (stratified) logrank test<a class="anchor" aria-label="anchor" href="#fit-a-covariate-adjusted-stratified-logrank-test"></a>
@@ -190,9 +212,25 @@ test.</p>
 <span class="co">#&gt; Score function: 0.0428465 </span>
 <span class="co">#&gt; Standard error: 0.04075915 </span>
 <span class="co">#&gt; Test statistic: 1.051212 </span>
-<span class="co">#&gt; 2-side p-value: 0.2931612</span></code></pre></div>
-<p>Use <code>adj_method = "CL"</code> for covariate-adjusted logrank
-test.</p>
+<span class="co">#&gt; 2-side p-value: 0.2931612</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Data Structure:</span>
+<span class="co">#&gt;            t delta I1 I0   model_w3 strata1 strata2 strata3 strata4 strata5</span>
+<span class="co">#&gt; 1 0.47072469     1  0  1  1.2155138       0       0       0       1       0</span>
+<span class="co">#&gt; 2 0.52920789     1  0  1  0.3308765       0       1       0       0       0</span>
+<span class="co">#&gt; 3 0.59263253     1  1  0  1.3902751       1       0       0       0       0</span>
+<span class="co">#&gt; 4 0.11815027     1  0  1  0.8720470       0       0       1       0       0</span>
+<span class="co">#&gt; 5 1.56192333     1  1  0 -1.0808170       0       0       0       1       0</span>
+<span class="co">#&gt; 6 0.03916098     1  1  0  0.4958216       0       0       0       0       0</span>
+<span class="co">#&gt;   strata6 strt</span>
+<span class="co">#&gt; 1       0    4</span>
+<span class="co">#&gt; 2       0    2</span>
+<span class="co">#&gt; 3       0    1</span>
+<span class="co">#&gt; 4       0    3</span>
+<span class="co">#&gt; 5       0    4</span>
+<span class="co">#&gt; 6       1    6</span></code></pre></div>
+<p>Use <code>adj_method = "CSL"</code> for covariate-adjusted stratified
+logrank test.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">csl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/robincar_logrank.html">robincar_logrank</a></span><span class="op">(</span>
   df<span class="op">=</span><span class="va">data.simu</span>,
@@ -227,7 +265,23 @@ test.</p>
 <span class="co">#&gt; Score function: 0.03009601 </span>
 <span class="co">#&gt; Standard error: 0.04256389 </span>
 <span class="co">#&gt; Test statistic: 0.7070785 </span>
-<span class="co">#&gt; 2-side p-value: 0.4795177</span></code></pre></div>
+<span class="co">#&gt; 2-side p-value: 0.4795177</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Data Structure:</span>
+<span class="co">#&gt;            t delta I1 I0   model_w3 strata1 strata2 strata3 strata4 strata5</span>
+<span class="co">#&gt; 1 0.47072469     1  0  1  1.2155138       0       0       0       1       0</span>
+<span class="co">#&gt; 2 0.52920789     1  0  1  0.3308765       0       1       0       0       0</span>
+<span class="co">#&gt; 3 0.59263253     1  1  0  1.3902751       1       0       0       0       0</span>
+<span class="co">#&gt; 4 0.11815027     1  0  1  0.8720470       0       0       1       0       0</span>
+<span class="co">#&gt; 5 1.56192333     1  1  0 -1.0808170       0       0       0       1       0</span>
+<span class="co">#&gt; 6 0.03916098     1  1  0  0.4958216       0       0       0       0       0</span>
+<span class="co">#&gt;   strata6 strt</span>
+<span class="co">#&gt; 1       0    4</span>
+<span class="co">#&gt; 2       0    2</span>
+<span class="co">#&gt; 3       0    1</span>
+<span class="co">#&gt; 4       0    3</span>
+<span class="co">#&gt; 5       0    4</span>
+<span class="co">#&gt; 6       1    6</span></code></pre></div>
 </div>
 </div>
   </div>

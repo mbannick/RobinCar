@@ -50,10 +50,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/calibration.html">Calibration for GLM Models</a>
+      <a href="../articles/use-linear-glm.html">Continuous and GLM-Type Outcomes</a>
     </li>
     <li>
-      <a href="../articles/use-linear-glm.html">Continuous and GLM-Type Outcomes</a>
+      <a href="../articles/calibration.html">Calibration for GLM Models</a>
     </li>
     <li>
       <a href="../articles/use-survival.html">Robust Testing for Time-to-Event Data</a>
@@ -87,6 +87,14 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/rm.html" class="external-link">rm</a></span><span class="op">(</span>list<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/ls.html" class="external-link">ls</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">RobinCar</span><span class="op">)</span></code></pre></div>
+<div class="section level4">
+<h4 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h4>
+<p>Ting Ye, Jun Shao, Yanyao Yi, Qinyuan Zhao (2022+). <a href="https://www.google.com/url?q=https%3A%2F%2Farxiv.org%2Fpdf%2F2009.11828.pdf&amp;sa=D&amp;sntz=1&amp;usg=AOvVaw0OHre3-8OSKzqlaR2yaVrY" class="external-link">Toward
+Better Practice of Covariate Adjustment in Analyzing Randomized Clinical
+Trials</a>. <em>Journal of the American Statistical Association</em>, in
+press.</p>
+</div>
 <div class="section level2">
 <h2 id="adjustment-with-continuous-outcomes">Adjustment with Continuous Outcomes<a class="anchor" aria-label="anchor" href="#adjustment-with-continuous-outcomes"></a>
 </h2>
@@ -123,7 +131,23 @@
 <span class="co">#&gt;           [,1]       [,2]       [,3]</span>
 <span class="co">#&gt; [1,] 0.1464348 0.00000000 0.00000000</span>
 <span class="co">#&gt; [2,] 0.0000000 0.01157025 0.00000000</span>
-<span class="co">#&gt; [3,] 0.0000000 0.00000000 0.01143562</span></code></pre></div>
+<span class="co">#&gt; [3,] 0.0000000 0.00000000 0.01143562</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Data Structure:</span>
+<span class="co">#&gt;   z1 z2          y0         y1       y2 A         y strata_cross x1</span>
+<span class="co">#&gt; 1  0  1  0.53887826 -2.5558896 3.735328 0 -2.555890          0-1  0</span>
+<span class="co">#&gt; 2  0  1 -0.08548387  3.0872151 3.683796 0  3.087215          0-1  0</span>
+<span class="co">#&gt; 3  1  1  4.35493364  2.9721471 3.344565 2  3.344565          1-1  1</span>
+<span class="co">#&gt; 4  0  2  0.59817631  0.3108723 2.178533 2  2.178533          0-2  0</span>
+<span class="co">#&gt; 5  0  1  1.39956151 -2.6562051 3.541720 1  3.541720          0-1  0</span>
+<span class="co">#&gt; 6  0  1  1.26664653 -4.0872147 3.764908 0 -4.087215          0-1  0</span>
+<span class="co">#&gt;             x3</span>
+<span class="co">#&gt; 1 -1.554766366</span>
+<span class="co">#&gt; 2 -0.364649622</span>
+<span class="co">#&gt; 3 -0.487620009</span>
+<span class="co">#&gt; 4  0.008503426</span>
+<span class="co">#&gt; 5 -1.471108795</span>
+<span class="co">#&gt; 6 -1.878365975</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="ancova-model-with-biased-coin-randomization">ANCOVA model with biased coin randomization<a class="anchor" aria-label="anchor" href="#ancova-model-with-biased-coin-randomization"></a>
@@ -157,7 +181,23 @@
 <span class="co">#&gt;               [,1]         [,2]          [,3]</span>
 <span class="co">#&gt; [1,]  0.0542970459 0.0004827189 -0.0001402482</span>
 <span class="co">#&gt; [2,]  0.0004827189 0.0069878637  0.0021719037</span>
-<span class="co">#&gt; [3,] -0.0001402482 0.0021719037  0.0084520838</span></code></pre></div>
+<span class="co">#&gt; [3,] -0.0001402482 0.0021719037  0.0084520838</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Data Structure:</span>
+<span class="co">#&gt;   z1 z2          y0         y1       y2 A         y strata_cross x1</span>
+<span class="co">#&gt; 1  0  1  0.53887826 -2.5558896 3.735328 0 -2.555890          0-1  0</span>
+<span class="co">#&gt; 2  0  1 -0.08548387  3.0872151 3.683796 0  3.087215          0-1  0</span>
+<span class="co">#&gt; 3  1  1  4.35493364  2.9721471 3.344565 2  3.344565          1-1  1</span>
+<span class="co">#&gt; 4  0  2  0.59817631  0.3108723 2.178533 2  2.178533          0-2  0</span>
+<span class="co">#&gt; 5  0  1  1.39956151 -2.6562051 3.541720 1  3.541720          0-1  0</span>
+<span class="co">#&gt; 6  0  1  1.26664653 -4.0872147 3.764908 0 -4.087215          0-1  0</span>
+<span class="co">#&gt;             x3</span>
+<span class="co">#&gt; 1 -1.554766366</span>
+<span class="co">#&gt; 2 -0.364649622</span>
+<span class="co">#&gt; 3 -0.487620009</span>
+<span class="co">#&gt; 4  0.008503426</span>
+<span class="co">#&gt; 5 -1.471108795</span>
+<span class="co">#&gt; 6 -1.878365975</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="anhecova-model-with-pocock-simon-randomization-and-linear-contrast">ANHECOVA model with Pocock-Simon randomization and linear
@@ -193,6 +233,22 @@ contrast<a class="anchor" aria-label="anchor" href="#anhecova-model-with-pocock-
 <span class="co">#&gt; [1,]  3.801433e-02 -9.678194e-05 -0.001010817</span>
 <span class="co">#&gt; [2,] -9.678194e-05  6.878309e-03  0.002347002</span>
 <span class="co">#&gt; [3,] -1.010817e-03  2.347002e-03  0.008115945</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Data Structure:</span>
+<span class="co">#&gt;   z1 z2          y0         y1       y2 A         y strata_cross x1</span>
+<span class="co">#&gt; 1  0  1  0.53887826 -2.5558896 3.735328 0 -2.555890          0-1  0</span>
+<span class="co">#&gt; 2  0  1 -0.08548387  3.0872151 3.683796 0  3.087215          0-1  0</span>
+<span class="co">#&gt; 3  1  1  4.35493364  2.9721471 3.344565 2  3.344565          1-1  1</span>
+<span class="co">#&gt; 4  0  2  0.59817631  0.3108723 2.178533 2  2.178533          0-2  0</span>
+<span class="co">#&gt; 5  0  1  1.39956151 -2.6562051 3.541720 1  3.541720          0-1  0</span>
+<span class="co">#&gt; 6  0  1  1.26664653 -4.0872147 3.764908 0 -4.087215          0-1  0</span>
+<span class="co">#&gt;             x3</span>
+<span class="co">#&gt; 1 -1.554766366</span>
+<span class="co">#&gt; 2 -0.364649622</span>
+<span class="co">#&gt; 3 -0.487620009</span>
+<span class="co">#&gt; 4  0.008503426</span>
+<span class="co">#&gt; 5 -1.471108795</span>
+<span class="co">#&gt; 6 -1.878365975</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $contrast</span>
 <span class="co">#&gt; Treatment group contrasts using linear contrast</span>
@@ -250,7 +306,23 @@ contrast<a class="anchor" aria-label="anchor" href="#anhecova-model-with-pocock-
 <span class="co">#&gt;           [,1]         [,2]         [,3]</span>
 <span class="co">#&gt; 0 0.0009847045 0.0001168350 0.0000512697</span>
 <span class="co">#&gt; 1 0.0001168350 0.0008810208 0.0000152694</span>
-<span class="co">#&gt; 2 0.0000512697 0.0000152694 0.0010558938</span></code></pre></div>
+<span class="co">#&gt; 2 0.0000512697 0.0000152694 0.0010558938</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Data Structure:</span>
+<span class="co">#&gt;   z1 z2          y0         y1       y2 A         y strata_cross x1</span>
+<span class="co">#&gt; 1  0  1  0.53887826 -2.5558896 3.735328 0 -2.555890          0-1  0</span>
+<span class="co">#&gt; 2  0  1 -0.08548387  3.0872151 3.683796 0  3.087215          0-1  0</span>
+<span class="co">#&gt; 3  1  1  4.35493364  2.9721471 3.344565 2  3.344565          1-1  1</span>
+<span class="co">#&gt; 4  0  2  0.59817631  0.3108723 2.178533 2  2.178533          0-2  0</span>
+<span class="co">#&gt; 5  0  1  1.39956151 -2.6562051 3.541720 1  3.541720          0-1  0</span>
+<span class="co">#&gt; 6  0  1  1.26664653 -4.0872147 3.764908 0 -4.087215          0-1  0</span>
+<span class="co">#&gt;             x3 y_bin</span>
+<span class="co">#&gt; 1 -1.554766366     0</span>
+<span class="co">#&gt; 2 -0.364649622     1</span>
+<span class="co">#&gt; 3 -0.487620009     1</span>
+<span class="co">#&gt; 4  0.008503426     1</span>
+<span class="co">#&gt; 5 -1.471108795     1</span>
+<span class="co">#&gt; 6 -1.878365975     0</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="heterogeneous-working-model-with-permuted-block-randomization">Heterogeneous working model with permuted-block randomization<a class="anchor" aria-label="anchor" href="#heterogeneous-working-model-with-permuted-block-randomization"></a>
@@ -289,12 +361,80 @@ contrast<a class="anchor" aria-label="anchor" href="#anhecova-model-with-pocock-
 <span class="co">#&gt;           [,1]         [,2]         [,3]</span>
 <span class="co">#&gt; 0 9.527362e-04 7.673164e-05 1.761882e-05</span>
 <span class="co">#&gt; 1 7.673164e-05 7.828870e-04 8.007111e-05</span>
-<span class="co">#&gt; 2 1.761882e-05 8.007111e-05 9.605914e-04</span></code></pre></div>
+<span class="co">#&gt; 2 1.761882e-05 8.007111e-05 9.605914e-04</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Data Structure:</span>
+<span class="co">#&gt;   z1 z2          y0         y1       y2 A         y strata_cross x1</span>
+<span class="co">#&gt; 1  0  1  0.53887826 -2.5558896 3.735328 0 -2.555890          0-1  0</span>
+<span class="co">#&gt; 2  0  1 -0.08548387  3.0872151 3.683796 0  3.087215          0-1  0</span>
+<span class="co">#&gt; 3  1  1  4.35493364  2.9721471 3.344565 2  3.344565          1-1  1</span>
+<span class="co">#&gt; 4  0  2  0.59817631  0.3108723 2.178533 2  2.178533          0-2  0</span>
+<span class="co">#&gt; 5  0  1  1.39956151 -2.6562051 3.541720 1  3.541720          0-1  0</span>
+<span class="co">#&gt; 6  0  1  1.26664653 -4.0872147 3.764908 0 -4.087215          0-1  0</span>
+<span class="co">#&gt;             x3 y_bin</span>
+<span class="co">#&gt; 1 -1.554766366     0</span>
+<span class="co">#&gt; 2 -0.364649622     1</span>
+<span class="co">#&gt; 3 -0.487620009     1</span>
+<span class="co">#&gt; 4  0.008503426     1</span>
+<span class="co">#&gt; 5 -1.471108795     1</span>
+<span class="co">#&gt; 6 -1.878365975     0</span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="heterogeneous-working-model-with-biased-coin-randomization">Heterogeneous working model with biased-coin randomization<a class="anchor" aria-label="anchor" href="#heterogeneous-working-model-with-biased-coin-randomization"></a>
+<h3 id="working-model-specified-using-a-formula-with-biased-coin-randomization">Working model specified using a formula, with biased-coin
+randomization<a class="anchor" aria-label="anchor" href="#working-model-specified-using-a-formula-with-biased-coin-randomization"></a>
 </h3>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">glm.formula</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/robincar_glm.html">robincar_glm</a></span><span class="op">(</span>df <span class="op">=</span> <span class="va">data</span>,
+                          response_col<span class="op">=</span><span class="st">"y_bin"</span>,
+                          treat_col<span class="op">=</span><span class="st">"A"</span>,
+                          formula<span class="op">=</span><span class="st">"y_bin ~ A + z2:x1"</span>,
+                          strata_cols<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"z2"</span><span class="op">)</span>,
+                          car_scheme<span class="op">=</span><span class="st">"biased-coin"</span>,
+                          g_family<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">binomial</a></span><span class="op">(</span>link<span class="op">=</span><span class="st">"logit"</span><span class="op">)</span>,
+                          g_accuracy<span class="op">=</span><span class="fl">7</span>,
+                          vcovHC<span class="op">=</span><span class="st">"HC0"</span><span class="op">)</span>
+<span class="va">glm.formula</span>
+<span class="co">#&gt; Treatment group mean estimates from a GLM working model of family binomial and link logit using formula: </span>
+<span class="co">#&gt; response ~ treat + z2:x1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Used HC0-type of heteroskedasticity-consistent variance estimates </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Estimates:</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 4</span></span>
+<span class="co">#&gt;   treat estimate     se `pval (2-sided)`</span>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 0        0.560 0.037<span style="text-decoration: underline;">7</span>        6.62<span style="color: #949494;">e</span><span style="color: #BB0000;">- 50</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 1        0.761 0.029<span style="text-decoration: underline;">2</span>        1.48<span style="color: #949494;">e</span><span style="color: #BB0000;">-149</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 2        0.713 0.032<span style="text-decoration: underline;">3</span>        6.96<span style="color: #949494;">e</span><span style="color: #BB0000;">-108</span></span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Variance-Covariance Matrix:</span>
+<span class="co">#&gt;           [,1]         [,2]         [,3]</span>
+<span class="co">#&gt; 0 0.0014201219 1.209135e-04 1.016166e-04</span>
+<span class="co">#&gt; 1 0.0001209135 8.543588e-04 2.117103e-05</span>
+<span class="co">#&gt; 2 0.0001016166 2.117103e-05 1.045560e-03</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Data Structure:</span>
+<span class="co">#&gt;   z1 z2          y0         y1       y2 A         y strata_cross x1</span>
+<span class="co">#&gt; 1  0  1  0.53887826 -2.5558896 3.735328 0 -2.555890          0-1  0</span>
+<span class="co">#&gt; 2  0  1 -0.08548387  3.0872151 3.683796 0  3.087215          0-1  0</span>
+<span class="co">#&gt; 3  1  1  4.35493364  2.9721471 3.344565 2  3.344565          1-1  1</span>
+<span class="co">#&gt; 4  0  2  0.59817631  0.3108723 2.178533 2  2.178533          0-2  0</span>
+<span class="co">#&gt; 5  0  1  1.39956151 -2.6562051 3.541720 1  3.541720          0-1  0</span>
+<span class="co">#&gt; 6  0  1  1.26664653 -4.0872147 3.764908 0 -4.087215          0-1  0</span>
+<span class="co">#&gt;             x3 y_bin</span>
+<span class="co">#&gt; 1 -1.554766366     0</span>
+<span class="co">#&gt; 2 -0.364649622     1</span>
+<span class="co">#&gt; 3 -0.487620009     1</span>
+<span class="co">#&gt; 4  0.008503426     1</span>
+<span class="co">#&gt; 5 -1.471108795     1</span>
+<span class="co">#&gt; 6 -1.878365975     0</span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="heterogeneous-working-model-with-biased-coin-randomization-differences-contrast">Heterogeneous working model with biased-coin randomization,
+differences contrast<a class="anchor" aria-label="anchor" href="#heterogeneous-working-model-with-biased-coin-randomization-differences-contrast"></a>
+</h3>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">glm.heterogeneous</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/robincar_glm.html">robincar_glm</a></span><span class="op">(</span>df <span class="op">=</span> <span class="va">data</span>,
                               response_col<span class="op">=</span><span class="st">"y_bin"</span>,
                               treat_col<span class="op">=</span><span class="st">"A"</span>,
@@ -331,6 +471,22 @@ contrast<a class="anchor" aria-label="anchor" href="#anhecova-model-with-pocock-
 <span class="co">#&gt; 0 9.355869e-04 7.535047e-05 1.730168e-05</span>
 <span class="co">#&gt; 1 7.535047e-05 7.687950e-04 7.862983e-05</span>
 <span class="co">#&gt; 2 1.730168e-05 7.862983e-05 9.433007e-04</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Data Structure:</span>
+<span class="co">#&gt;   z1 z2          y0         y1       y2 A         y strata_cross x1</span>
+<span class="co">#&gt; 1  0  1  0.53887826 -2.5558896 3.735328 0 -2.555890          0-1  0</span>
+<span class="co">#&gt; 2  0  1 -0.08548387  3.0872151 3.683796 0  3.087215          0-1  0</span>
+<span class="co">#&gt; 3  1  1  4.35493364  2.9721471 3.344565 2  3.344565          1-1  1</span>
+<span class="co">#&gt; 4  0  2  0.59817631  0.3108723 2.178533 2  2.178533          0-2  0</span>
+<span class="co">#&gt; 5  0  1  1.39956151 -2.6562051 3.541720 1  3.541720          0-1  0</span>
+<span class="co">#&gt; 6  0  1  1.26664653 -4.0872147 3.764908 0 -4.087215          0-1  0</span>
+<span class="co">#&gt;             x3 y_bin</span>
+<span class="co">#&gt; 1 -1.554766366     0</span>
+<span class="co">#&gt; 2 -0.364649622     1</span>
+<span class="co">#&gt; 3 -0.487620009     1</span>
+<span class="co">#&gt; 4  0.008503426     1</span>
+<span class="co">#&gt; 5 -1.471108795     1</span>
+<span class="co">#&gt; 6 -1.878365975     0</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $contrast</span>
 <span class="co">#&gt; Treatment group contrasts using linear contrast</span>
