@@ -1,5 +1,5 @@
 ---
-title: "(3) Robust Testing for Time-to-Event Data"
+title: "Robust Testing for Time-to-Event Data"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Robust Testing for Time-to-Event Data}
@@ -19,6 +19,10 @@ rm(list=ls())
 library(RobinCar)
 library(dplyr)
 ```
+
+#### References
+
+Ting Ye, Jun Shao, Yanyao Yi. [Covariate-Adjusted Log-Rank Test: Guaranteed Efficiency Gain and Universal Applicability.](https://arxiv.org/pdf/2201.11948.pdf)
 
 ## Robust Cox Score
 

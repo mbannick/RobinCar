@@ -1,5 +1,5 @@
 ---
-title: "(1) Continuous and GLM-Type Outcomes"
+title: "Continuous and GLM-Type Outcomes"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Continuous and GLM-Type Outcomes}
@@ -18,6 +18,10 @@ knitr::opts_chunk$set(
 rm(list=ls())
 library(RobinCar)
 ```
+
+#### References
+
+Ting Ye, Jun Shao, Yanyao Yi, Qinyuan Zhao (2022+). [Toward Better Practice of Covariate Adjustment in Analyzing Randomized Clinical Trials](https://www.google.com/url?q=https%3A%2F%2Farxiv.org%2Fpdf%2F2009.11828.pdf&sa=D&sntz=1&usg=AOvVaw0OHre3-8OSKzqlaR2yaVrY). *Journal of the American Statistical Association*, in press.
 
 ## Adjustment with Continuous Outcomes
 

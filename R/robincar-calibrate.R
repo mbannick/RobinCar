@@ -32,11 +32,14 @@ robincar_calibrate <- function(result, joint=FALSE,
     newdat <- cbind(newdat, result$data$covariate)
   }
   if(!is.null(add_x)){
-    if(!add_x %in% colnames(data)) .miss.covariate.calibrate()
+    if(!add_x %in% colnames(result$original_df)) .miss.covariate.calibrate()
     newdat <- cbind(newdat, result$original_df[add_x])
   }
   if(!is.null(result$data$strata)){
-    newdat <- cbind(newdat, result$data$strata)
+    for(cname in colnames(result$data$strata)){
+      if(cname %in% colnames(newdat)) next
+      newdat <- cbind(newdat, result$data$strata[cname])
+    }
   }
 
   # Run robincar_glm using the heterogeneous
