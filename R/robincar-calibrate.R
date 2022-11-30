@@ -32,8 +32,11 @@ robincar_calibrate <- function(result, joint=FALSE,
     newdat <- cbind(newdat, result$data$covariate)
   }
   if(!is.null(add_x)){
-    if(!add_x %in% colnames(result$original_df)) .miss.covariate.calibrate()
-    newdat <- cbind(newdat, result$original_df[add_x])
+    for(cname in c(add_x)){
+      if(cname %in% colnames(newdat)) next
+      if(!cname %in% colnames(result$original_df)) .miss.covariate.calibrate()
+      newdat <- cbind(newdat, result$original_df[cname])
+    }
   }
   if(!is.null(result$data$strata)){
     for(cname in colnames(result$data$strata)){
