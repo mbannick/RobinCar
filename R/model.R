@@ -73,6 +73,39 @@
   return(model)
 }
 
+# Makes a model class for the specified glm adjustment method
+# with settings for covariate randomization
+# scheme and vcovHC type.
+.make.model.RoboDataSL <- function(data, car_scheme, vcovHC,
+                                    covariate_to_include_strata,
+                                    SL_libraries, k_split) {
+
+  x_exists <- !is.null(data$covariate)
+  z_exists <- !is.null(data$strata)
+
+  # Get logic for adjustment methods
+  logic <- SLlogic(car_scheme=car_scheme,
+                    x_exists=x_exists, z_exists=z_exists,
+                    cov_strata=covariate_to_include_strata)
+  model <- structure(
+    list(
+      vcovHC=vcovHC,
+      SL_libraries=SL_libraries,
+      k_split=k_split,
+      car_scheme=car_scheme,
+      adj_se_z=logic$adj_se_z,
+      adj_vars=logic$adj_vars,
+      pu_joint_z=logic$pu_joint_z,
+      pu_funcs=logic$pu_funcs,
+      omegaz_func=logic$omegaz_func
+    ),
+    class=c(logic$method)
+  )
+
+  return(model)
+}
+
+
 # Makes a model class for the specified TTE adjustment method
 # with settings for covariate randomization
 # scheme and vcovHC type.

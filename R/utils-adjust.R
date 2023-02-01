@@ -42,3 +42,81 @@ get.dmat <- function(data, adj_vars){
   return(modmat)
 }
 
+get.mutilde <- function(model, data, muhat){
+  # Get response
+  y <- data$response
+
+  # Get treatment group indicators and outcome
+  t_ids <- sapply(data$treat_levels, function(x) data$treat == x)
+
+  if(!model$pu_joint_z){
+    # Only look within treatment groups
+    center_ids <- as.list(data.frame(t_ids))
+    center_mus <- as.list(data.frame(muhat))
+  } else {
+
+    # Will create matrix for combination of strata and treatment groups
+    sl <- data$joint_strata_levels
+    tl <- data$treat_levels
+
+    # Get indicators for joint strata group
+    s_ids <- sapply(sl, function(x) data$joint_strata == x)
+
+    # Get joint levels of treatment and strata groups
+    center_ids <- as.list(data.frame(
+      t_ids[, rep(1:ncol(t_ids), each=length(sl))] &
+        s_ids[, rep(1:ncol(s_ids), times=length(tl))]
+    ))
+
+    # Repeat the mu columns for each strata
+    center_mus <- as.list(data.frame(muhat[, rep(1:ncol(muhat), each=length(sl))]))
+  }
+
+  # Compute AIPW estimator by re-centering predictions
+  # within treatment groups
+  recenter <- function(u, i){
+    cent <- sum(u[i])/sum(i) - sum(y[i])/sum(i)
+    return(u - cent)
+  }
+  mutilde <- mapply(FUN=recenter,
+                    u=center_mus,
+                    i=center_ids)
+
+  if(model$pu_joint_z){
+    new_mutilde <- matrix(data=NA, nrow=data$n, ncol=ncol(muhat))
+    for(s_col in 1:ncol(s_ids)){
+      scol_seq <- seq(s_col, ncol(mutilde), by=length(sl))
+      new_mutilde[s_ids[, s_col], ] <- mutilde[s_ids[, s_col], scol_seq]
+    }
+    mutilde <- new_mutilde
+  }
+
+  # Check prediction un-biasedness for the original muhat
+  # g-computation just for warning/error reporting,
+  # only up to level of accuracy specified by the user
+  check.pu <- function(u, i) round(mean(u[i] - y[i]),
+                                   digits=model$g_accuracy)
+
+  # Calculate the group-specific residuals
+  # where the groups are defined as treatment or treatment x strata above
+  resid <- mapply(
+    FUN=check.pu,
+    u=center_mus,
+    i=center_ids
+  )
+
+  # Report warning or error messages, whatever
+  # is passed through the model settings, if not prediction unbiased.
+  if(!all(resid == 0)){
+    if(!is.list(model$pu_funcs)){
+      funcs <- list(model$pu_funcs)
+    } else {
+      funcs <- model$pu_funcs
+    }
+    for(func in funcs){
+      func()
+    }
+  }
+
+  return(mutilde)
+}
