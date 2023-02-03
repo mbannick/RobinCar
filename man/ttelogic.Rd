@@ -14,16 +14,3 @@ warning or error messages based on the user input,
 \description{
 Logic for performing robincar_coxscore or robincar_logrank for time to event endpoints
 }
-\examples{
-logic_CL <- ttelogic(x_exists=TRUE, z_exists=TRUE,
-                              car_scheme="permuted-block",
-                              adj_method="CL")
-
-logic_CSL <- ttelogic(x_exists=TRUE, z_exists=TRUE,
-                               car_scheme="permuted-block",
-                               adj_method="CSL")
-
-logic_coxscore <- ttelogic(x_exists=TRUE, z_exists=TRUE,
-                                    car_scheme="permuted-block",
-                                    adj_method="coxscore")
-}

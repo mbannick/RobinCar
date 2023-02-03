@@ -77,17 +77,61 @@ robincar_SL <- function(df,
   return(result)
 }
 
+#' Covariate adjustment using working models from the super learner libraries
+#' through the AIPW package with cross-fitting.
+#' Estimate treatment-group-specific response means and (optionally)
+#' treatment group contrasts using a generalized linear working model.
+#'
+#'
+#' @param n_times Number of times to run the robincar_SL function
+#' @param seed Seed to set before running the set of functions
+#' @param ... Additional arguments passed to robincar_SL
+#' @export
 robincar_SL_median <- function(n_times, seed, ...){
+
+  if(n_times %% 2 == 0) stop("Must have an odd number of n_times.")
 
   # Set the seed before running any of the robincar function
   # that will do sample splitting.
   set.seed(seed)
   res <- list()
-  for(i in n_times){
+  for(i in 1:n_times){
     res[[i]] <- robincar_SL(...)
   }
 
+  estimates <- sapply(res, function(x) x$result$estimate)
+  varcovs <- lapply(res, function(x) x$varcov)
+
+  # Get median of estimates
+  estimate <- apply(estimates, 1, median)
+
+  # Create varcov_tilde which adds on the residual
+  varcov_tilde <- list()
+  for(i in 1:n_times){
+    c_est <- estimates[, i] - estimate # centered estimates
+    varcov_tilde[[i]] <- varcovs[[i]] + c_est %*% t(c_est)
+  }
+  varcov_opnorm <- sapply(varcov_tilde, function(x) norm(x, type="2"))
+  # TODO: What if there are multiple matrices with the same operator norm?
+  idx <- which(varcov_opnorm == median(varcov_opnorm))
+  variance <- varcov_tilde[[idx]]
+
+  data <- res[[1]]$data
+
   # TODO: Extract each of the point estimates and variance-covariance
   # matrices to get the median-adjusted results.
+  result <- format.results(data$treat_levels, estimate, variance)
 
+  mods <- lapply(res, function(x) x$mod)
+  mu_as <- lapply(res, function(x) x$mu_a)
+
+  return(
+    structure(
+      class="SLModelResult",
+      list(result=result, varcov=variance,
+           settings=res[[1]]$settings,
+           data=res[[1]]$data, mod=mods, mu_a=mu_as,
+           original_df=res[[1]]$original_df)
+    )
+  )
 }

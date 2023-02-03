@@ -7,6 +7,10 @@ DATA2 <- data.frame(A=rbinom(n, size=1, prob=0.5),
                     x3=as.factor(rbinom(n, size=1, prob=0.5)),
                     z1=rbinom(n, size=1, prob=0.5),
                     z2=rbinom(n, size=1, prob=0.5))
+DATA2[, "y"] <- NA
+As <- DATA2$A == 1
+DATA2[DATA2$A == 1, "y"] <- rbinom(sum(As), size=1, prob=exp(DATA2[As,]$x1)/(1+exp(DATA2[As,]$x1)))
+DATA2[DATA2$A == 0, "y"] <- rbinom(n-sum(As), size=1, prob=exp(1 + 5*DATA2[!As,]$x1 + DATA2[!As,]$x2)/(1+exp(1 + 5*DATA2[!As,]$x1 + DATA2[!As,]$x2)))
 DATA2$A <- as.factor(DATA2$A)
 DATA2$x1 <- DATA2$x1 - mean(DATA2$x1)
 
@@ -33,4 +37,18 @@ sl.mod <- robincar_SL(
   car_scheme="permuted-block",
   covariate_to_include_strata=TRUE,
   vcovHC="HC3"
+)
+
+sl.mod <- robincar_SL_median(
+  seed=1,
+  n_times=5,
+  df=DATA2,
+  response_col="y",
+  treat_col="A",
+  strata_cols=c("z1"),
+  covariate_cols=c("x1"),
+  SL_libraries=c("SL.ranger"),
+  car_scheme="permuted-block",
+  covariate_to_include_strata=TRUE,
+  vcovHC="HC0"
 )

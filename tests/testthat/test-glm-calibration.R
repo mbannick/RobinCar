@@ -4,9 +4,6 @@ DATA$y <- ifelse(DATA$y > 2, 1, 0)
 
 test_that("test calibration", {
 
-  source("../../legacy/robin-g.R")
-  source("../../legacy/robin-g-calibrate.R")
-
   this <- robincar_glm(
     df=DATA,
     response_col="y",

@@ -41,7 +41,7 @@ robincar_SL(
 
 \item{SL_libraries}{Vector of super-learner libraries to use for the covariate adjustment (see SuperLearner::listWrappers())}
 
-\item{k_split}{Number of splits to use in cross-fitting (see ?AIPW) (default is 2)}
+\item{k_split}{Number of splits to use in cross-fitting}
 
 \item{contrast_h}{An optional function to specify a desired contrast}
 

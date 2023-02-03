@@ -4,31 +4,36 @@
 #' model type of `model` and also do G-computation or AIPW
 #' based on the second model type of `model`.
 adjust.SLModel <- function(model, data){
-  browser()
 
-  estimates <- list()
+  dmat <- get.dmat(data, model$adj_vars)
 
-  # TODO: Estimate \pi_a
-  pi_a <- ...
+  # TODO: Need to have option for multiple treatment groups
+  # TODO: This fails if there are not enough people in each
+  #       treatment group... how to fix?
+  aipw <- AIPW$new(
+    Y=data$response,
+    A=as.integer(data$treat) - 1,
+    W.Q=dmat,
+    W.g=rep(1, data$n),
+    Q.SL.library=model$SL_libraries,
+    g.SL.library="SL.mean",
+    k_split=model$k_split,
+    verbose=T
+  )
+  # TODO: Need option for whether or not to perform a stratified fit
+  # maybe in the adj_method option for homogeneous or heterogeneous?
+  aipw$stratified_fit()
+  mutilde <- do.call(cbind, aipw$obs_est[1:data$k])
+  estimate <- colMeans(mutilde)
 
-  for(i in 1:model$k_split){ # k splits
-    # Get covariates for outcome regression -- everything but the k'th partition
-    dmat <- get.dmat(data[!data$k], model$adj_vars)
-    # TODO: Use superlearner to estimate $\mu_k(X_i)$ for each observation in k
-    # and treatment group
-    sl_muk <- ...
-
-    # TODO: The mutilde function needs to be modified so that
-    # it uses \hat{\pi}_a on the whole sample. Should pass in a value for
-    # \hat{\pi}_a here so that we can override the default behavior of get.mutilde
-    mutilde <- get.mutilde(model, data, muhat=sl_muk, pi=pi_a)
-    estimates[[i]] <- colMeans(mutilde)
-  }
-
-  # TODO: Then average the estimates of \check{\theta}_k to get \hat{\theta}
+  # This is just a placeholder for the data frame, it's not
+  # actually using this GLM model fit
+  df <- data.frame(response=data$response, treat=data$treat, dmat)
+  glmod <- glm(response ~ ., data=df)
 
   # Compute the asymptotic variance -- not specific to a partition
   asympt.variance <- vcov_car(model, data, glmod, mutilde)
+  # TODO: What do we put for the rank of the AIPW model?
   vcov_wt <- get.vcovHC(model$vcovHC, n=data$n, p=glmod$rank)
   variance <- asympt.variance * vcov_wt / data$n
 

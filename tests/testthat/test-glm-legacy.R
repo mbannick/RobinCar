@@ -1,7 +1,6 @@
 # Compare to legacy code from Yanyao Yi
 
 test_that("GLM -- no covariates", {
-  source("../../legacy/robin-g.R")
 
   n <- 10000
   set.seed(10)
