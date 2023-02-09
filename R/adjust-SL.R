@@ -6,7 +6,6 @@
 adjust.SLModel <- function(model, data){
 
   dmat <- get.dmat(data, model$adj_vars)
-
   # TODO: Need to have option for multiple treatment groups
   # TODO: This fails if there are not enough people in each
   #       treatment group... how to fix?
@@ -23,7 +22,8 @@ adjust.SLModel <- function(model, data){
   # TODO: Need option for whether or not to perform a stratified fit
   # maybe in the adj_method option for homogeneous or heterogeneous?
   aipw$stratified_fit()
-  mutilde <- do.call(cbind, aipw$obs_est[1:data$k])
+  muhat <- do.call(cbind, aipw$obs_est[1:data$k])
+  mutilde <- get.mutilde(model, data, muhat)
   estimate <- colMeans(mutilde)
 
   # This is just a placeholder for the data frame, it's not
@@ -33,8 +33,7 @@ adjust.SLModel <- function(model, data){
 
   # Compute the asymptotic variance -- not specific to a partition
   asympt.variance <- vcov_car(model, data, glmod, mutilde)
-  # TODO: What do we put for the rank of the AIPW model?
-  vcov_wt <- get.vcovHC(model$vcovHC, n=data$n, p=glmod$rank)
+  vcov_wt <- get.vcovHC(model$vcovHC, n=data$n, p=NULL)
   variance <- asympt.variance * vcov_wt / data$n
 
   result <- format.results(data$treat_levels, estimate, variance)

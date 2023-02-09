@@ -77,8 +77,9 @@
 # with settings for covariate randomization
 # scheme and vcovHC type.
 .make.model.RoboDataSL <- function(data, car_scheme, vcovHC,
-                                    covariate_to_include_strata,
-                                    SL_libraries, k_split) {
+                                   covariate_to_include_strata,
+                                   SL_libraries, k_split,
+                                   g_accuracy) {
 
   x_exists <- !is.null(data$covariate)
   z_exists <- !is.null(data$strata)
@@ -97,7 +98,8 @@
       adj_vars=logic$adj_vars,
       pu_joint_z=logic$pu_joint_z,
       pu_funcs=logic$pu_funcs,
-      omegaz_func=logic$omegaz_func
+      omegaz_func=logic$omegaz_func,
+      g_accuracy=g_accuracy
     ),
     class=c(logic$method)
   )

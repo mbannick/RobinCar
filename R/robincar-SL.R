@@ -16,6 +16,7 @@
 #' @param contrast_dh An optional jacobian function for the contrast (otherwise use numerical derivative)
 #' @param SL_libraries Vector of super-learner libraries to use for the covariate adjustment (see SuperLearner::listWrappers())
 #' @param k_split Number of splits to use in cross-fitting
+#' @param g_accuracy Level of accuracy to check prediction un-biasedness (in digits).
 #' @param centering WARNING: Advanced use only. By default is NULL, so will perform expected behavior
 #'                           in documentation.
 #'                  If centering = 'none', then this will force it to be a g-computation estimator,
@@ -29,13 +30,13 @@
 #' @import SuperLearner
 robincar_SL <- function(df,
                          treat_col, response_col, strata_cols=NULL, covariate_cols=NULL,
-                         car_scheme="simple", vcovHC="HC0",
+                         car_scheme="simple",
                          covariate_to_include_strata=NULL,
                          SL_libraries=c(), k_split=2,
+                         g_accuracy=7,
                          contrast_h=NULL, contrast_dh=NULL){
 
   .check.car_scheme(car_scheme)
-  .check.vcovHC(vcovHC)
   .check.sl.libraries(SL_libraries)
 
   # Add a k split index to .make.data, so that we can index
@@ -53,10 +54,11 @@ robincar_SL <- function(df,
   model <- .make.model(
     data=data,
     car_scheme=car_scheme,
-    vcovHC=vcovHC,
+    vcovHC="HC0",
     covariate_to_include_strata=covariate_to_include_strata,
     SL_libraries=SL_libraries,
-    k_split=k_split
+    k_split=k_split,
+    g_accuracy=g_accuracy
   )
 
   # Perform adjustment
@@ -118,8 +120,6 @@ robincar_SL_median <- function(n_times, seed, ...){
 
   data <- res[[1]]$data
 
-  # TODO: Extract each of the point estimates and variance-covariance
-  # matrices to get the median-adjusted results.
   result <- format.results(data$treat_levels, estimate, variance)
 
   mods <- lapply(res, function(x) x$mod)
