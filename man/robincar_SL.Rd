@@ -14,7 +14,6 @@ robincar_SL(
   strata_cols = NULL,
   covariate_cols = NULL,
   car_scheme = "simple",
-  vcovHC = "HC0",
   covariate_to_include_strata = NULL,
   SL_libraries = c(),
   k_split = 2,
@@ -35,8 +34,6 @@ robincar_SL(
 
 \item{car_scheme}{Name of the type of covariate-adaptive randomization scheme. One of: "simple", "pocock-simon", "biased-coin", "permuted-block".}
 
-\item{vcovHC}{Type of heteroskedasticity-consistent variance estimates. One of: "HC0", "HC1", "HC3".}
-
 \item{covariate_to_include_strata}{Whether to include strata variables in covariate adjustment. Defaults to F for ANOVA and ANCOVA; defaults to T for ANHECOVA. User may override by passing in this argument.}
 
 \item{SL_libraries}{Vector of super-learner libraries to use for the covariate adjustment (see SuperLearner::listWrappers())}
@@ -46,6 +43,8 @@ robincar_SL(
 \item{contrast_h}{An optional function to specify a desired contrast}
 
 \item{contrast_dh}{An optional jacobian function for the contrast (otherwise use numerical derivative)}
+
+\item{vcovHC}{Type of heteroskedasticity-consistent variance estimates. One of: "HC0", "HC1", "HC3".}
 
 \item{centering}{WARNING: Advanced use only. By default is NULL, so will perform expected behavior
          in documentation.

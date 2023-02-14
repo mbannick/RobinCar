@@ -35,8 +35,7 @@ sl.mod <- robincar_SL(
   covariate_cols=c("x1"),
   SL_libraries=c("SL.ranger"),
   car_scheme="permuted-block",
-  covariate_to_include_strata=TRUE,
-  vcovHC="HC3"
+  covariate_to_include_strata=TRUE
 )
 
 sl.mod <- robincar_SL_median(
@@ -50,5 +49,5 @@ sl.mod <- robincar_SL_median(
   SL_libraries=c("SL.ranger"),
   car_scheme="permuted-block",
   covariate_to_include_strata=TRUE,
-  vcovHC="HC0"
+  g_accuracy=7
 )
