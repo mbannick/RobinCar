@@ -77,7 +77,7 @@
 # with settings for covariate randomization
 # scheme and vcovHC type.
 .make.model.RoboDataTTE <- function(data, adj_method, car_scheme,
-                                    p_trt, ref_arm, sparse_remove) {
+                                    p_trt, ref_arm, ...) {
 
   x_exists <- !is.null(data$covariate)
   z_exists <- !is.null(data$strata)
@@ -103,7 +103,7 @@
       car_scheme=car_scheme,
       p_trt=p_trt,
       ref_arm=ref_arm,
-      sparse_remove=sparse_remove
+      ...
     ),
     class=c(classtype, logic$method)
   )
