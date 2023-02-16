@@ -47,6 +47,16 @@
                                     covariate_to_include_strata,
                                     g_family, g_accuracy) {
 
+  if(is.null(covariate_to_include_strata)){
+    if(adj_method == "ANHECOVA"){
+      cov_strata <- TRUE
+    } else {
+      cov_strata <- FALSE
+    }
+  } else {
+    cov_strata <- covariate_to_include_strata
+  }
+
   x_exists <- !is.null(data$covariate)
   z_exists <- !is.null(data$strata)
 
