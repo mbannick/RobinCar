@@ -10,8 +10,8 @@ print.LinModelResult <- function(x, ...){
   print(x$result)
   cat("\nVariance-Covariance Matrix:\n")
   print(x$varcov)
-  cat("\nData Structure:\n")
-  print(head(x$original_df))
+  # cat("\nData Structure:\n")
+  # print(head(x$original_df))
 }
 
 #' Print glm model result
@@ -26,8 +26,8 @@ print.GLMModelResult <- function(x, ...){
   print(x$result)
   cat("\nVariance-Covariance Matrix:\n")
   print(x$varcov)
-  cat("\nData Structure:\n")
-  print(head(x$original_df))
+  # cat("\nData Structure:\n")
+  # print(head(x$original_df))
 }
 
 #' Print contrast result
@@ -78,19 +78,39 @@ print.TTEResult <- function(x, ...){
   }
   if((x$settings$method == "CL") | (x$settings$method == "CSL" & !x$settings$car_strata)){
     if((x$settings$adj_cov) | x$settings$adj_strata){
-      cat("Performed covariate-adjusted logrank test with covariates ",
-          paste0(c(covariates, strata), sep=", "))
+      if("TTEResultEst" %in% class(x)){
+        cat("Performed covariate-adjusted cox hazard ratio estimation with covariates ",
+            paste0(c(covariates, strata), sep=", "))
+      } else {
+        cat("Performed covariate-adjusted logrank test with covariates ",
+            paste0(c(covariates, strata), sep=", "))
+      }
     } else {
-      cat("Performed logrank test.")
+      if("TTEResultEst" %in% class(x)){
+        cat("Performed cox hazard ratio estimation.")
+      } else {
+        cat("Performed logrank test.")
+      }
     }
   } else if(x$settings$method == "CSL"){
     if((x$settings$adj_cov)){
-      cat("Performed covariate-adjusted stratified logrank test with covariates ",
-          paste0(c(covariates), sep=", "),
-          " and stratifying by ", paste0(c(strata), sep=", "))
+      if("TTEResultEst" %in% class(x)){
+        cat("Performed covariate-adjusted cox hazard ratio estimation with covariates ",
+            paste0(c(covariates), sep=", "),
+            " and stratifying by ", paste0(c(strata), sep=", "))
+      } else {
+        cat("Performed covariate-adjusted stratified logrank test with covariates ",
+            paste0(c(covariates), sep=", "),
+            " and stratifying by ", paste0(c(strata), sep=", "))
+      }
     } else {
-      cat("Performed stratified logrank test stratifying by ",
-          paste0(c(strata), sep=", "))
+      if("TTEResultEst" %in% class(x)){
+        cat("Performed stratified cox hazard ratio estimation stratifying by ",
+            paste0(c(strata), sep=", "))
+      } else {
+        cat("Performed stratified logrank test stratifying by ",
+            paste0(c(strata), sep=", "))
+      }
     }
   } else if(x$settings$method == "coxscore"){
     cat("Performed coxscore test")
@@ -130,12 +150,26 @@ print.TTEResult <- function(x, ...){
 
   print(summ)
   cat("\nReference arm is ", x$data$treat_col, "=", x$settings$ref_arm, "\n")
-  cat("\nScore function:", x$result$U,
+  if("TTEResultEst" %in% class(x)){
+    stat <- x$result$theta_CL/x$result$se_theta_CL
+    cat(
+      "\nTest Stat:", x$result$theta_CL/x$result$se_theta_CL,
+      "\n2-side p-value:", 2*(1-pnorm(abs(stat))),
+      "\nHR:", x$result$theta_CL,
+      "\nLog HR:", log(x$result$theta_CL),
+      "\nHR SE:", x$result$se_theta_CL
+    )
+  } else {
+    cat(
+      "\nScore function:", x$result$U,
       "\nStandard error:", x$result$se,
       "\nTest statistic:", x$result$statistic,
-      "\n2-side p-value:", 2*(1-pnorm(abs(x$result$statistic))))
-  cat("\n\nData Structure:\n")
-  print(head(x$original_df))
+      "\n2-side p-value:", 2*(1-pnorm(abs(x$result$statistic)))
+    )
+  }
+
+  # cat("\n\nData Structure:\n")
+  # print(head(x$original_df))
 }
 
 #' Print calibration result
@@ -168,6 +202,6 @@ print.CalibrationResult <- function(x, ...){
   print(x$result)
   cat("\nVariance-Covariance Matrix:\n")
   print(x$varcov)
-  cat("\nData Structure:\n")
-  print(head(x$original_df))
+  # cat("\nData Structure:\n")
+  # print(head(x$original_df))
 }

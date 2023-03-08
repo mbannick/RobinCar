@@ -28,7 +28,7 @@ robincar_covhr <- function(df,
                            interval=c(-10, 10)){
 
   .check.car_scheme(car_scheme)
-  browser()
+
   data <- .make.data(
     df=df,
     classname="RoboDataTTE",

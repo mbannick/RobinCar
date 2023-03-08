@@ -4,7 +4,7 @@ get.ordered.data.est <- function(df, lin_predictors){
 
   data <- df %>% mutate(lin_pred=lin_predictors)
 
-  df <- df %>%
+  data <- data %>%
     group_by(.data$strata) %>%
     mutate(
       s0_seq          = exp(.data$lin_pred)
