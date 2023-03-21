@@ -1,8 +1,10 @@
 # Robust Estimation and Inference for Covariate-Adaptive Randomization
 
+## Authors
 Ting Ye, Yanyao Yi, Marlena Bannick, and Faith Bian
 
-Documentation: https://marlenabannick.com/RobinCar/.
+## Documentation
+https://marlenabannick.com/RobinCar/.
 
 ## Installation
 

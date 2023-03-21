@@ -39,6 +39,8 @@ robincar_tte(
 \item{ref_arm}{Reference arm of the treatment group, defaults to NULL,
 which results in using the first element of `unique(data[, treat_col])`.}
 
+\item{sparse_remove}{Remove sparse strata from calculation}
+
 \item{car_scheme}{Name of the type of covariate-adaptive randomization scheme. One of: "simple", "pocock-simon", "biased-coin", "permuted-block".}
 }
 \description{

@@ -18,8 +18,8 @@ omegaz.closure <- function(car_scheme){
   return(omegaz.func)
 }
 
-#' @title Calculate nu_d for the randomization design
-#' @export
+# #' @title Calculate nu_d for the randomization design
+# #' @export
 nu.d <- function(car_scheme, p_trt=0.5){
 
   if(length(car_scheme) > 1 | length(car_scheme) == 0){
