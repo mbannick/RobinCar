@@ -19,6 +19,7 @@
 #'                which results in using the first element of `unique(data[, treat_col])`.
 #' @param p_trt Treatment allocation ratio for the reference arm.
 #' @param adj_method Adjustment method (one of "CL", "CSL", or "coxscore")
+#' @param sparse_remove Remove sparse strata from calculation
 #'
 #' @export
 robincar_tte <- function(df,
