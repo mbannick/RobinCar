@@ -17,7 +17,7 @@ adjust.SLModel <- function(model, data){
     Q.SL.library=model$SL_libraries,
     g.SL.library="SL.mean",
     k_split=model$k_split,
-    verbose=T
+    verbose=F
   )
   # TODO: Need option for whether or not to perform a stratified fit
   # maybe in the adj_method option for homogeneous or heterogeneous?

@@ -37,7 +37,7 @@ robincar_SL <- function(df,
                          contrast_h=NULL, contrast_dh=NULL){
 
   .check.car_scheme(car_scheme)
-  .check.sl.libraries(SL_libraries)
+  # .check.sl.libraries(SL_libraries)
 
   # Add a k split index to .make.data, so that we can index
   # the dataset on the kth index set for cross-fitting
