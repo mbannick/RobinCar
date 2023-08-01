@@ -185,8 +185,8 @@ test_that("X (continuous) yes Z no, case1, CL",{
     ref_arm=0
   )
 
-  # Using the new function with no Z, modified version of Ting's original code
-  test12_ty <- covariate_adjusted_logrank_noZ(data.simu1, p_trt = 0.5)
+  # Using the function with no Z, modified version of Ting's original code
+  test12_ty <- covariate_adjusted_logrank(data.simu1, p_trt = 0.5, Z=FALSE)
   expect_equal(test12$result$U, test12_ty$U_CL)
   expect_equal(test12$result$se, as.numeric(test12_ty$se))
 

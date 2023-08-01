@@ -476,9 +476,9 @@ covariate_adjusted_stratified_logrank<-function(data.simu,p_trt){
 # Covariate adjusted logrank proposed in Ye, Yi, Shao (2022)
 #' @title Ting Ye's original code
 #' @export
-covariate_adjusted_logrank <- function(data.simu, p_trt) {
+covariate_adjusted_logrank <- function(data.simu, p_trt, Z=TRUE) {
   n <- dim(data.simu)[1]
-  data.simu$fz <- ind_to_factor(data.simu)
+  if(Z) data.simu$fz <- ind_to_factor(data.simu)
   data.rev <- data.sort(data.simu)
   T.seq <- data.rev$t
   T.rep <- c(0, T.seq)[1:n]
@@ -492,7 +492,14 @@ covariate_adjusted_logrank <- function(data.simu, p_trt) {
 
   x.model <-
     as.matrix(data.rev[, grepl("model", names(data.rev)), drop = FALSE]) #only those has model
-  x.mat <- model.matrix( ~ factor(fz) + x.model, data = data.rev)[, -1]
+  if(Z){
+    x.mat <- model.matrix( ~ factor(fz) + x.model, data = data.rev)[, -1]
+  } else {
+    x.mat <- model.matrix( ~ x.model, data = data.rev)[, -1]
+  }
+
+  # Need this if there's only one covariate and no strata
+  x.mat <- as.matrix(x.mat)
   x.centered <- sweep(x.mat, 2, colMeans(x.mat))
   # calculating beta0 and beta1 for variance estimation
   mu_t <- data.rev$Y1 / data.rev$Y
@@ -502,12 +509,22 @@ covariate_adjusted_logrank <- function(data.simu, p_trt) {
                                                                  data.rev$Y1 / (data.rev$Y) ^ 2)
   data.rev$O.hat[data.rev$I0 == 1] <-
     (-1) * data.rev$O.hat[data.rev$I0 == 1]
-  fit1.Ohat <-
-    lm(O.hat ~ factor(fz) + x.model[data.rev$I1 == 1, ], data = data.rev[data.rev$I1 ==
-                                                                           1, ])
-  fit0.Ohat <-
-    lm(O.hat ~ factor(fz) + x.model[data.rev$I1 == 0, ], data = data.rev[data.rev$I1 ==
-                                                                           0, ])
+  if(Z){
+    fit1.Ohat <-
+      lm(O.hat ~ factor(fz) + x.model[data.rev$I1 == 1, ], data = data.rev[data.rev$I1 ==
+                                                                             1, ])
+    fit0.Ohat <-
+      lm(O.hat ~ factor(fz) + x.model[data.rev$I1 == 0, ], data = data.rev[data.rev$I1 ==
+                                                                             0, ])
+  } else {
+    fit1.Ohat <-
+      lm(O.hat ~ x.model[data.rev$I1 == 1, ], data = data.rev[data.rev$I1 ==
+                                                                1, ])
+    fit0.Ohat <-
+      lm(O.hat ~ x.model[data.rev$I1 == 0, ], data = data.rev[data.rev$I1 ==
+                                                                0, ])
+  }
+
   beta1.Ohat <- fit1.Ohat$coefficients[-1]
   beta0.Ohat <- fit0.Ohat$coefficients[-1]
 
@@ -563,93 +580,3 @@ covariate_adjusted_logrank <- function(data.simu, p_trt) {
   ))
 }
 
-# Covariate adjusted logrank proposed in Ye, Yi, Shao (2022)
-#' @title Ting Ye's original code
-#' @export
-covariate_adjusted_logrank_noZ <- function(data.simu, p_trt) {
-  n <- dim(data.simu)[1]
-  data.rev <- data.sort(data.simu)
-  T.seq <- data.rev$t
-  T.rep <- c(0, T.seq)[1:n]
-  T.diff <- T.seq - T.rep
-  same.ind <- which(T.diff == 0)
-  n_col <- dim(data.rev)[2]
-  for (ind in same.ind) {
-    data.rev[ind, (n_col - 2):n_col] <- data.rev[ind - 1, (n_col - 2):n_col]
-  }
-  n <- dim(data.rev)[1]
-
-  x.model <-
-    as.matrix(data.rev[, grepl("model", names(data.rev)), drop = FALSE]) #only those has model
-  x.mat <- model.matrix( ~ x.model, data = data.rev)[, -1]
-
-  x.mat <- as.matrix(x.mat) # in case there's only one covariate
-  x.centered <- sweep(x.mat, 2, colMeans(x.mat))
-  # calculating beta0 and beta1 for variance estimation
-  mu_t <- data.rev$Y1 / data.rev$Y
-  data.rev$O.hat <-
-    data.rev$delta * (data.rev$I1 - data.rev$Y1 / data.rev$Y) -
-    data.rev$I1 * cumsum(data.rev$delta / data.rev$Y) + cumsum(data.rev$delta *
-                                                                 data.rev$Y1 / (data.rev$Y) ^ 2)
-  data.rev$O.hat[data.rev$I0 == 1] <-
-    (-1) * data.rev$O.hat[data.rev$I0 == 1]
-  fit1.Ohat <-
-    lm(O.hat ~ x.model[data.rev$I1 == 1, ], data = data.rev[data.rev$I1 ==
-                                                              1, ])
-  fit0.Ohat <-
-    lm(O.hat ~ x.model[data.rev$I1 == 0, ], data = data.rev[data.rev$I1 ==
-                                                              0, ])
-  beta1.Ohat <- fit1.Ohat$coefficients[-1]
-  beta0.Ohat <- fit0.Ohat$coefficients[-1]
-
-  ind.na <- which(is.na(beta1.Ohat))
-  if (length(ind.na) == 0) {
-    U_CL <-
-      sum(data.rev$I1 * (data.rev$O.hat - t((x.centered) %*% beta1.Ohat)) -
-            data.rev$I0 * (data.rev$O.hat - t((x.centered) %*% beta0.Ohat))) /
-      n
-  } else{
-    warning(
-      "Removing model variables that are linearly dependent with the stratification variables."
-    )
-    x.mat <- x.mat[, -ind.na]
-    x.centered <- x.centered[, -ind.na]
-    beta1.Ohat <- beta1.Ohat[-ind.na]
-    beta0.Ohat <- beta0.Ohat[-ind.na]
-    U_CL <-
-      sum(data.rev$I1 * (data.rev$O.hat - t((x.centered) %*% beta1.Ohat)) -
-            data.rev$I0 * (data.rev$O.hat - t((x.centered) %*% beta0.Ohat))) /
-      n
-  }
-
-  score_logrank_anhecova_var <-
-    function(data.rev,
-             p_trt,
-             fit1.Ohat,
-             fit0.Ohat,
-             beta1.Ohat,
-             beta0.Ohat) {
-      my.var <-
-        (
-          p_trt * var(fit1.Ohat$residuals) + (1 - p_trt) * var(fit0.Ohat$residuals) +
-            (p_trt * beta1.Ohat - (1 - p_trt) * beta0.Ohat) %*% var(x.mat) %*% (p_trt *
-                                                                                  beta1.Ohat - (1 - p_trt) * beta0.Ohat)
-        ) / n
-      my.var.null <-
-        (
-          sum(data.rev$delta * data.rev$Y0 * data.rev$Y1 / data.rev$Y ^ 2) / n -
-            p_trt * (1 - p_trt) * (beta1.Ohat + beta0.Ohat) %*% var(x.mat) %*% (beta1.Ohat +
-                                                                                  beta0.Ohat)
-        ) / n
-      return(list(my.var = my.var, my.var.null = my.var.null))
-    }
-  tmp <-
-    score_logrank_anhecova_var(data.rev, p_trt, fit1.Ohat, fit0.Ohat, beta1.Ohat, beta0.Ohat)
-  se <- sqrt(tmp$my.var)
-  se.null <- sqrt(tmp$my.var.null)
-  return(list(
-    U_CL = U_CL,
-    se = se.null,
-    se.orig = se
-  ))
-}
