@@ -60,12 +60,12 @@ regress.to.Ohat <- function(df, stratified){
   # Get design matrix covariate variables, using uncentered variables
   covnames <- colnames(df)[grepl("^xmat_", colnames(df))]
   covnames <- covnames[!grepl("_center", covnames)]
-
+  browser()
   # Perform a linear regression by treatment group
   res <- df %>%
     dplyr::group_by(.data$trt1) %>%
     dplyr::group_modify(~broom::tidy(
-      lm(O.hat ~ 0 + ., data=.x %>%
+      lm(O.hat ~ 1 + ., data=.x %>%
            select("O.hat", covnames))
     ))
   res <- check.collinearity(res, covnames, stratified)
@@ -85,13 +85,12 @@ regress.to.Ohat <- function(df, stratified){
       names_prefix="trt1_",
       values_from=.data$estimate
     )
-
   return(betas)
 }
 
 #' @importFrom dplyr left_join mutate group_by group_modify
 calculate.adjustment <- function(df, betas, covnames, stratified){
-
+  browser()
   dat <- dplyr::left_join(df, betas, by="strata")
 
   if(stratified){
@@ -158,6 +157,7 @@ adjust.LogRank <- function(model, data){
     }
     # Get design matrix and centered versions of variables
     xmat <- get.design.matrix(df, covnames)
+    browser()
     df <- cbind(df, xmat)
 
     # Regress to Ohat -- get betas, then calculate adjustment using betas
