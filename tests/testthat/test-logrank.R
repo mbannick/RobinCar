@@ -1,7 +1,8 @@
 library(survival)
-# library(dplyr)
+library(dplyr)
 
 test_that("No X no Z case under SR, CL = logrank test", {
+
   set.seed(0)
   n <- 100
   data.simu0 <- data_gen(
@@ -151,6 +152,41 @@ test_that("X yes Z yes, case1, CL",{
     ref_arm=0
   )
   test12_ty <- covariate_adjusted_logrank(data.simu1, p_trt = 0.5)
+  expect_equal(test12$result$U, test12_ty$U_CL)
+  expect_equal(test12$result$se, as.numeric(test12_ty$se))
+
+})
+
+test_that("X (continuous) yes Z no, case1, CL",{
+
+  set.seed(0)
+  n <- 100
+
+  data.simu01 <- data_gen2(
+    n=n,
+    theta=0,
+    randomization="SR",
+    p_trt=0.5,
+    case="case1"
+  )
+
+  # Add another continuous covariate because Ting's code requires
+  data.simu1 <- data.simu01 %>%
+    dplyr::mutate(strt=0)
+
+  test12 <- robincar_logrank(
+    df=data.simu1,
+    treat_col="I1",
+    response_col="t",
+    event_col="delta",
+    covariate_cols=c("model_w3"),
+    car_scheme="simple",
+    adj_method=c("CL"),
+    ref_arm=0
+  )
+
+  # Using the new function with no Z, modified version of Ting's original code
+  test12_ty <- covariate_adjusted_logrank_noZ(data.simu1, p_trt = 0.5)
   expect_equal(test12$result$U, test12_ty$U_CL)
   expect_equal(test12$result$se, as.numeric(test12_ty$se))
 

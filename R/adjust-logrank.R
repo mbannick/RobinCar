@@ -4,10 +4,11 @@
 get.design.matrix <- function(df, covnames){
 
   formula <- as.formula(
-    paste0("~ 0 + ", paste0(covnames, collapse="+"))
+    paste0("~ 1 + ", paste0(covnames, collapse="+"))
   )
   # Get design matrix based on formula
-  mat <- stats::model.matrix(formula, df)
+  # remove intercept column because will use centered covariates
+  mat <- stats::model.matrix(formula, df)[,-1]
   mat <- data.frame(mat)
   colnames(mat) <- paste0("xmat_", colnames(mat))
 
@@ -65,7 +66,7 @@ regress.to.Ohat <- function(df, stratified){
   res <- df %>%
     dplyr::group_by(.data$trt1) %>%
     dplyr::group_modify(~broom::tidy(
-      lm(O.hat ~ 0 + ., data=.x %>%
+      lm(O.hat ~ 1 + ., data=.x %>%
            select("O.hat", covnames))
     ))
   res <- check.collinearity(res, covnames, stratified)
@@ -103,6 +104,7 @@ calculate.adjustment <- function(df, betas, covnames, stratified){
 
   # If there are some covariates:
   if(length(covnames_use > 0)){
+
     covnames_x <- paste0("xmat_", covnames_use)
     covnames_xc <- paste0("xmat_", covnames_use, "_center")
     beta1_names <- paste0("trt1_1_xmat_", covnames_use)
