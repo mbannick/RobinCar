@@ -1,4 +1,5 @@
-[![R-CMD-check](https://github.com/mbannick/RobinCar/actions/workflows/R-CMD-check.yaml/badge.svg?branch=main)](https://github.com/mbannick/RobinCar/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/mbannick/RobinCar/actions/workflows/R-CMD-check.yaml/badge.svg?branch=main)](https://github.com/mbannick/RobinCar/actions/workflows/R-CMD-check.yaml) [![DOI](https://zenodo.org/badge/506080289.svg)](https://zenodo.org/badge/latestdoi/506080289)
+
 
 # Robust Estimation and Inference for Covariate-Adaptive Randomization
 
