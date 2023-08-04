@@ -580,10 +580,15 @@ permuted_block <- function(z, blocksize, p_trt) {
   return(I)
 }
 
+#' Generate treatment assignments based on covariate-adaptive randomization.
+#'
+#' @param n Number of individuals
+#' @param strata_z Vector or matrix of strata indicators. Must all be binary variables.
+#' @param randomization One of SR (simple randomization), CABC, permuted_block,
+#'
 treatment_assignment <-
   function(n,
            strata_z,
-           minimization_z,
            randomization,
            p_trt,
            blocksize = 4) {
@@ -603,7 +608,7 @@ treatment_assignment <-
       if (p_trt != 1 / 2) {
         stop("For now, the proportion of treatment under CABC has to be 1/2.")
       }
-      I <- minimization(minimization_z)
+      I <- minimization(strata_z)
     } else if (randomization == "urn") {
       if (p_trt != 1 / 2) {
         stop("For now, the proportion of treatment under CABC has to be 1/2.")

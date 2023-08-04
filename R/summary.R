@@ -10,8 +10,6 @@ print.LinModelResult <- function(x, ...){
   print(x$result)
   cat("\nVariance-Covariance Matrix:\n")
   print(x$varcov)
-  cat("\nData Structure:\n")
-  print(head(x$original_df))
 }
 
 #' Print glm model result
@@ -26,8 +24,6 @@ print.GLMModelResult <- function(x, ...){
   print(x$result)
   cat("\nVariance-Covariance Matrix:\n")
   print(x$varcov)
-  cat("\nData Structure:\n")
-  print(head(x$original_df))
 }
 
 #' Print contrast result
@@ -134,8 +130,6 @@ print.TTEResult <- function(x, ...){
       "\nStandard error:", x$result$se,
       "\nTest statistic:", x$result$statistic,
       "\n2-side p-value:", 2*(1-pnorm(abs(x$result$statistic))))
-  cat("\n\nData Structure:\n")
-  print(head(x$original_df))
 }
 
 #' Print calibration result
@@ -168,6 +162,4 @@ print.CalibrationResult <- function(x, ...){
   print(x$result)
   cat("\nVariance-Covariance Matrix:\n")
   print(x$varcov)
-  cat("\nData Structure:\n")
-  print(head(x$original_df))
 }

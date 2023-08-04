@@ -1,7 +1,4 @@
-#' Generate description for linear model result
-#'
-#' @param x A LinModelResult object
-#' @param ... Additional arguments
+# Generate description for linear model result
 descript.LinModelResult <- function(x, ...){
   output <- c()
   output <- c(

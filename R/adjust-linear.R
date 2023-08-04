@@ -71,7 +71,7 @@ linmod.CUSTOM <- function(model, data, family=stats::gaussian, center=TRUE){
 adjust.LinModel <- function(model, data){
 
   # Fit a model with the settings in model
-  mod <- linmod(model, data)
+  mod <- linmod(model, data, family=gaussian)
 
   # Get the simple randomization variance and adjust if necessary
   asympt.variance <- vcov_car(model, data, mod)

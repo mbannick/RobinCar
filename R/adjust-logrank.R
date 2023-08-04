@@ -1,7 +1,7 @@
 
 #' @importFrom dplyr mutate group_by ungroup everything
 #' @importFrom stats model.matrix
-get.design.matrix <- function(df, covnames){
+get_design_matrix <- function(df, covnames){
 
   formula <- as.formula(
     paste0("~ 1 + ", paste0(covnames, collapse="+"))
@@ -56,7 +56,7 @@ check.collinearity <- function(df, covnames, stratified){
 #' @import broom
 #' @importFrom dplyr group_by group_modify ungroup select
 #' @importFrom tidyr pivot_wider
-regress.to.Ohat <- function(df, stratified){
+regress_to_Ohat <- function(df, stratified){
 
   # Get design matrix covariate variables, using uncentered variables
   covnames <- colnames(df)[grepl("^xmat_", colnames(df))]
@@ -159,11 +159,11 @@ adjust.LogRank <- function(model, data){
       covnames <- c(covnames, names(data$covariate))
     }
     # Get design matrix and centered versions of variables
-    xmat <- get.design.matrix(df, covnames)
+    xmat <- get_design_matrix(df, covnames)
     df <- cbind(df, xmat)
 
     # Regress to Ohat -- get betas, then calculate adjustment using betas
-    betas <- regress.to.Ohat(df, stratified=(model$method == "CSL"))
+    betas <- regress_to_Ohat(df, stratified=(model$method == "CSL"))
 
     # Get new covariate names based on the design matrix (helpful for factors)
     new_covnames <- colnames(xmat)

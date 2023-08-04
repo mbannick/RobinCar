@@ -140,23 +140,7 @@ then perform linear and joint calibration.</p>
 <span class="co">#&gt;           [,1]         [,2]         [,3]</span>
 <span class="co">#&gt; 0 1.251627e-03 1.002508e-04 3.171744e-05</span>
 <span class="co">#&gt; 1 1.002508e-04 7.611831e-04 9.390325e-05</span>
-<span class="co">#&gt; 2 3.171744e-05 9.390325e-05 9.164210e-04</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Data Structure:</span>
-<span class="co">#&gt;   z1 z2          y0         y1       y2 A         y strata_cross x1</span>
-<span class="co">#&gt; 1  0  1  0.53887826 -2.5558896 3.735328 0 -2.555890          0-1  0</span>
-<span class="co">#&gt; 2  0  1 -0.08548387  3.0872151 3.683796 0  3.087215          0-1  0</span>
-<span class="co">#&gt; 3  1  1  4.35493364  2.9721471 3.344565 2  3.344565          1-1  1</span>
-<span class="co">#&gt; 4  0  2  0.59817631  0.3108723 2.178533 2  2.178533          0-2  0</span>
-<span class="co">#&gt; 5  0  1  1.39956151 -2.6562051 3.541720 1  3.541720          0-1  0</span>
-<span class="co">#&gt; 6  0  1  1.26664653 -4.0872147 3.764908 0 -4.087215          0-1  0</span>
-<span class="co">#&gt;             x3   extra_cov y_bin</span>
-<span class="co">#&gt; 1 -1.554766366 -0.69721409     0</span>
-<span class="co">#&gt; 2 -0.364649622 -0.07498093     1</span>
-<span class="co">#&gt; 3 -0.487620009  0.16249915     1</span>
-<span class="co">#&gt; 4  0.008503426 -0.46808354     1</span>
-<span class="co">#&gt; 5 -1.471108795  2.17807660     1</span>
-<span class="co">#&gt; 6 -1.878365975  1.02171427     0</span></code></pre></div>
+<span class="co">#&gt; 2 3.171744e-05 9.390325e-05 9.164210e-04</span></code></pre></div>
 <div class="section level3">
 <h3 id="calibration">Calibration<a class="anchor" aria-label="anchor" href="#calibration"></a>
 </h3>
@@ -189,16 +173,7 @@ fits a model with the predicted potential outcomes as covariates.</p>
 <span class="co">#&gt;           [,1]         [,2]         [,3]</span>
 <span class="co">#&gt; 0 1.241131e-03 7.442724e-05 5.110205e-05</span>
 <span class="co">#&gt; 1 7.442724e-05 7.620323e-04 9.210614e-05</span>
-<span class="co">#&gt; 2 5.110205e-05 9.210614e-05 9.263788e-04</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Data Structure:</span>
-<span class="co">#&gt;   response treat      mu_0      mu_1      mu_2           x3 z1</span>
-<span class="co">#&gt; 1        0     0 0.5691487 0.8232565 0.7732195 -1.554766366  0</span>
-<span class="co">#&gt; 2        1     0 0.3129637 0.6163040 0.5403873 -0.364649622  0</span>
-<span class="co">#&gt; 3        1     2 0.9110546 0.9730583 0.9635535 -0.487620009  1</span>
-<span class="co">#&gt; 4        1     2 0.2459885 0.5349596 0.4571253  0.008503426  0</span>
-<span class="co">#&gt; 5        1     1 0.5507097 0.8121023 0.7598287 -1.471108795  0</span>
-<span class="co">#&gt; 6        0     0 0.6382718 0.8615305 0.8199595 -1.878365975  0</span></code></pre></div>
+<span class="co">#&gt; 2 5.110205e-05 9.210614e-05 9.263788e-04</span></code></pre></div>
 <p>Use <code>joint = TRUE</code> to indicate joint calibration. This
 fits a model with the predicted potential outcomes <em>and</em> the
 joint strata variables.</p>
@@ -229,16 +204,7 @@ joint strata variables.</p>
 <span class="co">#&gt;           [,1]         [,2]         [,3]</span>
 <span class="co">#&gt; 0 8.728651e-04 5.447923e-05 2.322831e-06</span>
 <span class="co">#&gt; 1 5.447923e-05 7.606109e-04 1.013007e-04</span>
-<span class="co">#&gt; 2 2.322831e-06 1.013007e-04 8.943043e-04</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Data Structure:</span>
-<span class="co">#&gt;   response treat      mu_0      mu_1      mu_2           x3 z1</span>
-<span class="co">#&gt; 1        0     0 0.5691487 0.8232565 0.7732195 -1.554766366  0</span>
-<span class="co">#&gt; 2        1     0 0.3129637 0.6163040 0.5403873 -0.364649622  0</span>
-<span class="co">#&gt; 3        1     2 0.9110546 0.9730583 0.9635535 -0.487620009  1</span>
-<span class="co">#&gt; 4        1     2 0.2459885 0.5349596 0.4571253  0.008503426  0</span>
-<span class="co">#&gt; 5        1     1 0.5507097 0.8121023 0.7598287 -1.471108795  0</span>
-<span class="co">#&gt; 6        0     0 0.6382718 0.8615305 0.8199595 -1.878365975  0</span></code></pre></div>
+<span class="co">#&gt; 2 2.322831e-06 1.013007e-04 8.943043e-04</span></code></pre></div>
 <p>Use <code>add_x</code> to include additional covariates in the
 calibration. This fits a model with the predicted potential outcomes and
 specified additional covariates (and the joint strata if
@@ -263,24 +229,15 @@ specified additional covariates (and the joint strata if
 <span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 4</span></span>
 <span class="co">#&gt;   treat estimate     se `pval (2-sided)`</span>
 <span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 0        0.582 0.029<span style="text-decoration: underline;">5</span>        2.29<span style="color: #949494;">e</span><span style="color: #BB0000;">- 86</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 1        0.761 0.027<span style="text-decoration: underline;">5</span>        4.97<span style="color: #949494;">e</span><span style="color: #BB0000;">-168</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 2        0.723 0.029<span style="text-decoration: underline;">9</span>        3.13<span style="color: #949494;">e</span><span style="color: #BB0000;">-129</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 0        0.581 0.029<span style="text-decoration: underline;">5</span>        4.11<span style="color: #949494;">e</span><span style="color: #BB0000;">- 86</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 1        0.762 0.027<span style="text-decoration: underline;">6</span>        5.68<span style="color: #949494;">e</span><span style="color: #BB0000;">-168</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 2        0.721 0.029<span style="text-decoration: underline;">9</span>        1.51<span style="color: #949494;">e</span><span style="color: #BB0000;">-128</span></span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Variance-Covariance Matrix:</span>
 <span class="co">#&gt;           [,1]         [,2]         [,3]</span>
-<span class="co">#&gt; 0 8.716494e-04 5.590245e-05 3.730187e-06</span>
-<span class="co">#&gt; 1 5.590245e-05 7.589182e-04 1.017316e-04</span>
-<span class="co">#&gt; 2 3.730187e-06 1.017316e-04 8.926251e-04</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Data Structure:</span>
-<span class="co">#&gt;   response treat      mu_0      mu_1      mu_2           x3   extra_cov z1</span>
-<span class="co">#&gt; 1        0     0 0.5691487 0.8232565 0.7732195 -1.554766366 -0.69721409  0</span>
-<span class="co">#&gt; 2        1     0 0.3129637 0.6163040 0.5403873 -0.364649622 -0.07498093  0</span>
-<span class="co">#&gt; 3        1     2 0.9110546 0.9730583 0.9635535 -0.487620009  0.16249915  1</span>
-<span class="co">#&gt; 4        1     2 0.2459885 0.5349596 0.4571253  0.008503426 -0.46808354  0</span>
-<span class="co">#&gt; 5        1     1 0.5507097 0.8121023 0.7598287 -1.471108795  2.17807660  0</span>
-<span class="co">#&gt; 6        0     0 0.6382718 0.8615305 0.8199595 -1.878365975  1.02171427  0</span></code></pre></div>
+<span class="co">#&gt; 0 8.729517e-04 5.402151e-05 2.908782e-06</span>
+<span class="co">#&gt; 1 5.402151e-05 7.606837e-04 1.010880e-04</span>
+<span class="co">#&gt; 2 2.908782e-06 1.010880e-04 8.943473e-04</span></code></pre></div>
 </div>
 </div>
   </div>

@@ -33,9 +33,3 @@ reference:
 - contents:
   - data_gen
   - data_gen2
-- title: "Testing"
-- contents:
-  - nu.d
-  - descript.GLMModelResult
-  - descript.LinModelResult
-  - ttelogic
