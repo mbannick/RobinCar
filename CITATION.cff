@@ -1,8 +1,14 @@
 cff-version: 1.2.0
 message: "Please cite the package as below."
 authors:
-  - family-names: Ye, Bannick, Yi, Bian
-    given-names: Ting, Marlena, Yanyao, Faith
+  - family-names: Ye
+    given-names: Ting
+  - family-names: Bannick
+    given-names: Marlena
+  - family-names: Yi
+    given-names: Yanyao
+  - family-names: Bian
+    given-names: Faith
 title: "RobinCar"
 version: 0.1.0
 doi: 10.5281/zenodo.8216051
