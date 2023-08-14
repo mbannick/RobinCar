@@ -1,68 +1,13 @@
 #' Generate simple randomization treatment assignments
-#' Currently only works for two treatment groups
 #'
 #' @param n Number of observations
 #' @param p_trt Proportion allotted to treatment
 #' @export
 #'
-#' @example
-#' SR(10, p_trt=0.4)
-SR <- function(n, p_trt){
-  I <- rbinom(n, 1, p_trt)
-  return(I)
-}
-
-#' Generate biased coin treatment groups
-#' Efron's biased coin randomization (Efron, 1971)
-#'
-#' @param z The strata design matrix
-#' @param BCD_p The proportion for the biased coin (only two treatment groups)
-#'
-#' @export
 #' @examples
-#'
-#' # Create strata variables
-#' x <- runif(100)
-#' z <- cut(x, breaks=c(0, 0.25, 0.5, 0.75, 1.0))
-#' z <- model.matrix(~0 + factor(z))
-#'
-#' CABC(z, BCD_p=2/3)
-CABC <- function(z, BCD_p=2/3){
-
-  BC <- function(n_within_strata){
-
-    stopifnot(BCD_p > 1 / 2)
-    I <- numeric(n_within_strata)
-    I[1] <- rbinom(1, 1, 1 / 2)
-    D <- 2 * I[1] - 1
-
-    for (i in 2:n_within_strata) {
-      if (D > 0)
-        I[i] <- rbinom(1, 1, (1 - BCD_p))
-      else if (D < 0)
-        I[i] <- rbinom(1, 1, BCD_p)
-      else if (D == 0)
-        I[i] <- rbinom(1, 1, 1 / 2)
-      D <- D + 2 * I[i] - 1
-    }
-    return(I)
-  }
-
-  n_strata <- dim(z)[2]
-  n <- dim(z)[1]
-  n_each_strata <- apply(z, 2, sum)
-  I <- numeric(n)
-  for (s in 1:n_strata) {
-    if (n_each_strata[s] == 0) {
-      next
-    }
-    else if (n_each_strata[s] == 1) {
-      I[z[, s] == 1] <- rbinom(1, 1, 0.5)
-    }
-    else{
-      I[z[, s] == 1] <- BC(n_each_strata[s])
-    }
-  }
+#' car_sr(10, p_trt=0.4)
+car_sr <- function(n, p_trt){
+  I <- rbinom(n, 1, p_trt)
   return(I)
 }
 
@@ -86,8 +31,8 @@ CABC <- function(z, BCD_p=2/3){
 #' z <- dummy_cols(z) %>%
 #'      mutate(across(where(is.numeric), as.factor))
 #'
-#' PB(z[, 2:5], c(0, 1, 2), trt_alc=c(1/4, 1/2, 1/4), blocksize=4L)
-PB <- function(z, trt_label, trt_alc, blocksize=4L) {
+#' car_pb(z[, 2:5], c(0, 1, 2), trt_alc=c(1/4, 1/2, 1/4), blocksize=4L)
+car_pb <- function(z, trt_label, trt_alc, blocksize=4L) {
 
   strata <- z
 
@@ -149,13 +94,13 @@ PB <- function(z, trt_label, trt_alc, blocksize=4L) {
 #' x <- runif(100)
 #' z <- cut(x, breaks=c(0, 0.25, 0.5, 0.75, 1.0))
 #' z <- dummy_cols(z)
-#' A <- PS(
+#' A <- car_ps(
 #'   z=z[, 2:5],
 #'   treat=c(0, 1, 2),
 #'   ratio=c(1, 1, 1),
 #'   imb_measure="Range"
 #' )
-PS <- function(z, treat, ratio, imb_measure, p_bc=0.8){
+car_ps <- function(z, treat, ratio, imb_measure, p_bc=0.8){
 
   if(!imb_measure %in% c("Range", "SD")) stop("Unrecognized imbalance measure.")
   z <- data.frame(z)
