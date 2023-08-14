@@ -21,7 +21,8 @@ Imports:
     survival,
     broom,
     data.table,
-    forcats
+    forcats,
+    fastDummies
 Depends: 
     R (>= 2.10)
 Suggests: 
