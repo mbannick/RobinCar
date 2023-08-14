@@ -28,6 +28,15 @@
     <loc>/index.html</loc>
   </url>
   <url>
+    <loc>/reference/car_pb.html</loc>
+  </url>
+  <url>
+    <loc>/reference/car_ps.html</loc>
+  </url>
+  <url>
+    <loc>/reference/car_sr.html</loc>
+  </url>
+  <url>
     <loc>/reference/data_gen.html</loc>
   </url>
   <url>

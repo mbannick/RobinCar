@@ -65,42 +65,8 @@
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>df</dt>
-<dd><p>A data.frame with the required columns</p></dd>
-
-
-<dt>treat_col</dt>
-<dd><p>Name of column in df with treatment variable</p></dd>
-
-
-<dt>response_col</dt>
-<dd><p>Name of the column in df with response variable</p></dd>
-
-
-<dt>event_col</dt>
-<dd><p>Name of column in df with event indicator
-(0/FALSE=no event, 1/TRUE=event)</p></dd>
-
-
-<dt>strata_cols</dt>
-<dd><p>Names of columns in df with strata variables</p></dd>
-
-
-<dt>covariate_cols</dt>
-<dd><p>Names of columns in df with covariate variables</p></dd>
-
-
-<dt>car_scheme</dt>
-<dd><p>Name of the type of covariate-adaptive randomization scheme. One of: "simple", "pocock-simon", "biased-coin", "permuted-block".</p></dd>
-
-
-<dt>ref_arm</dt>
-<dd><p>Reference arm of the treatment group, defaults to NULL,
-which results in using the first element of `unique(data[, treat_col])`.</p></dd>
-
-
-<dt>p_trt</dt>
-<dd><p>Treatment allocation ratio for the reference arm.</p></dd>
+    <dl><dt>...</dt>
+<dd><p>Arguments to robincar_tte, other than `adj_method`</p></dd>
 
 </dl></div>
 

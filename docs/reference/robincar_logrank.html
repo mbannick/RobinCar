@@ -69,42 +69,8 @@
 <dd><p>Adjustment method, one of "CL", "CSL"</p></dd>
 
 
-<dt>df</dt>
-<dd><p>A data.frame with the required columns</p></dd>
-
-
-<dt>treat_col</dt>
-<dd><p>Name of column in df with treatment variable</p></dd>
-
-
-<dt>response_col</dt>
-<dd><p>Name of the column in df with response variable</p></dd>
-
-
-<dt>event_col</dt>
-<dd><p>Name of column in df with event indicator
-(0/FALSE=no event, 1/TRUE=event)</p></dd>
-
-
-<dt>strata_cols</dt>
-<dd><p>Names of columns in df with strata variables</p></dd>
-
-
-<dt>covariate_cols</dt>
-<dd><p>Names of columns in df with covariate variables</p></dd>
-
-
-<dt>car_scheme</dt>
-<dd><p>Name of the type of covariate-adaptive randomization scheme. One of: "simple", "pocock-simon", "biased-coin", "permuted-block".</p></dd>
-
-
-<dt>ref_arm</dt>
-<dd><p>Reference arm of the treatment group, defaults to NULL,
-which results in using the first element of `unique(data[, treat_col])`.</p></dd>
-
-
-<dt>p_trt</dt>
-<dd><p>Treatment allocation ratio for the reference arm.</p></dd>
+<dt>...</dt>
+<dd><p>Additional arguments to `robincar_tte`</p></dd>
 
 </dl></div>
 
@@ -112,14 +78,6 @@ which results in using the first element of `unique(data[, treat_col])`.</p></dd
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span></span>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘dplyr’</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The following objects are masked from ‘package:stats’:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>     filter, lag</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The following objects are masked from ‘package:base’:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>     intersect, setdiff, setequal, union</span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">n</span><span class="op">=</span><span class="fl">100</span></span>
 <span class="r-in"><span class="va">data.simu0</span><span class="op">=</span><span class="fu"><a href="data_gen.html">data_gen</a></span><span class="op">(</span>n<span class="op">=</span><span class="va">n</span>,</span>
