@@ -19,16 +19,15 @@ Imports:
     stats,
     rlang,
     survival,
-    broom,
-    data.table,
     forcats,
-    fastDummies
+    fastDummies,
+    data.table,
+    broom
 Depends: 
     R (>= 2.10)
 Suggests: 
     knitr,
     rmarkdown,
-    testthat (>= 3.0.0),
-    fastDummies
+    testthat (>= 3.0.0)
 VignetteBuilder: knitr
 Config/testthat/edition: 3

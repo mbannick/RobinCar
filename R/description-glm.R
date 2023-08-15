@@ -1,7 +1,4 @@
-# Generate description for glm model result
-#
-# @param x A GLMModelResult object
-# @param ... Additional arguments
+
 descript.GLMModelResult <- function(x, ...){
   output <- c()
   if("AIPW" %in% class(x$settings)){
