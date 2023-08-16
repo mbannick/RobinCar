@@ -7,7 +7,11 @@ descript.GLMModelResult <- function(x, ...){
     etype <- "g-computation-type"
   }
   if(is.character(x$settings$g_family)){
-    family <- get(x$settings$g_family)()
+    if(x$settings$g_family == "nb"){
+      family <- "negative binomial with unknown dispersion"
+    } else {
+      family <- get(x$settings$g_family)()
+    }
   } else if(is.function(x$settings$g_family)){
     family <- (x$settings$g_family)()
   } else {

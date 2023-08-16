@@ -1,4 +1,6 @@
 
+library(MASS)
+
 DATA <- RobinCar:::data_sim
 DATA$A <- as.factor(DATA$A)
 DATA$y_bin <- ifelse(DATA$y > 2, 1, 0)
@@ -54,6 +56,40 @@ DATA2 <- data.frame(A=rbinom(n, size=1, prob=0.5),
 DATA2$A <- as.factor(DATA2$A)
 DATA2$x1 <- DATA2$x1 - mean(DATA2$x1)
 
+test_that("GLM full function -- NEGATIVE binomial, permuted block", {
+
+  # Known dispersion parameter
+  non <- robincar_glm(
+    df=DATA2,
+    response_col="y",
+    treat_col="A",
+    strata_cols=c("z1"),
+    covariate_cols=c("x1"),
+    car_scheme="permuted-block",
+    g_family=negative.binomial(4),
+    g_accuracy=7,
+    adj_method="heterogeneous",
+    covariate_to_include_strata=TRUE,
+    vcovHC="HC3")
+  expect_equal(class(non), "GLMModelResult")
+
+  # Known dispersion parameter
+  non <- robincar_glm(
+    df=DATA2,
+    response_col="y",
+    treat_col="A",
+    strata_cols=c("z1"),
+    covariate_cols=c("x1"),
+    car_scheme="permuted-block",
+    g_family="nb",
+    g_accuracy=7,
+    adj_method="heterogeneous",
+    covariate_to_include_strata=TRUE,
+    vcovHC="HC3")
+  expect_equal(class(non), "GLMModelResult")
+
+})
+
 test_that("GLM Settings", {
   non <- robincar_glm(
     df=DATA2,
@@ -104,6 +140,7 @@ test_that("GLM full function -- binomial, permuted block", {
   expect_equal(non$result$estimate,
                c(X1=0.20774694, X2=0.15547416), tolerance=1e-5)
 })
+
 
 test_that("GLM full function -- binomial, pocock simon", {
   non <- robincar_glm(

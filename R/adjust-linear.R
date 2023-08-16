@@ -4,6 +4,26 @@
 # to estimate the treatment effects for ANOVA (equivalent to a sample)
 # mean per group.
 
+# This function allows us to implement the negative binomial model through MASS
+#' @import MASS
+fitmod <- function(family, ...){
+  useMASS <- FALSE
+  if(class(family) == "character"){
+    if(family == "nb"){
+      useMASS <- TRUE
+    }
+  }
+  if(useMASS){
+    mod <- MASS::glm.nb(...)
+    # copy over the 'model' attribute to the 'data'
+    # because it has a different name in glm.nb
+    mod$data <- mod$model
+  } else {
+    mod <- stats::glm(..., family=family)
+  }
+  return(mod)
+}
+
 #' @importFrom stats gaussian
 linmod <- function(model, data, family, center=TRUE){
   UseMethod("linmod", model)
@@ -15,7 +35,7 @@ linmod.ANOVA <- function(model, data, family=stats::gaussian, center=TRUE){
     treat=data$treat,
     response=data$response
   )
-  mod <- stats::glm(response ~ 0 + treat, data=df, family=family)
+  mod <- fitmod(family=family, formula=response ~ 0 + treat, data=df)
   return(mod)
 }
 
@@ -29,9 +49,9 @@ linmod.ANCOVA <- function(model, data, family=stats::gaussian, center=TRUE){
   if(center) dmat <- .center.dmat(dmat)
   df <- cbind(df, dmat)
   if(center){
-    mod <- stats::glm(response ~ 0 + treat + ., data=df, family=family)
+    mod <- fitmod(family=family, formula=response ~ 0 + treat + ., data=df)
   } else {
-    mod <- stats::glm(response ~ 1 + treat + ., data=df, family=family)
+    mod <- fitmod(family=family, formula=response ~ 1 + treat + ., data=df)
   }
   return(mod)
 }
@@ -46,9 +66,9 @@ linmod.ANHECOVA <- function(model, data, family=stats::gaussian, center=TRUE){
   df <- cbind(df, dmat)
 
   if(center){
-    mod <- stats::glm(response ~ 0 + treat:., data=df, family=family)
+    mod <- fitmod(family=family, response ~ 0 + treat:., data=df)
   } else {
-    mod <- stats::glm(response ~ 1 + treat:., data=df, family=family)
+    mod <- fitmod(family=family, response ~ 1 + treat:., data=df)
   }
   return(mod)
 }
@@ -61,7 +81,7 @@ linmod.CUSTOM <- function(model, data, family=stats::gaussian, center=TRUE){
   dmat <- get.dmat(data, model$adj_vars)
   if(center) dmat <- .center.dmat(dmat)
   df <- cbind(df, dmat)
-  mod <- stats::glm(stats::as.formula(data$formula), data=df, family=family)
+  mod <- fitmod(family=family, stats::as.formula(data$formula), data=df)
 
   return(mod)
 }
