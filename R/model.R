@@ -47,13 +47,23 @@
                                     covariate_to_include_strata,
                                     g_family, g_accuracy) {
 
+  if(is.null(covariate_to_include_strata)){
+    if(adj_method == "heterogeneous"){
+      cov_strata <- TRUE
+    } else {
+      cov_strata <- FALSE
+    }
+  } else {
+    cov_strata <- covariate_to_include_strata
+  }
+
   x_exists <- !is.null(data$covariate)
   z_exists <- !is.null(data$strata)
 
   # Get logic for adjustment methods
   logic <- glmlogic(adj_method=adj_method, car_scheme=car_scheme,
                     x_exists=x_exists, z_exists=z_exists,
-                    cov_strata=covariate_to_include_strata,
+                    cov_strata=cov_strata,
                     formula=data$formula)
   model <- structure(
     list(
