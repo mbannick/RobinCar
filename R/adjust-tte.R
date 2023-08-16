@@ -252,11 +252,11 @@ get.tte.adjustment <- function(df, model, data){
       covnames <- c(covnames, names(data$covariate))
     }
     # Get design matrix and centered versions of variables
-    xmat <- get.design.matrix(df, covnames)
+    xmat <- get_design_matrix(df, covnames)
     df <- cbind(df, xmat)
 
     # Regress to Ohat -- get betas, then calculate adjustment using betas
-    betas <- regress.to.Ohat(df, stratified=(model$method == "CSL"))
+    betas <- regress_to_Ohat(df, stratified=(model$method == "CSL"))
 
     # Get new covariate names based on the design matrix (helpful for factors)
     new_covnames <- colnames(xmat)

@@ -18,7 +18,6 @@ vcov_sr.diag <- function(data, mod, residual=NULL){
     dplyr::group_by(.data$treat) %>%
     dplyr::summarize(se=stats::sd(.data$resid), .groups="drop") %>%
     dplyr::mutate(se=.data$se*sqrt(1/data$pie))
-  browser()
 
   return(diag(c(result$se)**2))
 }
@@ -80,7 +79,6 @@ vcov_sr.ANCOVA <- function(model, data, mod){
     B <- B[!C,]
     covX <- covX[!C,!C]
   }
-  browser()
   varcov <- diagmat +
     t(ScriptB) %*% covX %*% B +
     t(B) %*% covX %*% ScriptB -
@@ -172,7 +170,6 @@ vcov_car <- function(model, data, mod, ...){
 }
 
 vcov_car.LinModel <- function(model, data, mod){
-  # browser()
   # Get the variance under simple randomization
   v <- vcov_sr(model, data, mod)
   # Adjust for Z if needed
@@ -184,7 +181,6 @@ vcov_car.LinModel <- function(model, data, mod){
 # Gets AIPW asymptotic variance under simple randomization
 vcov_car.GLMModel <- function(model, data, mod, mutilde){
 
-  # browser()
   # Get predictions for observed treatment group
   preds <- matrix(nrow=data$n, ncol=1)
   for(t_id in 1:length(data$treat_levels)){
@@ -208,11 +204,9 @@ vcov_car.GLMModel <- function(model, data, mod, mutilde){
   cov_Ymu <- t(sapply(data$treat_levels, get.cov.Ya))
 
   # Sum of terms to compute simple randomization variance
-  browser()
   v <- diagmat + cov_Ymu + t(cov_Ymu) - stats::var(mutilde)
 
   # Adjust for Z if necessary
-
   if(!is.null(model$omegaz_func)) v <- v - get.erb(model, data, mod, mu_hat=preds)
 
   return(v)
