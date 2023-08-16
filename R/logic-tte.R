@@ -1,22 +1,21 @@
 ALLOWED_COX_CARSCHEME <- c("simple", "permuted-block", "biased-coin")
 
-#' @title Logic for performing robincar_coxscore or robincar_logrank for time to event endpoints
-#' @return warning or error messages based on the user input,
-#'         whether or not to adjust for covariates, and whether
-#'         to account for covariate-adaptive randomization
-#'
-#' @examples
-#' logic_CL <- ttelogic(x_exists=TRUE, z_exists=TRUE,
-#'                               car_scheme="permuted-block",
-#'                               adj_method="CL")
-#'
-#' logic_CSL <- ttelogic(x_exists=TRUE, z_exists=TRUE,
-#'                                car_scheme="permuted-block",
-#'                                adj_method="CSL")
-#'
-#' logic_coxscore <- ttelogic(x_exists=TRUE, z_exists=TRUE,
-#'                                     car_scheme="permuted-block",
-#'                                     adj_method="coxscore")
+# @title Logic for performing robincar_coxscore or robincar_logrank for time to event endpoints
+# @return warning or error messages based on the user input,
+#         whether or not to adjust for covariates, and whether
+#         to account for covariate-adaptive randomization
+#
+# logic_CL <- ttelogic(x_exists=TRUE, z_exists=TRUE,
+#                               car_scheme="permuted-block",
+#                               adj_method="CL")
+#
+# logic_CSL <- ttelogic(x_exists=TRUE, z_exists=TRUE,
+#                                car_scheme="permuted-block",
+#                                adj_method="CSL")
+#
+# logic_coxscore <- ttelogic(x_exists=TRUE, z_exists=TRUE,
+#                                     car_scheme="permuted-block",
+#                                     adj_method="coxscore")
 ttelogic <- function(x_exists, z_exists,
                      car_scheme, adj_method){
 

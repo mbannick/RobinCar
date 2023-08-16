@@ -1,7 +1,4 @@
-#' Generate description for glm model result
-#'
-#' @param x A GLMModelResult object
-#' @param ... Additional arguments
+
 descript.GLMModelResult <- function(x, ...){
   output <- c()
   if("AIPW" %in% class(x$settings)){
@@ -10,7 +7,11 @@ descript.GLMModelResult <- function(x, ...){
     etype <- "g-computation-type"
   }
   if(is.character(x$settings$g_family)){
-    family <- get(x$settings$g_family)()
+    if(x$settings$g_family == "nb"){
+      family <- "negative binomial with unknown dispersion"
+    } else {
+      family <- get(x$settings$g_family)()
+    }
   } else if(is.function(x$settings$g_family)){
     family <- (x$settings$g_family)()
   } else {

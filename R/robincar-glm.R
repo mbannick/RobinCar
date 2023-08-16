@@ -17,16 +17,9 @@
 #' @param contrast_h An optional function to specify a desired contrast
 #' @param contrast_dh An optional jacobian function for the contrast (otherwise use numerical derivative)
 #' @param g_family Family that would be supplied to glm(...), e.g., binomial. If no link specified, will use default link, like behavior in glm.
+#'                 If you wish to use a negative binomial working model with an unknown dispersion parameter, then use `g_family="nb"`.
 #' @param g_accuracy Level of accuracy to check prediction un-biasedness.
 #' @param formula An optional formula to use for adjustment specified using as.formula("..."). This overrides strata_cols and covariate_cols.
-#' @param centering WARNING: Advanced use only. By default is NULL, so will perform expected behavior
-#'                           in documentation.
-#'                  If centering = 'none', then this will force it to be a g-computation estimator,
-#'                     even if prediction unbiasedness does not hold.
-#'                  If centering = 'tx', then this will center within treatment groups, which is the
-#'                     AIPW estimator (equivalent to g-computation if prediction unbiasedness holds).
-#'                  TODO: If centering = 'tx-strata', then this will center within treatment group and
-#'                     within joint strata, which allows for the AIPW estimator to be used with Pocock-Simon.
 #'
 #' @export
 robincar_glm <- function(df,

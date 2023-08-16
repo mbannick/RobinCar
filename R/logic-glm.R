@@ -39,6 +39,9 @@ glmlogic <- function(adj_method, x_exists, z_exists, car_scheme, cov_strata,
       pu_funcs <- .pu.warn
       pu_joint_z <- FALSE
     }
+    if(z_exists & (car_scheme != "simple")){
+      omegaz_func <- omegaz.closure(car_scheme)
+    }
   } else {
     if(car_scheme == "simple"){
       if(z_exists) .z.exist.warn.simple()

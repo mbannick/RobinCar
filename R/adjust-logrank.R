@@ -1,13 +1,14 @@
 
 #' @importFrom dplyr mutate group_by ungroup everything
 #' @importFrom stats model.matrix
-get.design.matrix <- function(df, covnames){
+get_design_matrix <- function(df, covnames){
 
   formula <- as.formula(
-    paste0("~ 0 + ", paste0(covnames, collapse="+"))
+    paste0("~ 1 + ", paste0(covnames, collapse="+"))
   )
   # Get design matrix based on formula
-  mat <- stats::model.matrix(formula, df)
+  # remove intercept column because will use centered covariates
+  mat <- stats::model.matrix(formula, df)[,-1]
   mat <- data.frame(mat)
   colnames(mat) <- paste0("xmat_", colnames(mat))
 
@@ -55,7 +56,7 @@ check.collinearity <- function(df, covnames, stratified){
 #' @import broom
 #' @importFrom dplyr group_by group_modify ungroup select
 #' @importFrom tidyr pivot_wider
-regress.to.Ohat <- function(df, stratified){
+regress_to_Ohat <- function(df, stratified){
 
   # Get design matrix covariate variables, using uncentered variables
   covnames <- colnames(df)[grepl("^xmat_", colnames(df))]
@@ -65,7 +66,7 @@ regress.to.Ohat <- function(df, stratified){
   res <- df %>%
     dplyr::group_by(.data$trt1) %>%
     dplyr::group_modify(~broom::tidy(
-      lm(O.hat ~ 0 + ., data=.x %>%
+      lm(O.hat ~ 1 + ., data=.x %>%
            select("O.hat", covnames))
     ))
   res <- check.collinearity(res, covnames, stratified)
@@ -103,6 +104,7 @@ calculate.adjustment <- function(df, betas, covnames, stratified){
 
   # If there are some covariates:
   if(length(covnames_use > 0)){
+
     covnames_x <- paste0("xmat_", covnames_use)
     covnames_xc <- paste0("xmat_", covnames_use, "_center")
     beta1_names <- paste0("trt1_1_xmat_", covnames_use)
@@ -157,11 +159,11 @@ adjust.LogRank <- function(model, data){
       covnames <- c(covnames, names(data$covariate))
     }
     # Get design matrix and centered versions of variables
-    xmat <- get.design.matrix(df, covnames)
+    xmat <- get_design_matrix(df, covnames)
     df <- cbind(df, xmat)
 
     # Regress to Ohat -- get betas, then calculate adjustment using betas
-    betas <- regress.to.Ohat(df, stratified=(model$method == "CSL"))
+    betas <- regress_to_Ohat(df, stratified=(model$method == "CSL"))
 
     # Get new covariate names based on the design matrix (helpful for factors)
     new_covnames <- colnames(xmat)
