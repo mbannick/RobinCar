@@ -12,7 +12,7 @@ test_that("GLM full function -- linear", {
     treat_col="A",
     covariate_cols=c("x1"),
     car_scheme="simple",
-    adj_method="ANHECOVA",
+    adj_method="ANCOVA",
     covariate_to_include_strata=FALSE,
     vcovHC="HC0")
   non <- robincar_glm(
@@ -23,7 +23,7 @@ test_that("GLM full function -- linear", {
     car_scheme="simple",
     g_family=gaussian(link="identity"),
     g_accuracy=7,
-    adj_method="heterogeneous",
+    adj_method="homogeneous",
     covariate_to_include_strata=FALSE,
     vcovHC="HC0")
   expect_equal(class(non), "GLMModelResult")
