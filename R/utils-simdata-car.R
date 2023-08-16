@@ -72,7 +72,7 @@ car_pb <- function(z, trt_label, trt_alc, blocksize=4L) {
 #'
 #' @param z The strata design matrix
 #' @param treat A vector of length k (the number of treatment arms), which labels the treatment arms being compared.
-#' @param pi A vector of length k (the number of treatment arms), which indicates the allocation ratio, e.g., c(1,1,1) for equal allocation with three treatment arms.
+#' @param ratio A vector of length k (the number of treatment arms), which indicates the allocation ratio, e.g., c(1,1,1) for equal allocation with three treatment arms.
 #' @param imb_measure What measure of imbalance should be minimzed during randomization -- either "Range" or "SD"
 #' @param p_bc The biased probability, i.e., the probability of assigning each patient to the arm that minimizes the imbalance. Default is 0.8
 #' @return

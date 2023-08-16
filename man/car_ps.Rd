@@ -11,11 +11,11 @@ car_ps(z, treat, ratio, imb_measure, p_bc = 0.8)
 
 \item{treat}{A vector of length k (the number of treatment arms), which labels the treatment arms being compared.}
 
+\item{ratio}{A vector of length k (the number of treatment arms), which indicates the allocation ratio, e.g., c(1,1,1) for equal allocation with three treatment arms.}
+
 \item{imb_measure}{What measure of imbalance should be minimzed during randomization -- either "Range" or "SD"}
 
 \item{p_bc}{The biased probability, i.e., the probability of assigning each patient to the arm that minimizes the imbalance. Default is 0.8}
-
-\item{pi}{A vector of length k (the number of treatment arms), which indicates the allocation ratio, e.g., c(1,1,1) for equal allocation with three treatment arms.}
 }
 \value{
 \describe{
