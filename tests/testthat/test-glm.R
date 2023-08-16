@@ -66,7 +66,7 @@ test_that("GLM full function -- NEGATIVE binomial, permuted block", {
     strata_cols=c("z1"),
     covariate_cols=c("x1"),
     car_scheme="permuted-block",
-    g_family=negative.binomial(4),
+    g_family=negative.binomial(1),
     g_accuracy=7,
     adj_method="heterogeneous",
     covariate_to_include_strata=TRUE,
