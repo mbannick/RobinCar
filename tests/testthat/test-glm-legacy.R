@@ -1,6 +1,6 @@
 # Compare to legacy code from Yanyao Yi
 
-test_that("GLM -- no covariates", {
+test_that("GLM legacy", {
 
   n <- 10000
   set.seed(10)
@@ -35,6 +35,9 @@ test_that("GLM -- no covariates", {
             }
 
             if(scheme != "SR" & is.null(zs)) next
+            # We can't compare the behavior in this case
+            # because old code automatically includes Z when heterogeneous + pocock simon
+            if(scheme == "minimization" & !ctis & meth == "heterogeneous") next
 
             runthis <- function(){
               return(robincar_glm(
