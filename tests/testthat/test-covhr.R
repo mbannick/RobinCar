@@ -2,8 +2,10 @@ library(survival)
 library(dplyr)
 
 test_that("No X no Z case under SR, CL = logrank test",{
+
   set.seed(0)
-  n <- 100
+
+  n <- 1000
   data.simu0 <- data_gen(
     n=n,
     theta=0,
@@ -34,7 +36,9 @@ test_that("No X no Z case under SR, CL = logrank test",{
     sqrt(surv_out$score) * ifelse(surv_out$coefficients > 0, 1, -1)
 
   expect_equal(out$result$theta_L, out$result$theta_CL)
-  expect_equal(out$result$theta_L, unname(surv_out$coefficients))
+  # Need a tolerance here because possibly a slightly different optimization
+  # algorithm to find the hazard ratio than coxph
+  expect_equal(out$result$theta_L, unname(surv_out$coefficients), tolerance=1e-5)
   expect_equal(out$result$se_theta_L, as.numeric(sqrt(surv_out$var)))
 
 })
