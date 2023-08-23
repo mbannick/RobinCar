@@ -23,6 +23,10 @@ library(RobinCar)
 
 Ting Ye, Jun Shao, Yanyao Yi, Qinyuan Zhao (2022+). [Toward Better Practice of Covariate Adjustment in Analyzing Randomized Clinical Trials](https://www.google.com/url?q=https%3A%2F%2Farxiv.org%2Fpdf%2F2009.11828.pdf&sa=D&sntz=1&usg=AOvVaw0OHre3-8OSKzqlaR2yaVrY). *Journal of the American Statistical Association*, in press.
 
+Ting Ye, Marlena Bannick, Yanyao Yi, Jun Shao (2023). [Robust variance estimation for covariate-adjusted unconditional treatment effect in randomized clinical trials with binary outcomes](https://www.tandfonline.com/doi/full/10.1080/24754269.2023.2205802). *Statistical Theory and Related Fields*, 7(2):159-163.
+
+Marlena Bannick, Jun Shao, Jingyi Liu, Yu Du, Yanyao Yi, Ting Ye (2023+). [A General Form of Covariate Adjustment in Randomized Clinical Trials](https://arxiv.org/abs/2306.10213).
+
 ## Adjustment with Continuous Outcomes
 
 The dataset that we will use for this is included in the package.
