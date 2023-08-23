@@ -1,0 +1,137 @@
+#' Covariate adjustment using working models from the super learner libraries
+#' through the AIPW package with cross-fitting.
+#' Estimate treatment-group-specific response means and (optionally)
+#' treatment group contrasts using a generalized linear working model.
+#'
+#'
+#' @param df A data.frame with the required columns
+#' @param treat_col Name of column in df with treatment variable
+#' @param response_col Name of the column in df with response variable
+#' @param strata_cols Names of columns in df with strata variables
+#' @param covariate_cols Names of columns in df with covariate variables
+#' @param car_scheme Name of the type of covariate-adaptive randomization scheme. One of: "simple", "pocock-simon", "biased-coin", "permuted-block".
+#' @param vcovHC Type of heteroskedasticity-consistent variance estimates. One of: "HC0", "HC1", "HC3".
+#' @param covariate_to_include_strata Whether to include strata variables in covariate adjustment. Defaults to F for ANOVA and ANCOVA; defaults to T for ANHECOVA. User may override by passing in this argument.
+#' @param contrast_h An optional function to specify a desired contrast
+#' @param contrast_dh An optional jacobian function for the contrast (otherwise use numerical derivative)
+#' @param SL_libraries Vector of super-learner libraries to use for the covariate adjustment (see SuperLearner::listWrappers())
+#' @param k_split Number of splits to use in cross-fitting
+#' @param g_accuracy Level of accuracy to check prediction un-biasedness (in digits).
+#' @param centering WARNING: Advanced use only. By default is NULL, so will perform expected behavior
+#'                           in documentation.
+#'                  If centering = 'none', then this will force it to be a g-computation estimator,
+#'                     even if prediction unbiasedness does not hold.
+#'                  If centering = 'tx', then this will center within treatment groups, which is the
+#'                     AIPW estimator (equivalent to g-computation if prediction unbiasedness holds).
+#'                  TODO: If centering = 'tx-strata', then this will center within treatment group and
+#'                     within joint strata, which allows for the AIPW estimator to be used with Pocock-Simon.
+#' @export
+#' @importFrom SuperLearner listWrappers
+#' @import SuperLearner
+robincar_SL <- function(df,
+                         treat_col, response_col, strata_cols=NULL, covariate_cols=NULL,
+                         car_scheme="simple",
+                         covariate_to_include_strata=NULL,
+                         SL_libraries=c(), k_split=2,
+                         g_accuracy=7,
+                         contrast_h=NULL, contrast_dh=NULL){
+
+  .check.car_scheme(car_scheme)
+  # .check.sl.libraries(SL_libraries)
+
+  # Add a k split index to .make.data, so that we can index
+  # the dataset on the kth index set for cross-fitting
+  data <- .make.data(
+    df=df, classname="RoboDataSL",
+    treat_col=treat_col,
+    response_col=response_col,
+    strata_cols=strata_cols,
+    covariate_cols=covariate_cols
+  )
+  validate(data)
+
+  # Create model object
+  model <- .make.model(
+    data=data,
+    car_scheme=car_scheme,
+    vcovHC="HC0",
+    covariate_to_include_strata=covariate_to_include_strata,
+    SL_libraries=SL_libraries,
+    k_split=k_split,
+    g_accuracy=g_accuracy
+  )
+
+  # Perform adjustment
+  result <- adjust(model, data)
+  # This is to save the original dataset for calibration add_x later on
+  result$original_df <- df
+
+  # Create transformation object
+  if(!is.null(contrast_h)){
+    c_result <- robincar_contrast(
+      result=result,
+      contrast_h=contrast_h,
+      contrast_dh=contrast_dh
+    )
+    result <- list(main=result, contrast=c_result)
+  }
+
+  return(result)
+}
+
+#' Covariate adjustment using working models from the super learner libraries
+#' through the AIPW package with cross-fitting.
+#' Estimate treatment-group-specific response means and (optionally)
+#' treatment group contrasts using a generalized linear working model.
+#'
+#'
+#' @param n_times Number of times to run the robincar_SL function
+#' @param seed Seed to set before running the set of functions
+#' @param ... Additional arguments passed to robincar_SL
+#' @export
+robincar_SL_median <- function(n_times, seed, ...){
+
+  if(n_times %% 2 == 0) stop("Must have an odd number of n_times.")
+
+  # Set the seed before running any of the robincar function
+  # that will do sample splitting.
+  set.seed(seed)
+  res <- list()
+  for(i in 1:n_times){
+    res[[i]] <- robincar_SL(...)
+  }
+
+  estimates <- sapply(res, function(x) x$result$estimate)
+  varcovs <- lapply(res, function(x) x$varcov)
+
+  # Get median of estimates
+  estimate <- apply(estimates, 1, median)
+
+  # Create varcov_tilde which adds on the residual
+  varcov_tilde <- list()
+  for(i in 1:n_times){
+    c_est <- estimates[, i] - estimate # centered estimates
+    varcov_tilde[[i]] <- varcovs[[i]] + c_est %*% t(c_est)
+  }
+  varcov_opnorm <- sapply(varcov_tilde, function(x) norm(x, type="2"))
+  # TODO: What if there are multiple matrices with the same operator norm?
+  idx <- which(varcov_opnorm == median(varcov_opnorm))
+  variance <- varcov_tilde[[idx]]
+
+  data <- res[[1]]$data
+
+  result <- format.results(data$treat_levels, estimate, variance)
+
+  mods <- lapply(res, function(x) x$mod)
+  mu_as <- lapply(res, function(x) x$mu_a)
+
+  return(
+    structure(
+      class="SLModelResult",
+      list(result=result, varcov=variance,
+           settings=res[[1]]$settings,
+           data=res[[1]]$data, mod=mods, mu_a=mu_as,
+           original_df=res[[1]]$original_df)
+    )
+  )
+}

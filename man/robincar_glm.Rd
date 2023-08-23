@@ -38,9 +38,10 @@ robincar_glm(
 
 \item{vcovHC}{Type of heteroskedasticity-consistent variance estimates. One of: "HC0", "HC1", "HC3".}
 
-\item{covariate_to_include_strata}{Whether to include strata variables in covariate adjustment. Defaults to F for ANOVA and ANCOVA; defaults to T for ANHECOVA. User may override by passing in this argument.}
+\item{covariate_to_include_strata}{Whether to include strata variables in covariate adjustment. Defaults to F for homogeneous; defaults to T for heterogeneous. User may override by passing in this argument.}
 
-\item{g_family}{Family that would be supplied to glm(...), e.g., binomial. If no link specified, will use default link, like behavior in glm.}
+\item{g_family}{Family that would be supplied to glm(...), e.g., binomial. If no link specified, will use default link, like behavior in glm.
+If you wish to use a negative binomial working model with an unknown dispersion parameter, then use `g_family="nb"`.}
 
 \item{g_accuracy}{Level of accuracy to check prediction un-biasedness.}
 

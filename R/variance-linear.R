@@ -211,3 +211,8 @@ vcov_car.GLMModel <- function(model, data, mod, mutilde){
 
   return(v)
 }
+
+vcov_car.SLModel <- function(model, data, mod, mutilde){
+  v <- vcov_car.GLMModel(model, data, mod, mutilde)
+  return(v)
+}

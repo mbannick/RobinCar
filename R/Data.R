@@ -50,6 +50,13 @@ validate.RoboDataGLM <- function(data){
 
 }
 
+validate.RoboDataSL <- function(data){
+
+  errors <- character()
+  .return.error(errors)
+
+}
+
 validate.RoboDataTTE <- function(data, ref_arm){
 
   errors <- character()
