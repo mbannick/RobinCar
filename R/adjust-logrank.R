@@ -1,5 +1,4 @@
 
-
 #' @importFrom dplyr mutate group_by summarise arrange
 adjust.LogRank <- function(model, data){
 

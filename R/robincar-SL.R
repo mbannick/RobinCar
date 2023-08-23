@@ -98,6 +98,7 @@ robincar_SL_median <- function(n_times, seed, ...){
   set.seed(seed)
   res <- list()
   for(i in 1:n_times){
+    cat(".")
     res[[i]] <- robincar_SL(...)
   }
 
