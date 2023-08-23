@@ -58,17 +58,24 @@ glmlogic <- function(adj_method, x_exists, z_exists, car_scheme, cov_strata,
       if(!z_exists){
         .z.miss.err()
       } else {
-        omegaz_func <- omegaz.closure(car_scheme)
-        if(!cov_strata){
-          .z.include.warn()
-        }
         pu_joint_z <- TRUE
-        if(x_exists){
-          adj_vars <- "joint_z_x"
-          pu_funcs <- .pu.z.warn
+        omegaz_func <- omegaz.closure(car_scheme)
+        if(cov_strata){
+          if(x_exists){
+            adj_vars <- "joint_z_x"
+            pu_funcs <- .pu.z.warn
+          } else {
+            adj_vars <- "joint_z"
+            pu_funcs <- c(.pu.z.calibrate, .pu.z.warn)
+          }
         } else {
-          adj_vars <- "joint_z"
-          pu_funcs <- c(.pu.z.calibrate, .pu.z.warn)
+          if(x_exists){
+            adj_vars <- "x"
+            pu_funcs <- .pu.z.warn
+          } else {
+            method <- "ANOVA"
+            pu_funcs <- .pu.z.warn
+          }
         }
       }
     }

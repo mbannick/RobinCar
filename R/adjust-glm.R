@@ -98,6 +98,7 @@ get.mutilde <- function(model, data, mod){
     i=center_ids
   )
 
+  dfree <- mod$rank
   # Report warning or error messages, whatever
   # is passed through the model settings, if not prediction unbiased.
   if(!all(resid == 0)){
@@ -109,9 +110,17 @@ get.mutilde <- function(model, data, mod){
     for(func in funcs){
       func()
     }
+    if(model$pu_joint_z){
+      # Adjust the degrees of freedom for the model if prediction unbiasedness does not hold
+      # and we end up having to adjust within levels of z
+      # TODO: This is not going to work when there are covariates in the model...
+      # Might need to do a more conservative adjustment
+      # dfree <- (dfree - data$k) + data$k * length(data$joint_strata_levels)
+      dfree <- dfree + data$k * length(data$joint_strata_levels)
+    }
   }
 
-  return(mutilde)
+  return(list(mutilde=mutilde, df_adjust=dfree))
 }
 
 # Perform GLM adjustment, based on the classes
@@ -125,12 +134,18 @@ adjust.GLMModel <- function(model, data){
 
   # Get mutilde from the GLM model, then estimate the treatment means by
   # taking the mean over all of the potential outcomes
-  mutilde <- get.mutilde(model, data, glmod)
+  glmod.adjusted <- get.mutilde(model, data, glmod)
+  mutilde <- glmod.adjusted$mutilde
+
+  # Degree of freedom adjustment
+  df_adjust <- glmod.adjusted$df_adjust
+
   estimate <- colMeans(mutilde)
 
   # Compute the asymptotic variance
   asympt.variance <- vcov_car(model, data, glmod, mutilde)
-  vcov_wt <- get.vcovHC(model$vcovHC, n=data$n, p=glmod$rank)
+
+  vcov_wt <- get.vcovHC(model$vcovHC, n=data$n, p=df_adjust)
   variance <- asympt.variance * vcov_wt / data$n
 
   result <- format.results(data$treat_levels, estimate, variance)
