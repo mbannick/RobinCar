@@ -22,7 +22,9 @@ Imports:
     forcats,
     fastDummies,
     data.table,
-    broom
+    broom,
+    SuperLearner,
+    AIPW
 Depends: 
     R (>= 2.10)
 Suggests: 
