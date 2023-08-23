@@ -40,10 +40,10 @@
   .check.options("vcovHC", vcovHC, OPTIONS)
 }
 
-.check.sl.libraries <- function(SL_libraries){
-  libs <- invisible(SuperLearner::listWrappers(what="SL"))
-  OPTIONS <- libs[grepl("^SL.", libs)]
-  # for(lib in SL_libraries){
-  #   .check.options("Super Learner libraries", lib, OPTIONS)
-  # }
-}
+# .check.sl.libraries <- function(SL_libraries){
+#   libs <- invisible(SuperLearner::listWrappers(what="SL"))
+#   OPTIONS <- libs[grepl("^SL.", libs)]
+#   # for(lib in SL_libraries){
+#   #   .check.options("Super Learner libraries", lib, OPTIONS)
+#   # }
+# }

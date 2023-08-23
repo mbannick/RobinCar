@@ -2,10 +2,8 @@
 % Please edit documentation in R/robincar-SL.R
 \name{robincar_SL}
 \alias{robincar_SL}
-\title{Covariate adjustment using working models from the super learner libraries
-through the AIPW package with cross-fitting.
-Estimate treatment-group-specific response means and (optionally)
-treatment group contrasts using a generalized linear working model.}
+\title{BETA: Covariate adjustment using working models from the super learner libraries
+through the AIPW package with cross-fitting.}
 \usage{
 robincar_SL(
   df,
@@ -16,6 +14,7 @@ robincar_SL(
   car_scheme = "simple",
   covariate_to_include_strata = NULL,
   SL_libraries = c(),
+  SL_learners = c(),
   k_split = 2,
   g_accuracy = 7,
   contrast_h = NULL,
@@ -39,6 +38,8 @@ robincar_SL(
 
 \item{SL_libraries}{Vector of super-learner libraries to use for the covariate adjustment (see SuperLearner::listWrappers())}
 
+\item{SL_learners}{Optional list of super-learner "learners" to use for the covariate adjustment (see SuperLearner::create.Learner)}
+
 \item{k_split}{Number of splits to use in cross-fitting}
 
 \item{g_accuracy}{Level of accuracy to check prediction un-biasedness (in digits).}
@@ -46,21 +47,43 @@ robincar_SL(
 \item{contrast_h}{An optional function to specify a desired contrast}
 
 \item{contrast_dh}{An optional jacobian function for the contrast (otherwise use numerical derivative)}
-
-\item{vcovHC}{Type of heteroskedasticity-consistent variance estimates. One of: "HC0", "HC1", "HC3".}
-
-\item{centering}{WARNING: Advanced use only. By default is NULL, so will perform expected behavior
-         in documentation.
-If centering = 'none', then this will force it to be a g-computation estimator,
-   even if prediction unbiasedness does not hold.
-If centering = 'tx', then this will center within treatment groups, which is the
-   AIPW estimator (equivalent to g-computation if prediction unbiasedness holds).
-TODO: If centering = 'tx-strata', then this will center within treatment group and
-   within joint strata, which allows for the AIPW estimator to be used with Pocock-Simon.}
 }
 \description{
-Covariate adjustment using working models from the super learner libraries
-through the AIPW package with cross-fitting.
 Estimate treatment-group-specific response means and (optionally)
 treatment group contrasts using a generalized linear working model.
+}
+\details{
+*WARNING: This function is still under development and has not been extensively tested.*
+This function currently only works for two treatment groups.
+}
+\examples{
+
+n <- 1000
+set.seed(10)
+DATA2 <- data.frame(A=rbinom(n, size=1, prob=0.5),
+                    y=rbinom(n, size=1, prob=0.2),
+                    x1=rnorm(n),
+                    x2=rnorm(n),
+                    x3=as.factor(rbinom(n, size=1, prob=0.5)),
+                    z1=rbinom(n, size=1, prob=0.5),
+                    z2=rbinom(n, size=1, prob=0.5))
+DATA2[, "y"] <- NA
+As <- DATA2$A == 1
+DATA2[DATA2$A == 1, "y"] <- rbinom(sum(As), size=1, prob=exp(DATA2[As,]$x1)/(1+exp(DATA2[As,]$x1)))
+DATA2[DATA2$A == 0, "y"] <- rbinom(n-sum(As), size=1, prob=exp(1 + 5*DATA2[!As,]$x1 + DATA2[!As,]$x2)/(1+exp(1 + 5*DATA2[!As,]$x1 + DATA2[!As,]$x2)))
+DATA2$A <- as.factor(DATA2$A)
+
+sl.mod <- robincar_SL(
+  df=DATA2,
+  response_col="y",
+  treat_col="A",
+  strata_cols=c("z1"),
+  covariate_cols=c("x1"),
+  SL_libraries=c("SL.ranger"),
+  car_scheme="permuted-block",
+  covariate_to_include_strata=TRUE
+)
+
+sl.mod$result
+
 }

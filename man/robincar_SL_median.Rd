@@ -2,10 +2,8 @@
 % Please edit documentation in R/robincar-SL.R
 \name{robincar_SL_median}
 \alias{robincar_SL_median}
-\title{Covariate adjustment using working models from the super learner libraries
-through the AIPW package with cross-fitting.
-Estimate treatment-group-specific response means and (optionally)
-treatment group contrasts using a generalized linear working model.}
+\title{BETA: Covariate adjustment using working models from the super learner libraries
+through the AIPW package with cross-fitting, with median adjustment.}
 \usage{
 robincar_SL_median(n_times, seed, ...)
 }
@@ -13,12 +11,13 @@ robincar_SL_median(n_times, seed, ...)
 \item{n_times}{Number of times to run the robincar_SL function}
 
 \item{seed}{Seed to set before running the set of functions}
-
-\item{...}{Additional arguments passed to robincar_SL}
 }
 \description{
-Covariate adjustment using working models from the super learner libraries
-through the AIPW package with cross-fitting.
 Estimate treatment-group-specific response means and (optionally)
 treatment group contrasts using a generalized linear working model.
+Perform median adjustment to limit randomness induced from cross-fitting.
+}
+\details{
+*WARNING: This function is still under development and has not been extensively tested.*
+This function currently only works for two treatment groups.
 }

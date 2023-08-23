@@ -88,7 +88,8 @@
 # scheme and vcovHC type.
 .make.model.RoboDataSL <- function(data, car_scheme, vcovHC,
                                    covariate_to_include_strata,
-                                   SL_libraries, k_split,
+                                   SL_libraries, SL_learners,
+                                   k_split,
                                    g_accuracy) {
 
   x_exists <- !is.null(data$covariate)
@@ -102,6 +103,7 @@
     list(
       vcovHC=vcovHC,
       SL_libraries=SL_libraries,
+      SL_learners=SL_learners,
       k_split=k_split,
       car_scheme=car_scheme,
       adj_se_z=logic$adj_se_z,
