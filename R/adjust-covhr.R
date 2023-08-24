@@ -2,26 +2,26 @@
 #' @importFrom dplyr group_by mutate ungroup
 get.ordered.data.est <- function(df, lin_predictors){
 
-  data <- df %>% mutate(lin_pred=lin_predictors)
+  data <- df %>% dplyr::mutate(lin_pred=lin_predictors)
 
   data <- data %>%
-    group_by(.data$strata) %>%
-    mutate(
+    dplyr::group_by(.data$strata) %>%
+    dplyr::mutate(
       s0_seq          = exp(.data$lin_pred)
-    ) %>% mutate(
+    ) %>% dplyr::mutate(
       mu_num          = .data$s0_seq * .data$Y1,
       mu_denom        = (.data$s0_seq * .data$Y1 + .data$Y0)
-    ) %>% mutate(
+    ) %>% dplyr::mutate(
       mu_t            = .data$mu_num / .data$mu_denom,
       score_i         = .data$event * (.data$trt1 - .data$mu_t),
       O.hat1          = .data$event * .data$Y0 / .data$mu_denom -
         .data$s0_seq * cumsum(.data$event * .data$Y0 / .data$mu_denom**2),
       O.hat0          = .data$event * .data$s0_seq * .data$Y1 / .data$mu_denom -
         .data$s0_seq * cumsum(.data$event * .data$Y1 / .data$mu_denom**2)
-    ) %>% mutate(
+    ) %>% dplyr::mutate(
       O.hat           = .data$O.hat0 * (.data$trt0 == 1) +
         .data$O.hat1 * (.data$trt1 == 1)
-    ) %>% ungroup()
+    ) %>% dplyr::ungroup()
 
   return(data)
 
@@ -64,7 +64,7 @@ adjust.CovHR <- function(model, data){
   score.adj <- function(theta) score.theta(theta, df=df_process) - cov_adjust
   thetaCLhat <- uniroot(score.adj, interval=model$interval)$root
 
-  df <- df %>% mutate(
+  df <- df %>% dplyr::mutate(
     ssig_l = .data$event * exp(thetaCLhat) * .data$Y0 * .data$Y1 /
       (exp(thetaCLhat) * .data$Y1 + .data$Y0)**2
   )
@@ -74,7 +74,7 @@ adjust.CovHR <- function(model, data){
     dplyr::filter(!is.na(.data$uu_cl)) %>%
     dplyr::group_by(strata) %>%
     dplyr::summarise(
-      var_adj = model$p_trt * (1 - model$p_trt) * unique(.data$bsigb) * n(),
+      var_adj = model$p_trt * (1 - model$p_trt) * unique(.data$bsigb) * dplyr::n(),
       .groups = "drop"
     ) %>%
     dplyr::arrange(strata)

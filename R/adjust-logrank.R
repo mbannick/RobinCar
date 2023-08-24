@@ -1,5 +1,5 @@
 
-#' @importFrom dplyr mutate group_by summarise arrange
+#' @importFrom dplyr mutate group_by summarise arrange n
 adjust.LogRank <- function(model, data){
 
   # Creates data
@@ -26,7 +26,7 @@ adjust.LogRank <- function(model, data){
     dplyr::group_by(strata) %>%
     dplyr::summarise(
       U_SL_z  = sum(.data$uu_cl),
-      var_adj = model$p_trt * (1 - model$p_trt) * unique(.data$bsigb) * n(),
+      var_adj = model$p_trt * (1 - model$p_trt) * unique(.data$bsigb) * dplyr::n(),
       .groups = "drop"
     ) %>%
     dplyr::arrange(strata)

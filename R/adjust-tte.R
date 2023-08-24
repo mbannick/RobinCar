@@ -40,6 +40,7 @@ fix.ties <- function(df){
 
 # Pre-process the time to event dataset by calculating
 # the risk set size, and fixing ties in the failure times.
+#' @importFrom dplyr n
 process.tte.df <- function(df, ref_arm=NULL){
 
   # Get the treatment column and set the reference group
@@ -53,11 +54,11 @@ process.tte.df <- function(df, ref_arm=NULL){
   df <- df %>%
     dplyr::arrange(.data$strata, .data$response) %>%
     group_by(.data$strata) %>%
-    mutate(Y=n():1,
+    mutate(Y=dplyr::n():1,
            trt0=as.integer(.data$treat == trts[1]),
            trt1=as.integer(.data$treat == trts[2]),
-           Y0=cumsum(.data$trt0[n():1])[n():1],
-           Y1=cumsum(.data$trt1[n():1])[n():1])
+           Y0=cumsum(.data$trt0[dplyr::n():1])[dplyr::n():1],
+           Y1=cumsum(.data$trt1[dplyr::n():1])[dplyr::n():1])
 
   # Fix ties
   df <- fix.ties(df)
@@ -66,7 +67,7 @@ process.tte.df <- function(df, ref_arm=NULL){
   return(df)
 }
 
-#' @importFrom dplyr group_by mutate ungroup
+#' @importFrom dplyr group_by mutate ungroup n
 get.ordered.data <- function(df, ref_arm){
 
   df <- df %>%
@@ -81,15 +82,15 @@ get.ordered.data <- function(df, ref_arm){
       s0_seq          = exp(.data$lin_pred),
       s1_seq          = .data$s0_seq * .data$trt1,
 
-      s0              = cumsum(.data$s0_seq[n():1])[n():1]/n(),
-      s1              = cumsum(.data$s1_seq[n():1])[n():1]/n(),
+      s0              = cumsum(.data$s0_seq[dplyr::n():1])[dplyr::n():1]/dplyr::n(),
+      s1              = cumsum(.data$s1_seq[dplyr::n():1])[dplyr::n():1]/dplyr::n(),
 
       mu_t            = .data$s1 / .data$s0,
 
-      mean_at_risk    = .data$event / (n()*.data$s0),
+      mean_at_risk    = .data$event / (dplyr::n()*.data$s0),
       cumsum_at_risk  = cumsum(.data$mean_at_risk),
 
-      mean_at_risk2   = .data$event / (n()*.data$s0) * .data$mu_t,
+      mean_at_risk2   = .data$event / (dplyr::n()*.data$s0) * .data$mu_t,
       cumsum_at_risk2 = cumsum(.data$mean_at_risk2),
 
       O_i             = .data$event * (.data$trt1 - .data$mu_t) -
@@ -225,11 +226,11 @@ calculate.adjustment <- function(df, betas, covnames, stratified){
         adjust1 <- matcx %*% t(b1)
         adjust0 <- matcx %*% t(b0)
         bsigb   <- as.numeric((b1+b0) %*% var(matx) %*% t(b1 + b0))
-        out     <- data.frame(adjust1, adjust0, bsigb) %>% as_tibble()
+        out     <- data.frame(adjust1, adjust0, bsigb) %>% dplyr::as_tibble()
         cbind(.x,out)
       })
   } else {
-    dat <- dat %>% mutate(
+    dat <- dat %>% dplyr::mutate(
       adjust1 = 0,
       adjust0 = 0,
       bsigb   = 0
