@@ -23,13 +23,13 @@ adjust.LogRank <- function(model, data){
   # Summarize by strata (if CL, then single strata)
   ss <- df %>%
     dplyr::filter(!is.na(.data$uu_cl)) %>%
-    dplyr::group_by(strata) %>%
+    dplyr::group_by(.data$strata) %>%
     dplyr::summarise(
       U_SL_z  = sum(.data$uu_cl),
       var_adj = model$p_trt * (1 - model$p_trt) * unique(.data$bsigb) * dplyr::n(),
       .groups = "drop"
     ) %>%
-    dplyr::arrange(strata)
+    dplyr::arrange(.data$strata)
 
   # Final quantities for the C(S)L statistic
   U_CSL     <- mean(df$uu_cl)

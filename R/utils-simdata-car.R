@@ -4,10 +4,12 @@
 #' @param p_trt Proportion allotted to treatment
 #' @export
 #'
+#' @importFrom stats rbinom
+#'
 #' @examples
 #' car_sr(10, p_trt=0.4)
 car_sr <- function(n, p_trt){
-  I <- rbinom(n, 1, p_trt)
+  I <- stats::rbinom(n, 1, p_trt)
   return(I)
 }
 
@@ -19,7 +21,7 @@ car_sr <- function(n, p_trt){
 #' @param blocksize Permuted block blocksize
 #'
 #' @export
-#' @importFrom dplyr summarise_all
+#' @importFrom dplyr summarise_all group_by_all cur_group_id mutate
 #'
 #' @examples
 #' # Create strata variables
@@ -52,7 +54,7 @@ car_pb <- function(z, trt_label, trt_alc, blocksize=4L) {
 
   strata_cross <- strata %>%
     group_by_all %>%
-    mutate(strata_ind = cur_group_id()) %>%
+    dplyr::mutate(strata_ind = dplyr::cur_group_id()) %>%
     ungroup()
 
   A <- rep(NA, nrow(strata))
@@ -83,6 +85,7 @@ car_pb <- function(z, trt_label, trt_alc, blocksize=4L) {
 #' @author Ting Ye Yanyao Yi
 #' @import tidyverse
 #' @import fastDummies
+#' @importFrom stats sd
 #' @export
 #'
 #' @examples
@@ -141,7 +144,7 @@ car_ps <- function(z, treat, ratio, imb_measure, p_bc=0.8){
           range_level <- apply(num_level, 1, range)
           imb_margin <- range_level[2,] - range_level[1,]
         } else {
-          sd_level <- apply(num_level, 1, sd)
+          sd_level <- apply(num_level, 1, stats::sd)
           imb_margin <- sd_level
         }
         imbalance[i] <- sum(covwt %*% imb_margin)

@@ -110,7 +110,7 @@ get.ordered.data <- function(df, ref_arm){
 #' @importFrom stats model.matrix
 get_design_matrix <- function(df, covnames){
 
-  formula <- as.formula(
+  formula <- stats::as.formula(
     paste0("~ 1 + ", paste0(covnames, collapse="+"))
   )
   # Get design matrix based on formula
@@ -125,8 +125,8 @@ get_design_matrix <- function(df, covnames){
   # but this will center the strata variables also, if they are included.
   mat <- data.frame(mat) %>%
     dplyr::mutate(strata=df$strata) %>%
-    dplyr::group_by(strata, ) %>%
-    dplyr::mutate(across(
+    dplyr::group_by(.data$strata, ) %>%
+    dplyr::mutate(dplyr::across(
       .cols=everything(),
       .fns=list(center=~scale(., center=TRUE, scale=FALSE)),
       .names="{col}_{fn}"
@@ -148,13 +148,13 @@ check.collinearity <- function(df, covnames, stratified){
     names <- unique(df$term)
     x_covnames <- names[grepl("^xmat_", names)]
     x_covnames <- x_covnames[!grepl("carcov_z", x_covnames)]
-    if(all(is.na(df %>% dplyr::filter(grepl("xmat_",term)) %>% .$estimate))){
+    if(all(is.na(df %>% dplyr::filter(grepl("xmat_", .data$term)) %>% .$estimate))){
       .lin.dep.strat.error()
     }
   }
 
   df <- df %>% dplyr::mutate(
-    estimate=tidyr::replace_na(estimate, 0)
+    estimate=tidyr::replace_na(.data$estimate, 0)
   )
 
   return(df)
@@ -184,7 +184,7 @@ regress_to_Ohat <- function(df, stratified){
     tidyr::expand_grid(
       # strata-specific betas (same)
       strata=unique(df$strata), .) %>%
-    dplyr::select(strata,
+    dplyr::select(.data$strata,
                   .data$trt1,
                   .data$term,
                   .data$estimate) %>%

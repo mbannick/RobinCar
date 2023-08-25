@@ -5,7 +5,7 @@
 # mean per group.
 
 # This function allows us to implement the negative binomial model through MASS
-#' @import MASS
+#' @importFrom MASS glm.nb
 fitmod <- function(family, ...){
   useMASS <- FALSE
   if(class(family) == "character"){

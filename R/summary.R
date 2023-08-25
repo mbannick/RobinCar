@@ -53,7 +53,7 @@ print.ContrastResult <- function(x, ...){
 #' @param x A TTEResult object
 #' @param ... Additional arguments
 #'
-#' @importFrom data.table data.table setorder setnames
+#' @importFrom data.table data.table setorder setnames N .SD
 #' @export
 print.TTEResult <- function(x, ...){
 
@@ -119,6 +119,19 @@ print.TTEResult <- function(x, ...){
   }
   cat("\n------------------------------------\n")
 
+  # Make visible binding for global variables
+  # Recommended by data.table developers
+  # These are names of columns of the data.table created below
+  # and including them as NULL allows the R CMD CHECK to pass
+  # https://www.r-bloggers.com/2019/08/no-visible-binding-for-global-variable/
+
+  treat <- NULL
+  N <- NULL
+  name <- NULL
+  strata_col <- NULL
+  observed <- NULL
+
+
   df <- data.table::data.table(observed=x$data$event, treat=x$data$treat)
   df[, treat := as.character(treat)]
 
@@ -150,17 +163,17 @@ print.TTEResult <- function(x, ...){
     stat <- x$result$theta_CL/x$result$se_theta_CL
     cat(
       "\nTest Stat:", x$result$theta_CL/x$result$se_theta_CL,
-      "\n2-side p-value:", 2*(1-pnorm(abs(stat))),
-      "\nHR:", x$result$theta_CL,
-      "\nLog HR:", log(x$result$theta_CL),
-      "\nHR SE:", x$result$se_theta_CL
+      "\n2-side p-value:", 2*(1-stats::pnorm(abs(stat))),
+      "\nHR:", exp(x$result$theta_CL),
+      "\nLog HR:", (x$result$theta_CL),
+      "\nLog HR SE:", x$result$se_theta_CL
     )
   } else {
     cat(
       "\nScore function:", x$result$U,
       "\nStandard error:", x$result$se,
       "\nTest statistic:", x$result$statistic,
-      "\n2-side p-value:", 2*(1-pnorm(abs(x$result$statistic)))
+      "\n2-side p-value:", 2*(1-stats::pnorm(abs(x$result$statistic)))
     )
   }
 }

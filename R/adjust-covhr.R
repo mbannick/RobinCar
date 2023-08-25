@@ -35,6 +35,7 @@ score.theta <- function(theta, df){
 }
 
 #' @importFrom dplyr mutate group_by summarise arrange
+#' @importFrom stats uniroot
 adjust.CovHR <- function(model, data){
 
   # Creates data
@@ -46,7 +47,7 @@ adjust.CovHR <- function(model, data){
 
   # Get un-adjusted estimate
   score.unadj <- function(theta) score.theta(theta, df=df_process)
-  thetaLhat <- uniroot(score.unadj, interval=model$interval)$root
+  thetaLhat <- stats::uniroot(score.unadj, interval=model$interval)$root
 
   # Perform covariate adjustment
   df <- get.ordered.data.est(df=df, lin_predictors=thetaLhat)
@@ -62,7 +63,7 @@ adjust.CovHR <- function(model, data){
 
   # Get adjusted estimate
   score.adj <- function(theta) score.theta(theta, df=df_process) - cov_adjust
-  thetaCLhat <- uniroot(score.adj, interval=model$interval)$root
+  thetaCLhat <- stats::uniroot(score.adj, interval=model$interval)$root
 
   df <- df %>% dplyr::mutate(
     ssig_l = .data$event * exp(thetaCLhat) * .data$Y0 * .data$Y1 /
@@ -72,12 +73,12 @@ adjust.CovHR <- function(model, data){
   # Summarize by strata (if CL, then single strata)
   ss <- df %>%
     dplyr::filter(!is.na(.data$uu_cl)) %>%
-    dplyr::group_by(strata) %>%
+    dplyr::group_by(.data$strata) %>%
     dplyr::summarise(
       var_adj = model$p_trt * (1 - model$p_trt) * unique(.data$bsigb) * dplyr::n(),
       .groups = "drop"
     ) %>%
-    dplyr::arrange(strata)
+    dplyr::arrange(.data$strata)
 
   # Final quantities for the C(S)L statistic
   sig2_L  <- mean(df$ssig_l)

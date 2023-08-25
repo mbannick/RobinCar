@@ -34,7 +34,7 @@ get.strata.sum <- function(df, n, p_trt, sparse_remove=FALSE){
 
   if(sparse_remove){
     if(any(ss$na_ind)){
-      .sparse.strata.wardplyr::n()
+      .sparse.strata.warn()
       ss <- ss %>% dplyr::filter(!.data$na_ind)
     } else {
       ss <- ss %>% tidyr::replace_na(

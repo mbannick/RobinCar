@@ -38,7 +38,7 @@ adjust.SLModel <- function(model, data){
   # This is just a placeholder for the data frame, it's not
   # actually using this GLM model fit
   df <- data.frame(response=data$response, treat=data$treat, dmat)
-  glmod <- glm(response ~ ., data=df)
+  glmod <- stats::glm(response ~ ., data=df)
 
   # Compute the asymptotic variance -- not specific to a partition
   asympt.variance <- vcov_car(model, data, glmod, mutilde)

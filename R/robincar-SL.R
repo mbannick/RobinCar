@@ -145,7 +145,7 @@ robincar_SL_median <- function(n_times, seed, ...){
   varcovs <- lapply(res, function(x) x$varcov)
 
   # Get median of estimates
-  estimate <- apply(estimates, 1, median)
+  estimate <- apply(estimates, 1, stats::median)
 
   # Create varcov_tilde which adds on the residual
   varcov_tilde <- list()
@@ -155,7 +155,7 @@ robincar_SL_median <- function(n_times, seed, ...){
   }
   varcov_opnorm <- sapply(varcov_tilde, function(x) norm(x, type="2"))
   # TODO: What if there are multiple matrices with the same operator norm?
-  idx <- which(varcov_opnorm == median(varcov_opnorm))
+  idx <- which(varcov_opnorm == stats::median(varcov_opnorm))
   variance <- varcov_tilde[[idx]]
 
   data <- res[[1]]$data
