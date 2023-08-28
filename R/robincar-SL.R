@@ -32,6 +32,7 @@
 #' @examples
 #'
 #' library(SuperLearner)
+#' library(ranger)
 #' n <- 1000
 #' set.seed(10)
 #' DATA2 <- data.frame(A=rbinom(n, size=1, prob=0.5),
