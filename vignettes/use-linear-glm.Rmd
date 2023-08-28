@@ -51,12 +51,13 @@ fit.anova <- robincar_linear(df = data,
 
 ```{r}
 fit.ancova <- robincar_linear(df = data, 
-                              response_col="y",
-                              treat_col="A",
-                              strata_cols=c("z1", "z2"),
-                              covariate_cols=c("x1", "x3"),
-                              car_scheme="biased-coin",
-                              adj_method="ANCOVA")
+                            response_col="y",
+                            treat_col="A",
+                            strata_cols=c("z1", "z2"),
+                            covariate_cols=c("x1", "x3"),
+                            car_scheme="biased-coin",
+                            adj_method="ANCOVA")
+
 ```
 
 ### ANHECOVA model with Pocock-Simon randomization and linear contrast

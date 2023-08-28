@@ -49,7 +49,7 @@ glmlogic <- function(adj_method, x_exists, z_exists, car_scheme, cov_strata,
         adj_vars <- "x"
         pu_funcs <- .pu.warn
       } else {
-        .x.miss.warn()
+        # .x.miss.warn()
         method <- "ANOVA"
         aipw <- FALSE
       }

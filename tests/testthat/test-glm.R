@@ -12,6 +12,42 @@ test_that("GLM full function -- linear", {
     treat_col="A",
     covariate_cols=c("x1"),
     car_scheme="simple",
+    adj_method="ANOVA",
+    covariate_to_include_strata=FALSE)
+  non <- robincar_glm(
+    df=DATA,
+    response_col="y",
+    treat_col="A",
+    car_scheme="simple",
+    g_family=gaussian(link="identity"),
+    g_accuracy=7,
+    adj_method="homogeneous",
+    covariate_to_include_strata=FALSE)
+  expect_equal(class(non), "GLMModelResult")
+
+  # Check that the result from the linear and glm function is the same
+  # when using the identity link.
+  est_lin <- lin$result$estimate
+  names(est_lin) <- NULL
+  est_non <- non$result$estimate
+  names(est_non) <- NULL
+  expect_equal(est_lin, est_non, tolerance=1e-10)
+
+  # These won't be exactly equivalent, only asymptotically (?)
+  var_lin <- lin$result$se
+  names(var_lin) <- NULL
+  var_non <- non$result$se
+  names(var_non) <- NULL
+  expect_equal(var_lin, var_non, tolerance=1e-2)
+})
+
+test_that("GLM full function -- linear", {
+  lin <- robincar_linear(
+    df=DATA,
+    response_col="y",
+    treat_col="A",
+    covariate_cols=c("x1"),
+    car_scheme="simple",
     adj_method="ANCOVA",
     covariate_to_include_strata=FALSE)
   non <- robincar_glm(
@@ -23,6 +59,43 @@ test_that("GLM full function -- linear", {
     g_family=gaussian(link="identity"),
     g_accuracy=7,
     adj_method="homogeneous",
+    covariate_to_include_strata=FALSE)
+  expect_equal(class(non), "GLMModelResult")
+
+  # Check that the result from the linear and glm function is the same
+  # when using the identity link.
+  est_lin <- lin$result$estimate
+  names(est_lin) <- NULL
+  est_non <- non$result$estimate
+  names(est_non) <- NULL
+  expect_equal(est_lin, est_non, tolerance=1e-10)
+
+  # These won't be exactly equivalent, only asymptotically (?)
+  var_lin <- lin$result$se
+  names(var_lin) <- NULL
+  var_non <- non$result$se
+  names(var_non) <- NULL
+  expect_equal(var_lin, var_non, tolerance=1e-2)
+})
+
+test_that("GLM full function -- linear", {
+  lin <- robincar_linear(
+    df=DATA,
+    response_col="y",
+    treat_col="A",
+    covariate_cols=c("x1"),
+    car_scheme="simple",
+    adj_method="ANHECOVA",
+    covariate_to_include_strata=FALSE)
+  non <- robincar_glm(
+    df=DATA,
+    response_col="y",
+    treat_col="A",
+    covariate_cols=c("x1"),
+    car_scheme="simple",
+    g_family=gaussian(link="identity"),
+    g_accuracy=7,
+    adj_method="heterogeneous",
     covariate_to_include_strata=FALSE)
   expect_equal(class(non), "GLMModelResult")
 
