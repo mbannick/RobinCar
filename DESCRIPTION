@@ -19,7 +19,6 @@ Imports:
     stats,
     rlang,
     survival,
-    forcats,
     fastDummies,
     data.table,
     broom,
@@ -32,6 +31,7 @@ Suggests:
     knitr,
     rmarkdown,
     ranger,
+    forcats,
     testthat (>= 3.0.0)
 VignetteBuilder: knitr
 Config/testthat/edition: 3
