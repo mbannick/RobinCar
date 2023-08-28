@@ -55,9 +55,12 @@ treatment group contrasts using a generalized linear working model.
 \details{
 *WARNING: This function is still under development and has not been extensively tested.*
 This function currently only works for two treatment groups.
+Before using this function, you must load the SuperLearner library with
+`library(SuperLearner)`, otherwise the function call will fail.
 }
 \examples{
 
+library(SuperLearner)
 n <- 1000
 set.seed(10)
 DATA2 <- data.frame(A=rbinom(n, size=1, prob=0.5),
@@ -69,8 +72,16 @@ DATA2 <- data.frame(A=rbinom(n, size=1, prob=0.5),
                     z2=rbinom(n, size=1, prob=0.5))
 DATA2[, "y"] <- NA
 As <- DATA2$A == 1
-DATA2[DATA2$A == 1, "y"] <- rbinom(sum(As), size=1, prob=exp(DATA2[As,]$x1)/(1+exp(DATA2[As,]$x1)))
-DATA2[DATA2$A == 0, "y"] <- rbinom(n-sum(As), size=1, prob=exp(1 + 5*DATA2[!As,]$x1 + DATA2[!As,]$x2)/(1+exp(1 + 5*DATA2[!As,]$x1 + DATA2[!As,]$x2)))
+DATA2[DATA2$A == 1, "y"] <- rbinom(
+  sum(As),
+  size=1,
+  prob=exp(DATA2[As,]$x1)/(1+exp(DATA2[As,]$x1)))
+DATA2[DATA2$A == 0, "y"] <- rbinom(
+  n-sum(As),
+  size=1,
+  prob=exp(1 +
+    5*DATA2[!As,]$x1 + DATA2[!As,]$x2)/
+    (1+exp(1 + 5*DATA2[!As,]$x1 + DATA2[!As,]$x2)))
 DATA2$A <- as.factor(DATA2$A)
 
 sl.mod <- robincar_SL(

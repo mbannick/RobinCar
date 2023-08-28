@@ -612,3 +612,37 @@ treatment_assignment <-
     }
     return(I)
   }
+
+minimization <- function(z,
+                         imbalance_measure = "square",
+                         BCD_p = 2 / 3) {
+  z <- as.matrix(z)
+  n <- dim(z)[1]
+  I <- numeric(n)
+  I[1] <- rbinom(1, 1, 1 / 2)
+  D <- matrix(0, nrow = dim(z)[1], ncol = dim(z)[2])
+  D[1, ] <- (2 * I[1] - 1) * z[1, ]
+  for (i in 2:n) {
+    D_before_i <- D[i - 1, ]
+    D_potential_1 <- D_before_i + z[i, ]
+    D_potential_0 <- D_before_i - z[i, ]
+    if (imbalance_measure == "square") {
+      imb_potential_1 <- sum(D_potential_1 ^ 2)
+      imb_potential_0 <- sum(D_potential_0 ^ 2)
+    } else if (imbalance_measure == "absolute") {
+      imb_potential_1 <- sum(abs(D_potential_1))
+      imb_potential_0 <- sum(abs(D_potential_0))
+    }
+
+    if (imb_potential_1 > imb_potential_0) {
+      # imbalance is larger if assinged to I=1
+      I[i] <- rbinom(1, 1, (1 - BCD_p)) #BCD_p>1/2
+    } else if (imb_potential_1 < imb_potential_0) {
+      I[i] <- rbinom(1, 1, BCD_p)
+    } else if (imb_potential_1 == imb_potential_0) {
+      I[i] <- rbinom(1, 1, 0.5)
+    }
+    D[i, ] <- D_potential_1 * I[i] + D_potential_0 * (1 - I[i])
+  }
+  return(I)
+}

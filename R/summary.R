@@ -53,7 +53,8 @@ print.ContrastResult <- function(x, ...){
 #' @param x A TTEResult object
 #' @param ... Additional arguments
 #'
-#' @importFrom data.table data.table setorder setnames N .SD
+#' @importFrom data.table data.table setorder setnames .SD :=
+#' @import data.table
 #' @export
 print.TTEResult <- function(x, ...){
 
@@ -125,13 +126,6 @@ print.TTEResult <- function(x, ...){
   # and including them as NULL allows the R CMD CHECK to pass
   # https://www.r-bloggers.com/2019/08/no-visible-binding-for-global-variable/
 
-  treat <- NULL
-  N <- NULL
-  name <- NULL
-  strata_col <- NULL
-  observed <- NULL
-
-
   df <- data.table::data.table(observed=x$data$event, treat=x$data$treat)
   df[, treat := as.character(treat)]
 
@@ -150,10 +144,10 @@ print.TTEResult <- function(x, ...){
 
   if(x$settings$car_strata){
     summ[, strata_col := paste0("strata = ", strata)]
-    summ <- summ[, .(strata_col, name, N, observed)]
+    summ <- summ[, c("strata_col", "name", "N", "observed"), with=F]
     data.table::setnames(summ, c("Strata", "Treatment", "N.total", "N.events"))
   } else {
-    summ <- summ[, .(name, N, observed)]
+    summ <- summ[, c("name", "N", "observed")]
     data.table::setnames(summ, c("Treatment", "N.total", "N.events"))
   }
 

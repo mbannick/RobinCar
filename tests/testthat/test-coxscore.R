@@ -35,6 +35,7 @@ test_that("X yes Z yes, permuted-block, coxscore",{
     car_scheme="permuted-block",
     ref_arm=0
   )
+  # print(test1)
   test1_ty <- score_robust(data.simu,
                            randomization="permuted_block",
                            p_trt=0.5)

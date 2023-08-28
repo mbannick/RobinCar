@@ -6,6 +6,8 @@
 #'
 #' *WARNING: This function is still under development and has not been extensively tested.*
 #' This function currently only works for two treatment groups.
+#' Before using this function, you must load the SuperLearner library with
+#' `library(SuperLearner)`, otherwise the function call will fail.
 #'
 #' @param df A data.frame with the required columns
 #' @param treat_col Name of column in df with treatment variable
@@ -29,6 +31,7 @@
 #'
 #' @examples
 #'
+#' library(SuperLearner)
 #' n <- 1000
 #' set.seed(10)
 #' DATA2 <- data.frame(A=rbinom(n, size=1, prob=0.5),
@@ -40,8 +43,16 @@
 #'                     z2=rbinom(n, size=1, prob=0.5))
 #' DATA2[, "y"] <- NA
 #' As <- DATA2$A == 1
-#' DATA2[DATA2$A == 1, "y"] <- rbinom(sum(As), size=1, prob=exp(DATA2[As,]$x1)/(1+exp(DATA2[As,]$x1)))
-#' DATA2[DATA2$A == 0, "y"] <- rbinom(n-sum(As), size=1, prob=exp(1 + 5*DATA2[!As,]$x1 + DATA2[!As,]$x2)/(1+exp(1 + 5*DATA2[!As,]$x1 + DATA2[!As,]$x2)))
+#' DATA2[DATA2$A == 1, "y"] <- rbinom(
+#'   sum(As),
+#'   size=1,
+#'   prob=exp(DATA2[As,]$x1)/(1+exp(DATA2[As,]$x1)))
+#' DATA2[DATA2$A == 0, "y"] <- rbinom(
+#'   n-sum(As),
+#'   size=1,
+#'   prob=exp(1 +
+#'     5*DATA2[!As,]$x1 + DATA2[!As,]$x2)/
+#'     (1+exp(1 + 5*DATA2[!As,]$x1 + DATA2[!As,]$x2)))
 #' DATA2$A <- as.factor(DATA2$A)
 #'
 #' sl.mod <- robincar_SL(
@@ -123,12 +134,22 @@ robincar_SL <- function(df,
 #'
 #' *WARNING: This function is still under development and has not been extensively tested.*
 #' This function currently only works for two treatment groups.
+#' Before using this function, you must load the SuperLearner library with
+#' `library(SuperLearner)`, otherwise the function call will fail.
 #'
 #' @param n_times Number of times to run the robincar_SL function
 #' @param seed Seed to set before running the set of functions
 #' @inheritParams robincar_SL
 #' @export
-robincar_SL_median <- function(n_times, seed, ...){
+robincar_SL_median <- function(n_times, seed, df,
+                               treat_col, response_col,
+                               strata_cols=NULL, covariate_cols=NULL,
+                               car_scheme="simple",
+                               covariate_to_include_strata=NULL,
+                               SL_libraries=c(), SL_learners=c(),
+                               k_split=2,
+                               g_accuracy=7,
+                               contrast_h=NULL, contrast_dh=NULL){
 
   if(n_times %% 2 == 0) stop("Must have an odd number of n_times.")
 
@@ -138,7 +159,20 @@ robincar_SL_median <- function(n_times, seed, ...){
   res <- list()
   for(i in 1:n_times){
     cat(".")
-    res[[i]] <- robincar_SL(...)
+    res[[i]] <- robincar_SL(
+      df=df,
+      treat_col=treat_col,
+      response_col=response_col,
+      strata_cols=strata_cols,
+      covariate_cols=covariate_cols,
+      car_scheme=car_scheme,
+      covariate_to_include_strata=covariate_to_include_strata,
+      SL_libraries=SL_libraries,
+      SL_learners=SL_learners,
+      k_split=k_split,
+      g_accuracy=g_accuracy,
+      contrast_h=contrast_h,
+      contrast_dh=contrast_dh)
   }
 
   estimates <- sapply(res, function(x) x$result$estimate)

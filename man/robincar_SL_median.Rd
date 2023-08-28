@@ -5,12 +5,54 @@
 \title{BETA: Covariate adjustment using working models from the super learner libraries
 through the AIPW package with cross-fitting, with median adjustment.}
 \usage{
-robincar_SL_median(n_times, seed, ...)
+robincar_SL_median(
+  n_times,
+  seed,
+  df,
+  treat_col,
+  response_col,
+  strata_cols = NULL,
+  covariate_cols = NULL,
+  car_scheme = "simple",
+  covariate_to_include_strata = NULL,
+  SL_libraries = c(),
+  SL_learners = c(),
+  k_split = 2,
+  g_accuracy = 7,
+  contrast_h = NULL,
+  contrast_dh = NULL
+)
 }
 \arguments{
 \item{n_times}{Number of times to run the robincar_SL function}
 
 \item{seed}{Seed to set before running the set of functions}
+
+\item{df}{A data.frame with the required columns}
+
+\item{treat_col}{Name of column in df with treatment variable}
+
+\item{response_col}{Name of the column in df with response variable}
+
+\item{strata_cols}{Names of columns in df with strata variables}
+
+\item{covariate_cols}{Names of columns in df with covariate variables}
+
+\item{car_scheme}{Name of the type of covariate-adaptive randomization scheme. One of: "simple", "pocock-simon", "biased-coin", "permuted-block".}
+
+\item{covariate_to_include_strata}{Whether to include strata variables in covariate adjustment. Defaults to F for ANOVA and ANCOVA; defaults to T for ANHECOVA. User may override by passing in this argument.}
+
+\item{SL_libraries}{Vector of super-learner libraries to use for the covariate adjustment (see SuperLearner::listWrappers())}
+
+\item{SL_learners}{Optional list of super-learner "learners" to use for the covariate adjustment (see SuperLearner::create.Learner)}
+
+\item{k_split}{Number of splits to use in cross-fitting}
+
+\item{g_accuracy}{Level of accuracy to check prediction un-biasedness (in digits).}
+
+\item{contrast_h}{An optional function to specify a desired contrast}
+
+\item{contrast_dh}{An optional jacobian function for the contrast (otherwise use numerical derivative)}
 }
 \description{
 Estimate treatment-group-specific response means and (optionally)
@@ -20,4 +62,6 @@ Perform median adjustment to limit randomness induced from cross-fitting.
 \details{
 *WARNING: This function is still under development and has not been extensively tested.*
 This function currently only works for two treatment groups.
+Before using this function, you must load the SuperLearner library with
+`library(SuperLearner)`, otherwise the function call will fail.
 }
