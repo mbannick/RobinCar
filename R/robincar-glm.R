@@ -12,7 +12,7 @@
 #' @param covariate_cols Names of columns in df with covariate variables
 #' @param car_scheme Name of the type of covariate-adaptive randomization scheme. One of: "simple", "pocock-simon", "biased-coin", "permuted-block".
 #' @param adj_method Name of adjustment method to use, one of "heterogeneous" (interaction model) or "homogeneous"
-#' @param vcovHC Type of heteroskedasticity-consistent variance estimates. One of: "HC0", "HC1", "HC3".
+# @param vcovHC Type of heteroskedasticity-consistent variance estimates. One of: "HC0", "HC1", "HC3".
 #' @param covariate_to_include_strata Whether to include strata variables in covariate adjustment. Defaults to F for homogeneous; defaults to T for heterogeneous. User may override by passing in this argument.
 #' @param contrast_h An optional function to specify a desired contrast
 #' @param contrast_dh An optional jacobian function for the contrast (otherwise use numerical derivative)
@@ -24,14 +24,17 @@
 #' @export
 robincar_glm <- function(df,
                          treat_col, response_col, strata_cols=NULL, covariate_cols=NULL,
-                         car_scheme="simple", adj_method="heterogeneous", vcovHC="HC0",
+                         car_scheme="simple", adj_method="heterogeneous", # vcovHC="HC0",
                          covariate_to_include_strata=NULL,
                          g_family=stats::gaussian, g_accuracy=7, formula=NULL,
                          contrast_h=NULL, contrast_dh=NULL){
 
   .check.car_scheme(car_scheme)
   .check.adj_method.glm(adj_method)
-  .check.vcovHC(vcovHC)
+  # .check.vcovHC(vcovHC)
+  # for now, until we implement a better degrees of freedom correction
+  # only allowing HC0.
+  vcovHC <- "HC0"
 
   data <- .make.data(
     df=df, classname="RoboDataGLM",

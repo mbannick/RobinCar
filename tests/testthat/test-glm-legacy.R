@@ -50,8 +50,7 @@ test_that("GLM legacy", {
                 car_scheme=scheme0,
                 g_family=binomial(link="logit"),
                 g_accuracy=7,
-                adj_method=meth,
-                vcovHC="HC0"
+                adj_method=meth
               ))
             }
 

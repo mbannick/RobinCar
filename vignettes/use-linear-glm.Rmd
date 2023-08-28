@@ -44,8 +44,7 @@ fit.anova <- robincar_linear(df = data,
                              treat_col="A",
                              covariate_cols=c("x1", "x3"),
                              car_scheme="simple",
-                             adj_method="ANOVA",
-                             vcovHC="HC0")
+                             adj_method="ANOVA")
 ```
 
 ### ANCOVA model with biased coin randomization
@@ -57,8 +56,7 @@ fit.ancova <- robincar_linear(df = data,
                               strata_cols=c("z1", "z2"),
                               covariate_cols=c("x1", "x3"),
                               car_scheme="biased-coin",
-                              adj_method="ANCOVA",
-                              vcovHC="HC0")
+                              adj_method="ANCOVA")
 ```
 
 ### ANHECOVA model with Pocock-Simon randomization and linear contrast
@@ -71,7 +69,6 @@ fit.anhecova <- robincar_linear(df = data,
                                 covariate_cols=c("x1", "x3"),
                                 car_scheme="pocock-simon",
                                 adj_method="ANHECOVA",
-                                vcovHC="HC0",
                                 contrast_h="diff")
 ```
 
@@ -93,8 +90,7 @@ glm.homogeneous<-robincar_glm(df = data,
                               g_family=binomial(link="logit"),
                               g_accuracy=7,
                               adj_method="heterogeneous",
-                              covariate_to_include_strata=TRUE,
-                              vcovHC="HC3")
+                              covariate_to_include_strata=TRUE)
 glm.homogeneous
 ```
 
@@ -110,8 +106,7 @@ glm.heterogeneous<-robincar_glm(df = data,
                               g_family=binomial(link="logit"),
                               g_accuracy=7,
                               covariate_to_include_strata=TRUE,
-                              adj_method="heterogeneous",
-                              vcovHC="HC1")
+                              adj_method="heterogeneous")
 glm.heterogeneous
 ```
 
@@ -125,8 +120,7 @@ glm.formula<-robincar_glm(df = data,
                           strata_cols=c("z2"),
                           car_scheme="biased-coin",
                           g_family=binomial(link="logit"),
-                          g_accuracy=7,
-                          vcovHC="HC0")
+                          g_accuracy=7)
 glm.formula
 ```
 
@@ -143,7 +137,6 @@ glm.heterogeneous<-robincar_glm(df = data,
                               g_accuracy=7,
                               covariate_to_include_strata=TRUE,
                               adj_method="heterogeneous",
-                              vcovHC="HC0",
                               contrast_h="diff")
 glm.heterogeneous
 ```

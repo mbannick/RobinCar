@@ -23,8 +23,7 @@ test_that("GLM formula versus homogeneous - simple", {
     g_family=binomial(link="logit"),
     g_accuracy=7,
     adj_method="homogeneous",
-    covariate_to_include_strata=TRUE,
-    vcovHC="HC3")
+    covariate_to_include_strata=TRUE)
 
   formula <- robincar_glm(
     df=DATA2,
@@ -33,8 +32,7 @@ test_that("GLM formula versus homogeneous - simple", {
     formula="y ~ A + x1 + z1",
     car_scheme="simple",
     g_family=binomial(link=logit),
-    g_accuracy=7,
-    vcovHC="HC3"
+    g_accuracy=7
   )
 
   expect_equal(specs$result$estimate, formula$result$estimate)
@@ -54,8 +52,7 @@ test_that("GLM formula versus homogeneous - car", {
       g_family=binomial(link="logit"),
       g_accuracy=7,
       adj_method="homogeneous",
-      covariate_to_include_strata=TRUE,
-      vcovHC="HC3")
+      covariate_to_include_strata=TRUE)
 
     formula <- robincar_glm(
       df=DATA2,
@@ -65,8 +62,7 @@ test_that("GLM formula versus homogeneous - car", {
       strata_cols=c("z1"),
       car_scheme=car_scheme,
       g_family=binomial(link=logit),
-      g_accuracy=7,
-      vcovHC="HC3"
+      g_accuracy=7
     )
 
     expect_equal(specs$result$estimate, formula$result$estimate)
@@ -84,8 +80,7 @@ test_that("GLM formula versus heterogeneous - simple", {
     g_family=binomial(link="logit"),
     g_accuracy=7,
     adj_method="heterogeneous",
-    covariate_to_include_strata=TRUE,
-    vcovHC="HC3")
+    covariate_to_include_strata=TRUE)
 
   formula <- robincar_glm(
     df=DATA2,
@@ -94,8 +89,7 @@ test_that("GLM formula versus heterogeneous - simple", {
     formula="y ~ A + A*x1 + A*z1",
     car_scheme="simple",
     g_family=binomial(link=logit),
-    g_accuracy=7,
-    vcovHC="HC3"
+    g_accuracy=7
   )
 
   expect_equal(specs$result$estimate, formula$result$estimate)
@@ -114,8 +108,7 @@ test_that("GLM formula versus homogeneous - car", {
       g_family=binomial(link="logit"),
       g_accuracy=7,
       adj_method="heterogeneous",
-      covariate_to_include_strata=TRUE,
-      vcovHC="HC3")
+      covariate_to_include_strata=TRUE)
 
     formula <- robincar_glm(
       df=DATA2,
@@ -125,8 +118,7 @@ test_that("GLM formula versus homogeneous - car", {
       strata_cols=c("z1"),
       car_scheme=car_scheme,
       g_family=binomial(link=logit),
-      g_accuracy=7,
-      vcovHC="HC3"
+      g_accuracy=7
     )
 
     expect_equal(specs$result$estimate, formula$result$estimate)
@@ -143,8 +135,7 @@ test_that("GLM formula versus homogeneous - simple, no Z cov", {
     car_scheme="simple",
     g_family=binomial(link="logit"),
     g_accuracy=7,
-    adj_method="homogeneous",
-    vcovHC="HC3")
+    adj_method="homogeneous")
 
   formula <- robincar_glm(
     df=DATA2,
@@ -153,8 +144,7 @@ test_that("GLM formula versus homogeneous - simple, no Z cov", {
     formula="y ~ A + x1",
     car_scheme="simple",
     g_family=binomial(link=logit),
-    g_accuracy=7,
-    vcovHC="HC3"
+    g_accuracy=7
   )
 
   expect_equal(specs$result$estimate, formula$result$estimate)
@@ -179,8 +169,7 @@ test_that("GLM formula versus homogeneous - car, no cov Z", {
       g_family=binomial(link="logit"),
       g_accuracy=7,
       covariate_to_include_strata=FALSE,
-      adj_method="homogeneous",
-      vcovHC="HC0")
+      adj_method="homogeneous")
 
     formula <- robincar_glm(
       df=DATA2,
@@ -190,8 +179,7 @@ test_that("GLM formula versus homogeneous - car, no cov Z", {
       strata_cols=c("z1"),
       car_scheme=car_scheme,
       g_family=binomial(link=logit),
-      g_accuracy=7,
-      vcovHC="HC0"
+      g_accuracy=7
     )
 
     expect_equal(specs$result$estimate, formula$result$estimate)
@@ -199,87 +187,85 @@ test_that("GLM formula versus homogeneous - car, no cov Z", {
   }
 })
 
-# test_that("GLM formula - POCOCK SIMON no X", {
-#
-#   specs <- robincar_glm(
-#     df=DATA2,
-#     response_col="y",
-#     treat_col="A",
-#     strata_cols=c("z1"),
-#     car_scheme="pocock-simon",
-#     g_family=binomial(link="logit"),
-#     g_accuracy=7,
-#     covariate_to_include_strata=FALSE,
-#     adj_method="heterogeneous",
-#     vcovHC="HC3")
-#
-#   formula <- robincar_glm(
-#     df=DATA2,
-#     response_col="y",
-#     treat_col="A",
-#     formula="y ~ A",
-#     strata_cols=c("z1"),
-#     car_scheme="pocock-simon",
-#     g_family=binomial(link=logit),
-#     g_accuracy=7,
-#     vcovHC="HC3"
-#   )
-#   # if we calibrate formula with joint Z, then this should be equivalent
-#   # to the initial specs model
-#   calib <- robincar_calibrate(
-#     formula, joint=TRUE, vcovHC="HC3"
-#   )
-#
-#   expect_equal(specs$result$estimate, calib$result$estimate)
-#   expect_equal(specs$varcov, calib$varcov)
-#
-#   expect_equal(specs$result$estimate, formula$result$estimate)
-#   # TODO: But why would these be different but estimates the same?
-#   # it's because of using HC3. Calibrating within joint levels of Z using our pocock-simon trick
-#   # to get variance does not change the "p" of the glm, so HC3 differs. HC0 does not.
-#   # Do we need to do anything or is this ok?
-#   expect_equal(specs$varcov, formula$varcov)
-# })
-#
-# test_that("GLM formula - POCOCK SIMON no X, 3 levels of A", {
-#
-#   specs <- robincar_glm(
-#     df=DATA2,
-#     response_col="y",
-#     treat_col="A3LEVEL",
-#     strata_cols=c("z1"),
-#     car_scheme="pocock-simon",
-#     g_family=binomial(link="logit"),
-#     g_accuracy=7,
-#     covariate_to_include_strata=FALSE,
-#     adj_method="heterogeneous",
-#     vcovHC="HC3")
-#
-#   formula <- robincar_glm(
-#     df=DATA2,
-#     response_col="y",
-#     treat_col="A3LEVEL",
-#     formula="y ~ A3LEVEL",
-#     strata_cols=c("z1"),
-#     car_scheme="pocock-simon",
-#     g_family=binomial(link=logit),
-#     g_accuracy=7,
-#     vcovHC="HC3"
-#   )
-#   # if we calibrate formula with joint Z, then this should be equivalent
-#   # to the initial specs model
-#   calib <- robincar_calibrate(
-#     formula, joint=TRUE, vcovHC="HC3"
-#   )
-#
-#   expect_equal(specs$result$estimate, calib$result$estimate)
-#   expect_equal(specs$varcov, calib$varcov)
-#
-#   expect_equal(specs$result$estimate, formula$result$estimate)
-#   # TODO: But why would these be different but estimates the same?
-#   # it's because of using HC3. Calibrating within joint levels of Z using our pocock-simon trick
-#   # to get variance does not change the "p" of the glm, so HC3 differs. HC0 does not.
-#   # Do we need to do anything or is this ok?
-#   expect_equal(specs$varcov, formula$varcov)
-# })
-#
+test_that("GLM formula - POCOCK SIMON no X", {
+
+  specs <- robincar_glm(
+    df=DATA2,
+    response_col="y",
+    treat_col="A",
+    strata_cols=c("z1"),
+    car_scheme="pocock-simon",
+    g_family=binomial(link="logit"),
+    g_accuracy=7,
+    covariate_to_include_strata=FALSE,
+    adj_method="heterogeneous")
+
+  formula <- robincar_glm(
+    df=DATA2,
+    response_col="y",
+    treat_col="A",
+    formula="y ~ A",
+    strata_cols=c("z1"),
+    car_scheme="pocock-simon",
+    g_family=binomial(link=logit),
+    g_accuracy=7
+  )
+  # if we calibrate formula with joint Z, then this should be equivalent
+  # to the initial specs model
+  calib <- robincar_calibrate(
+    formula, joint=TRUE
+  )
+
+  expect_equal(specs$result$estimate, calib$result$estimate)
+  expect_equal(specs$varcov, calib$varcov)
+
+  expect_equal(specs$result$estimate, formula$result$estimate)
+  # TODO: But why would these be different but estimates the same?
+  # it's because of using HC3. Calibrating within joint levels of Z using our pocock-simon trick
+  # to get variance does not change the "p" of the glm, so HC3 differs. HC0 does not.
+  # Do we need to do anything or is this ok?
+  #
+  # Skipping HC0 for now.
+  expect_equal(specs$varcov, formula$varcov)
+})
+
+test_that("GLM formula - POCOCK SIMON no X, 3 levels of A", {
+
+  specs <- robincar_glm(
+    df=DATA2,
+    response_col="y",
+    treat_col="A3LEVEL",
+    strata_cols=c("z1"),
+    car_scheme="pocock-simon",
+    g_family=binomial(link="logit"),
+    g_accuracy=7,
+    covariate_to_include_strata=FALSE,
+    adj_method="heterogeneous")
+
+  formula <- robincar_glm(
+    df=DATA2,
+    response_col="y",
+    treat_col="A3LEVEL",
+    formula="y ~ A3LEVEL",
+    strata_cols=c("z1"),
+    car_scheme="pocock-simon",
+    g_family=binomial(link=logit),
+    g_accuracy=7
+  )
+  # if we calibrate formula with joint Z, then this should be equivalent
+  # to the initial specs model
+  calib <- robincar_calibrate(
+    formula, joint=TRUE
+  )
+
+  expect_equal(specs$result$estimate, calib$result$estimate)
+  expect_equal(specs$varcov, calib$varcov)
+
+  expect_equal(specs$result$estimate, formula$result$estimate)
+  # TODO: But why would these be different but estimates the same?
+  # it's because of using HC3. Calibrating within joint levels of Z using our pocock-simon trick
+  # to get variance does not change the "p" of the glm, so HC3 differs. HC0 does not.
+  # Do we need to do anything or is this ok?
+  expect_equal(specs$varcov, formula$varcov)
+})
+

@@ -13,8 +13,7 @@ test_that("GLM full function -- linear", {
     covariate_cols=c("x1"),
     car_scheme="simple",
     adj_method="ANCOVA",
-    covariate_to_include_strata=FALSE,
-    vcovHC="HC0")
+    covariate_to_include_strata=FALSE)
   non <- robincar_glm(
     df=DATA,
     response_col="y",
@@ -24,8 +23,7 @@ test_that("GLM full function -- linear", {
     g_family=gaussian(link="identity"),
     g_accuracy=7,
     adj_method="homogeneous",
-    covariate_to_include_strata=FALSE,
-    vcovHC="HC0")
+    covariate_to_include_strata=FALSE)
   expect_equal(class(non), "GLMModelResult")
 
   # Check that the result from the linear and glm function is the same
@@ -69,8 +67,7 @@ test_that("GLM full function -- NEGATIVE binomial, permuted block", {
     g_family=negative.binomial(1),
     g_accuracy=7,
     adj_method="heterogeneous",
-    covariate_to_include_strata=TRUE,
-    vcovHC="HC3")
+    covariate_to_include_strata=TRUE)
   expect_equal(class(non), "GLMModelResult")
 
   # Known dispersion parameter
@@ -84,8 +81,7 @@ test_that("GLM full function -- NEGATIVE binomial, permuted block", {
     g_family="nb",
     g_accuracy=7,
     adj_method="heterogeneous",
-    covariate_to_include_strata=TRUE,
-    vcovHC="HC3")
+    covariate_to_include_strata=TRUE)
   expect_equal(class(non), "GLMModelResult")
 
 })
@@ -100,8 +96,7 @@ test_that("GLM Settings", {
     g_family=gaussian(link="identity"),
     g_accuracy=7,
     adj_method="heterogeneous",
-    covariate_to_include_strata=FALSE,
-    vcovHC="HC0")
+    covariate_to_include_strata=FALSE)
   expect_equal(non$settings$adj_vars, "x")
   expect_equal(non$settings$pu_joint_z, FALSE)
   expect_equal(non$settings$adj_se_z, FALSE)
@@ -116,8 +111,7 @@ test_that("GLM Settings", {
     g_family=gaussian(link="identity"),
     g_accuracy=7,
     adj_method="heterogeneous",
-    covariate_to_include_strata=TRUE,
-    vcovHC="HC0")
+    covariate_to_include_strata=TRUE)
   expect_equal(non$settings$adj_vars, "joint_z_x")
   expect_equal(non$settings$pu_joint_z, FALSE)
   expect_equal(non$settings$adj_se_z, TRUE)
@@ -134,8 +128,7 @@ test_that("GLM full function -- binomial, permuted block", {
     g_family=binomial(link="logit"),
     g_accuracy=7,
     adj_method="heterogeneous",
-    covariate_to_include_strata=TRUE,
-    vcovHC="HC3")
+    covariate_to_include_strata=TRUE)
   expect_equal(class(non), "GLMModelResult")
   expect_equal(non$result$estimate,
                c(X1=0.20774694, X2=0.15547416), tolerance=1e-5)
@@ -153,8 +146,7 @@ test_that("GLM full function -- binomial, pocock simon", {
     g_family=binomial(link="logit"),
     g_accuracy=7,
     adj_method="heterogeneous",
-    covariate_to_include_strata=TRUE,
-    vcovHC="HC0")
+    covariate_to_include_strata=TRUE)
   expect_equal(class(non), "GLMModelResult")
   expect_equal(non$result$estimate,
                c(0.20774694, 0.15547416), tolerance=1e-5)
@@ -170,8 +162,7 @@ test_that("GLM -- no covariates", {
     car_scheme="biased-coin",
     g_family=binomial(link="logit"),
     g_accuracy=7,
-    adj_method="homogeneous",
-    vcovHC="HC0")
+    adj_method="homogeneous")
   expect_equal(class(non), "GLMModelResult")
   expect_equal(length(non$mod$coefficients), 2)
 })
@@ -187,8 +178,7 @@ test_that("GLM -- no covariates except strata", {
     covariate_to_include_strata=TRUE,
     g_family=binomial(link="logit"),
     g_accuracy=7,
-    adj_method="heterogeneous",
-    vcovHC="HC0")
+    adj_method="heterogeneous")
   expect_equal(length(non$mod$coefficients), 4)
 })
 

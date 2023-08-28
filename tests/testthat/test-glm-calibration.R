@@ -13,8 +13,7 @@ test_that("test calibration", {
     car_scheme="biased-coin",
     g_family=binomial(link="logit"),
     g_accuracy=7,
-    adj_method="homogeneous",
-    vcovHC="HC0"))
+    adj_method="homogeneous"))
 
   that <- Robin_g(
     robin.data=DATA,
@@ -25,7 +24,6 @@ test_that("test calibration", {
     robin.g_family=binomial(link="logit"),
     robin.g_accuracy=7,
     robin.formula=NULL,
-    robin.vcovHC="HC0",
     robin.adj_method="homogeneous"
   )
 
@@ -35,8 +33,7 @@ test_that("test calibration", {
       calib_this <- suppressWarnings(robincar_calibrate(
         result=this,
         joint=joint,
-        add_x=add_x,
-        vcovHC="HC0"
+        add_x=add_x
       ))
       calib_that <- Robin_calibrate(
         robin.g_object=that$robin.g_object,

@@ -12,7 +12,6 @@ robincar_glm(
   covariate_cols = NULL,
   car_scheme = "simple",
   adj_method = "heterogeneous",
-  vcovHC = "HC0",
   covariate_to_include_strata = NULL,
   g_family = stats::gaussian,
   g_accuracy = 7,
@@ -35,8 +34,6 @@ robincar_glm(
 \item{car_scheme}{Name of the type of covariate-adaptive randomization scheme. One of: "simple", "pocock-simon", "biased-coin", "permuted-block".}
 
 \item{adj_method}{Name of adjustment method to use, one of "heterogeneous" (interaction model) or "homogeneous"}
-
-\item{vcovHC}{Type of heteroskedasticity-consistent variance estimates. One of: "HC0", "HC1", "HC3".}
 
 \item{covariate_to_include_strata}{Whether to include strata variables in covariate adjustment. Defaults to F for homogeneous; defaults to T for heterogeneous. User may override by passing in this argument.}
 
