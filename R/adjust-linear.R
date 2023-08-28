@@ -8,7 +8,7 @@
 #' @importFrom MASS glm.nb
 fitmod <- function(family, ...){
   useMASS <- FALSE
-  if(class(family) == "character"){
+  if(is.character(family)){
     if(family == "nb"){
       useMASS <- TRUE
     }

@@ -79,7 +79,7 @@ descript.GLMModelResult <- function(x, ...){
     }
   }
   for(o in output){
-    if(class(o) == "formula"){
+    if("formula" %in% class(o)){
       print(o, showEnv=FALSE)
     } else {
       cat(o)
