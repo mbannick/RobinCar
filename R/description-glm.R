@@ -46,22 +46,25 @@ descript.GLMModelResult <- function(x, ...){
                 paste0(names(x$data$strata), collapse=", "))
       )
     }
-    output <- c(
-      output,
-      sprintf("\nusing adjustment variables: %s",
-              paste0(cov_name, collapse=", "))
-    )
-    if("ANHECOVA" %in% class(x$settings)){
+    if(!is.null(x$settings$adj_vars)){
       output <- c(
         output,
-        "\nand their interactions with treatment."
+        sprintf("\nusing adjustment variables: %s",
+                paste0(cov_name, collapse=", "))
       )
-    } else if("ANCOVA" %in% class(x$settings)){
-      output <- c(output, ".")
-    } else {
-      stop("Error with the type of model.")
+      if("ANHECOVA" %in% class(x$settings)){
+        output <- c(
+          output,
+          "\nand their interactions with treatment."
+        )
+      } else if("ANCOVA" %in% class(x$settings)){
+        output <- c(output, ".")
+      } else {
+        stop("Error with the type of model.")
+      }
     }
   }
+
   output <- c(
     output,
     sprintf("\n\nUsed %s-type of heteroskedasticity-consistent variance estimates ",
