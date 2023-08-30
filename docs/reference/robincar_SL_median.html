@@ -67,7 +67,23 @@ Perform median adjustment to limit randomness induced from cross-fitting.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">robincar_SL_median</span><span class="op">(</span><span class="va">n_times</span>, <span class="va">seed</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">robincar_SL_median</span><span class="op">(</span>
+  <span class="va">n_times</span>,
+  <span class="va">seed</span>,
+  <span class="va">df</span>,
+  <span class="va">treat_col</span>,
+  <span class="va">response_col</span>,
+  strata_cols <span class="op">=</span> <span class="cn">NULL</span>,
+  covariate_cols <span class="op">=</span> <span class="cn">NULL</span>,
+  car_scheme <span class="op">=</span> <span class="st">"simple"</span>,
+  covariate_to_include_strata <span class="op">=</span> <span class="cn">NULL</span>,
+  SL_libraries <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">)</span>,
+  SL_learners <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">)</span>,
+  k_split <span class="op">=</span> <span class="fl">2</span>,
+  g_accuracy <span class="op">=</span> <span class="fl">7</span>,
+  contrast_h <span class="op">=</span> <span class="cn">NULL</span>,
+  contrast_dh <span class="op">=</span> <span class="cn">NULL</span>
+<span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -79,11 +95,65 @@ Perform median adjustment to limit randomness induced from cross-fitting.</p>
 <dt>seed</dt>
 <dd><p>Seed to set before running the set of functions</p></dd>
 
+
+<dt>df</dt>
+<dd><p>A data.frame with the required columns</p></dd>
+
+
+<dt>treat_col</dt>
+<dd><p>Name of column in df with treatment variable</p></dd>
+
+
+<dt>response_col</dt>
+<dd><p>Name of the column in df with response variable</p></dd>
+
+
+<dt>strata_cols</dt>
+<dd><p>Names of columns in df with strata variables</p></dd>
+
+
+<dt>covariate_cols</dt>
+<dd><p>Names of columns in df with covariate variables</p></dd>
+
+
+<dt>car_scheme</dt>
+<dd><p>Name of the type of covariate-adaptive randomization scheme. One of: "simple", "pocock-simon", "biased-coin", "permuted-block".</p></dd>
+
+
+<dt>covariate_to_include_strata</dt>
+<dd><p>Whether to include strata variables in covariate adjustment. Defaults to F for ANOVA and ANCOVA; defaults to T for ANHECOVA. User may override by passing in this argument.</p></dd>
+
+
+<dt>SL_libraries</dt>
+<dd><p>Vector of super-learner libraries to use for the covariate adjustment (see SuperLearner::listWrappers())</p></dd>
+
+
+<dt>SL_learners</dt>
+<dd><p>Optional list of super-learner "learners" to use for the covariate adjustment (see SuperLearner::create.Learner)</p></dd>
+
+
+<dt>k_split</dt>
+<dd><p>Number of splits to use in cross-fitting</p></dd>
+
+
+<dt>g_accuracy</dt>
+<dd><p>Level of accuracy to check prediction un-biasedness (in digits).</p></dd>
+
+
+<dt>contrast_h</dt>
+<dd><p>An optional function to specify a desired contrast</p></dd>
+
+
+<dt>contrast_dh</dt>
+<dd><p>An optional jacobian function for the contrast (otherwise use numerical derivative)</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
     <p>*WARNING: This function is still under development and has not been extensively tested.*
-This function currently only works for two treatment groups.</p>
+This function currently only works for two treatment groups.
+Before using this function, you must load the SuperLearner library with
+`library(SuperLearner)`, otherwise the function call will fail.</p>
     </div>
 
   </div>

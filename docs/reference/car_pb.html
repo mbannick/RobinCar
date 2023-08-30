@@ -89,6 +89,9 @@
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘dplyr’</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following objects are masked from ‘package:RobinCar’:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     between, first, last</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following objects are masked from ‘package:stats’:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>     filter, lag</span>
@@ -102,9 +105,9 @@
 <span class="r-in">     <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across</a></span><span class="op">(</span><span class="fu">where</span><span class="op">(</span><span class="va">is.numeric</span><span class="op">)</span>, <span class="va">as.factor</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">car_pb</span><span class="op">(</span><span class="va">z</span><span class="op">[</span>, <span class="fl">2</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, trt_alc<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">4</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">4</span><span class="op">)</span>, blocksize<span class="op">=</span><span class="fl">4L</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   [1] 0 2 0 1 1 1 2 2 0 1 1 1 1 1 2 2 0 0 0 2 1 1 1 2 0 0 1 1 2 0 1 1 1 1 2 2 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [38] 1 0 1 2 2 1 0 1 1 1 2 2 0 1 0 1 2 0 1 2 1 1 0 1 0 1 1 0 1 2 0 0 2 1 1 2 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [75] 2 1 1 0 1 1 1 2 2 1 0 1 1 0 2 1 1 1 0 2 0 2 1 1 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [1] 1 0 1 1 0 2 1 1 2 1 1 2 0 2 0 2 1 1 2 2 1 1 0 1 1 1 2 0 1 0 1 2 1 1 1 0 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [38] 1 0 2 2 1 1 0 0 1 0 1 1 1 2 0 2 1 1 1 1 2 2 1 0 1 1 0 0 0 1 1 1 0 2 0 2 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [75] 2 1 2 0 2 1 2 1 1 0 1 0 2 1 1 2 1 1 0 1 0 1 2 0 1 2</span>
 </code></pre></div>
     </div>
   </div>

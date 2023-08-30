@@ -65,7 +65,7 @@ a GLMModelResult object.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">robincar_calibrate</span><span class="op">(</span><span class="va">result</span>, joint <span class="op">=</span> <span class="cn">FALSE</span>, add_x <span class="op">=</span> <span class="cn">NULL</span>, vcovHC <span class="op">=</span> <span class="st">"HC0"</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">robincar_calibrate</span><span class="op">(</span><span class="va">result</span>, joint <span class="op">=</span> <span class="cn">FALSE</span>, add_x <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -83,12 +83,8 @@ rather than just linear calibration that uses mu.</p></dd>
 
 <dt>add_x</dt>
 <dd><p>Additional x to use in the calibration. Must have been in
-the original dataset that robincar_glm was called on.</p></dd>
-
-
-<dt>vcovHC</dt>
-<dd><p>Which type of heteroskedasticity-consistent
-standard error estimates to use.</p></dd>
+the original dataset that robincar_glm was called on.
+ standard error estimates to use.</p></dd>
 
 </dl></div>
 
