@@ -192,7 +192,7 @@ vcov_car.GLMModel <- function(model, data, mod, mutilde){
   residual <- data$response - preds
 
   # Diagonal matrix of residuals for first component
-  diagmat <- vcov_sr.diag(data, mod, residual=residual)
+  # diagmat <- vcov_sr.diag(data, mod, residual=residual)
 
   # Get covariance between observed Y and predicted \mu counterfactuals
   get.cov.Ya <- function(a){
@@ -202,6 +202,18 @@ vcov_car.GLMModel <- function(model, data, mod, mutilde){
   }
   # Covariance matrix between Y and \mu
   cov_Ymu <- t(sapply(data$treat_levels, get.cov.Ya))
+
+  # NEW: we are avoiding the situation where we have issues in estimating
+  # the variance when many (or all) of the Y_a are zero in one group
+  var_mutilde <- stats::var(mutilde)
+  diag_mutilde <- diag(diag(var_mutilde))
+  diag_covYmu <- diag(diag(cov_Ymu))
+  diag_pi <- diag(1/c(data$pie))
+
+  # New formula for variance calculation, doing a decomposition of variance
+  # rather than calculating variance of residual
+  diagmat <- vcov_sr.diag(data, mod, residual=data$response) +
+    (diag_mutilde - 2 * diag_covYmu) * diag_pi
 
   # Sum of terms to compute simple randomization variance
   v <- diagmat + cov_Ymu + t(cov_Ymu) - stats::var(mutilde)
