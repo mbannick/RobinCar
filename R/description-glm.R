@@ -1,7 +1,4 @@
-#' Generate description for glm model result
-#'
-#' @param x A GLMModelResult object
-#' @param ... Additional arguments
+
 descript.GLMModelResult <- function(x, ...){
   output <- c()
   if("AIPW" %in% class(x$settings)){
@@ -10,7 +7,11 @@ descript.GLMModelResult <- function(x, ...){
     etype <- "g-computation-type"
   }
   if(is.character(x$settings$g_family)){
-    family <- get(x$settings$g_family)()
+    if(x$settings$g_family == "nb"){
+      family <- "negative binomial with unknown dispersion"
+    } else {
+      family <- get(x$settings$g_family)()
+    }
   } else if(is.function(x$settings$g_family)){
     family <- (x$settings$g_family)()
   } else {
@@ -45,22 +46,25 @@ descript.GLMModelResult <- function(x, ...){
                 paste0(names(x$data$strata), collapse=", "))
       )
     }
-    output <- c(
-      output,
-      sprintf("\nusing adjustment variables: %s",
-              paste0(cov_name, collapse=", "))
-    )
-    if("ANHECOVA" %in% class(x$settings)){
+    if(!is.null(x$settings$adj_vars)){
       output <- c(
         output,
-        "\nand their interactions with treatment."
+        sprintf("\nusing adjustment variables: %s",
+                paste0(cov_name, collapse=", "))
       )
-    } else if("ANCOVA" %in% class(x$settings)){
-      output <- c(output, ".")
-    } else {
-      stop("Error with the type of model.")
+      if("ANHECOVA" %in% class(x$settings)){
+        output <- c(
+          output,
+          "\nand their interactions with treatment."
+        )
+      } else if("ANCOVA" %in% class(x$settings)){
+        output <- c(output, ".")
+      } else {
+        stop("Error with the type of model.")
+      }
     }
   }
+
   output <- c(
     output,
     sprintf("\n\nUsed %s-type of heteroskedasticity-consistent variance estimates ",
@@ -78,7 +82,7 @@ descript.GLMModelResult <- function(x, ...){
     }
   }
   for(o in output){
-    if(class(o) == "formula"){
+    if("formula" %in% class(o)){
       print(o, showEnv=FALSE)
     } else {
       cat(o)

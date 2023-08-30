@@ -5,7 +5,7 @@
 \title{Run a linear or joint calibration on
 a GLMModelResult object.}
 \usage{
-robincar_calibrate(result, joint = FALSE, add_x = NULL, vcovHC = "HC0")
+robincar_calibrate(result, joint = FALSE, add_x = NULL)
 }
 \arguments{
 \item{result}{A GLMModelResult}
@@ -16,10 +16,8 @@ to achieve universality and efficiency gain
 rather than just linear calibration that uses mu.}
 
 \item{add_x}{Additional x to use in the calibration. Must have been in
-the original dataset that robincar_glm was called on.}
-
-\item{vcovHC}{Which type of heteroskedasticity-consistent
-standard error estimates to use.}
+the original dataset that robincar_glm was called on.
+ standard error estimates to use.}
 }
 \description{
 Run a linear or joint calibration on

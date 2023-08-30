@@ -16,6 +16,7 @@ get.linear.predictor <- function(df, covnames){
 }
 
 #' @importFrom stats var
+#' @importFrom dplyr n
 get.strata.sum <- function(df, n, p_trt, sparse_remove=FALSE){
 
   ss <- df %>%
@@ -25,7 +26,7 @@ get.strata.sum <- function(df, n, p_trt, sparse_remove=FALSE){
       cond_var1       = stats::var(.data$O_i[.data$trt1 == 1]),
       cond_mean0      = mean(-.data$O_i[.data$trt0 == 1]),
       cond_mean1      = mean(.data$O_i[.data$trt1 == 1]),
-      prob_z          = n() / n,
+      prob_z          = dplyr::n() / n,
       nu_d            = unique(.data$nu_d),
       .groups = "drop"
     ) %>%

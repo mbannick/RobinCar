@@ -1,9 +1,0 @@
-pandoc: 2.17.1.1
-pkgdown: 2.0.4
-pkgdown_sha: ~
-articles:
-  calibration: calibration.html
-  use-linear-glm: use-linear-glm.html
-  use-survival: use-survival.html
-last_built: 2022-11-04T15:57Z
-

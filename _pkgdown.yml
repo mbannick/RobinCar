@@ -20,8 +20,11 @@ reference:
   - robincar_calibrate
   - robincar_contrast
   - robincar_logrank
+  - robincar_covhr
   - robincar_coxscore
   - robincar_tte
+  - robincar_SL
+  - robincar_SL_median
 - title: "Summary printing functions."
 - contents:
   - print.LinModelResult
@@ -31,11 +34,8 @@ reference:
   - print.TTEResult
 - title: "Simulation"
 - contents:
+  - car_sr
+  - car_pb
+  - car_ps
   - data_gen
   - data_gen2
-- title: "Testing"
-- contents:
-  - nu.d
-  - descript.GLMModelResult
-  - descript.LinModelResult
-  - ttelogic

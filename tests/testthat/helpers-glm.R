@@ -279,4 +279,3 @@ Robin_g <- function(robin.data = data.tmp,
 
   return(robin.return)
 }
-

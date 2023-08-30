@@ -170,7 +170,6 @@ vcov_car <- function(model, data, mod, ...){
 }
 
 vcov_car.LinModel <- function(model, data, mod){
-
   # Get the variance under simple randomization
   v <- vcov_sr(model, data, mod)
   # Adjust for Z if needed
@@ -208,8 +207,12 @@ vcov_car.GLMModel <- function(model, data, mod, mutilde){
   v <- diagmat + cov_Ymu + t(cov_Ymu) - stats::var(mutilde)
 
   # Adjust for Z if necessary
-
   if(!is.null(model$omegaz_func)) v <- v - get.erb(model, data, mod, mu_hat=preds)
 
+  return(v)
+}
+
+vcov_car.SLModel <- function(model, data, mod, mutilde){
+  v <- vcov_car.GLMModel(model, data, mod, mutilde)
   return(v)
 }

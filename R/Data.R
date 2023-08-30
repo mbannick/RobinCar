@@ -2,7 +2,7 @@
 # to be used across all analysis methods.
 
 .check.response <- function(data){
-  if(class(data$response) != "numeric"){
+  if(!is.numeric(data$response)){
     return("Response column must be numeric.")
   }
 }
@@ -14,7 +14,7 @@
 }
 
 .check.treat <- function(data){
-  if(class(data$treat) != "factor"){
+  if(!is.factor(data$treat)){
     return("Treatment column must be a factor variable.")
   }
 }
@@ -44,6 +44,13 @@ validate.RoboDataLinear <- function(data){
 }
 
 validate.RoboDataGLM <- function(data){
+
+  errors <- character()
+  .return.error(errors)
+
+}
+
+validate.RoboDataSL <- function(data){
 
   errors <- character()
   .return.error(errors)

@@ -32,88 +32,6 @@ get.muhat <- function(model, data, mod){
   return(pred_cols)
 }
 
-get.mutilde <- function(model, data, mod){
-  # Get response
-  y <- data$response
-
-  # Get g-computation predictions
-  muhat <- get.muhat(model, data, mod)
-
-  # Get treatment group indicators and outcome
-  t_ids <- sapply(data$treat_levels, function(x) data$treat == x)
-
-  if(!model$pu_joint_z){
-    # Only look within treatment groups
-    center_ids <- as.list(data.frame(t_ids))
-    center_mus <- as.list(data.frame(muhat))
-  } else {
-
-    # Will create matrix for combination of strata and treatment groups
-    sl <- data$joint_strata_levels
-    tl <- data$treat_levels
-
-    # Get indicators for joint strata group
-    s_ids <- sapply(sl, function(x) data$joint_strata == x)
-
-    # Get joint levels of treatment and strata groups
-    center_ids <- as.list(data.frame(
-      t_ids[, rep(1:ncol(t_ids), each=length(sl))] &
-        s_ids[, rep(1:ncol(s_ids), times=length(tl))]
-    ))
-
-    # Repeat the mu columns for each strata
-    center_mus <- as.list(data.frame(muhat[, rep(1:ncol(muhat), each=length(sl))]))
-  }
-
-  # Compute AIPW estimator by re-centering predictions
-  # within treatment groups
-  recenter <- function(u, i){
-    cent <- sum(u[i])/sum(i) - sum(y[i])/sum(i)
-    return(u - cent)
-  }
-  mutilde <- mapply(FUN=recenter,
-                    u=center_mus,
-                    i=center_ids)
-
-  if(model$pu_joint_z){
-    new_mutilde <- matrix(data=NA, nrow=data$n, ncol=ncol(muhat))
-    for(s_col in 1:ncol(s_ids)){
-      scol_seq <- seq(s_col, ncol(mutilde), by=length(sl))
-      new_mutilde[s_ids[, s_col], ] <- mutilde[s_ids[, s_col], scol_seq]
-    }
-    mutilde <- new_mutilde
-  }
-
-  # Check prediction un-biasedness for the original muhat
-  # g-computation just for warning/error reporting,
-  # only up to level of accuracy specified by the user
-  check.pu <- function(u, i) round(mean(u[i] - y[i]),
-                                   digits=model$g_accuracy)
-
-  # Calculate the group-specific residuals
-  # where the groups are defined as treatment or treatment x strata above
-  resid <- mapply(
-    FUN=check.pu,
-    u=center_mus,
-    i=center_ids
-  )
-
-  # Report warning or error messages, whatever
-  # is passed through the model settings, if not prediction unbiased.
-  if(!all(resid == 0)){
-    if(!is.list(model$pu_funcs)){
-      funcs <- list(model$pu_funcs)
-    } else {
-      funcs <- model$pu_funcs
-    }
-    for(func in funcs){
-      func()
-    }
-  }
-
-  return(mutilde)
-}
-
 # Perform GLM adjustment, based on the classes
 # of the model. Will perform adjustment based on the linear
 # model type of `model` and also do G-computation or AIPW
@@ -123,14 +41,23 @@ adjust.GLMModel <- function(model, data){
   # Get the generalized linear model and estimates by AIPW
   glmod <- linmod(model, data, family=model$g_family, center=FALSE)
 
+  # Get g-computation predictions
+  muhat <- get.muhat(model, data, glmod)
+
   # Get mutilde from the GLM model, then estimate the treatment means by
   # taking the mean over all of the potential outcomes
-  mutilde <- get.mutilde(model, data, glmod)
+  glmod.adjusted <- get.mutilde(model, data, muhat)
+  mutilde <- glmod.adjusted$mutilde
+
+  # Degree of freedom adjustment
+  df_adjust <- glmod.adjusted$df_adjust
+
   estimate <- colMeans(mutilde)
 
   # Compute the asymptotic variance
   asympt.variance <- vcov_car(model, data, glmod, mutilde)
-  vcov_wt <- get.vcovHC(model$vcovHC, n=data$n, p=glmod$rank)
+
+  vcov_wt <- get.vcovHC(model$vcovHC, n=data$n, p=df_adjust)
   variance <- asympt.variance * vcov_wt / data$n
 
   result <- format.results(data$treat_levels, estimate, variance)

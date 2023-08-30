@@ -8,11 +8,11 @@
 #'              rather than just linear calibration that uses mu.
 #' @param add_x Additional x to use in the calibration. Must have been in
 #'              the original dataset that robincar_glm was called on.
-#' @param vcovHC Which type of heteroskedasticity-consistent
+# @param vcovHC Which type of heteroskedasticity-consistent
 #'               standard error estimates to use.
 #' @export
 robincar_calibrate <- function(result, joint=FALSE,
-                               add_x=NULL, vcovHC="HC0"){
+                               add_x=NULL){
 
   # Get the g-computation predictions
   mu_names <- paste0("mu_", result$data$treat_levels)
@@ -57,8 +57,8 @@ robincar_calibrate <- function(result, joint=FALSE,
     car_scheme=result$settings$car_scheme,
     adj_method="heterogeneous",
     g_family=gaussian(link="identity"),
-    g_accuracy=result$settings$g_accuracy,
-    vcovHC=vcovHC
+    g_accuracy=result$settings$g_accuracy
+    # vcovHC=vcovHC
   )
   # Designate as calibration result
   # for the print statement to work

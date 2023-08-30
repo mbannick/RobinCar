@@ -39,6 +39,9 @@ glmlogic <- function(adj_method, x_exists, z_exists, car_scheme, cov_strata,
       pu_funcs <- .pu.warn
       pu_joint_z <- FALSE
     }
+    if(z_exists & (car_scheme != "simple")){
+      omegaz_func <- omegaz.closure(car_scheme)
+    }
   } else {
     if(car_scheme == "simple"){
       if(z_exists) .z.exist.warn.simple()
@@ -46,7 +49,7 @@ glmlogic <- function(adj_method, x_exists, z_exists, car_scheme, cov_strata,
         adj_vars <- "x"
         pu_funcs <- .pu.warn
       } else {
-        .x.miss.warn()
+        # .x.miss.warn()
         method <- "ANOVA"
         aipw <- FALSE
       }
@@ -55,17 +58,24 @@ glmlogic <- function(adj_method, x_exists, z_exists, car_scheme, cov_strata,
       if(!z_exists){
         .z.miss.err()
       } else {
-        omegaz_func <- omegaz.closure(car_scheme)
-        if(!cov_strata){
-          .z.include.warn()
-        }
         pu_joint_z <- TRUE
-        if(x_exists){
-          adj_vars <- "joint_z_x"
-          pu_funcs <- .pu.z.warn
+        omegaz_func <- omegaz.closure(car_scheme)
+        if(cov_strata){
+          if(x_exists){
+            adj_vars <- "joint_z_x"
+            pu_funcs <- .pu.z.warn
+          } else {
+            adj_vars <- "joint_z"
+            pu_funcs <- c(.pu.z.calibrate, .pu.z.warn)
+          }
         } else {
-          adj_vars <- "joint_z"
-          pu_funcs <- c(.pu.z.calibrate, .pu.z.warn)
+          if(x_exists){
+            adj_vars <- "x"
+            pu_funcs <- .pu.z.warn
+          } else {
+            method <- "ANOVA"
+            pu_funcs <- .pu.z.warn
+          }
         }
       }
     }

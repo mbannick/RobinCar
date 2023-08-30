@@ -10,57 +10,41 @@
 #' @param covariate_cols Names of columns in df with covariate variables
 #' @param car_scheme Name of the type of covariate-adaptive randomization scheme. One of: "simple", "pocock-simon", "biased-coin", "permuted-block".
 #' @param adj_method Name of linear adjustment method to use. One of: "ANOVA", "ANCOVA", "ANHECOVA".
-#' @param vcovHC Type of heteroskedasticity-consistent variance estimates. One of: "HC0", "HC1", "HC3".
 #' @param covariate_to_include_strata Whether to include strata variables in covariate adjustment. Defaults to F for ANOVA and ANCOVA; defaults to T for ANHECOVA. User may override by passing in this argument.
 #' @param contrast_h An optional function to specify a desired contrast
 #' @param contrast_dh An optional jacobian function for the contrast (otherwise use numerical derivative)
 #' @export
 robincar_linear <- function(df,
                             treat_col, response_col, strata_cols=NULL, covariate_cols=NULL,
-                            car_scheme="simple", adj_method="ANOVA", vcovHC="HC0",
+                            car_scheme="simple", adj_method="ANOVA",
                             covariate_to_include_strata=NULL,
                             contrast_h=NULL, contrast_dh=NULL){
 
-  .check.car_scheme(car_scheme)
   .check.adj_method.linear(adj_method)
-  .check.vcovHC(vcovHC)
-
-  # Create data object and validate
-  data <- .make.data(
-    df=df, classname="RoboDataLinear",
-    treat_col=treat_col,
-    response_col=response_col,
-    strata_cols=strata_cols,
-    covariate_cols=covariate_cols
-  )
-  validate(data)
-
-  # Create model object
-  model <- .make.model(
-    data=data,
-    adj_method=adj_method,
-    car_scheme=car_scheme,
-    vcovHC=vcovHC,
-    covariate_to_include_strata=covariate_to_include_strata
-  )
-
-  # Perform linear adjustment
-  result <- adjust(model, data)
-  # This is to save the original dataset for summary later on
-  result$original_df <- df
-
-  # Create transformation object
-  if(!is.null(contrast_h)){
-    c_result <- robincar_contrast(
-      result=result,
-      contrast_h=contrast_h,
-      contrast_dh=contrast_dh
-    )
-    result <- list(
-      main=result, contrast=c_result
-    )
+  if(adj_method == "ANOVA"){
+    covariate_cols <- NULL
+    covariate_to_include_strata <- FALSE
+    adj_method <- "homogeneous"
+  } else if(adj_method == "ANCOVA"){
+    adj_method <- "homogeneous"
+  } else {
+    adj_method <- "heterogeneous"
   }
 
-  print(result)
+  result <- robincar_glm(
+    df=df,
+    treat_col=treat_col,
+    response_col=response_col,
+    covariate_cols=covariate_cols,
+    strata_cols=strata_cols,
+    car_scheme=car_scheme,
+    covariate_to_include_strata=covariate_to_include_strata,
+    contrast_h=contrast_h,
+    contrast_dh=contrast_dh,
+    g_family=stats::gaussian,
+    g_accuracy=7,
+    adj_method=adj_method
+  )
+
   return(result)
 }

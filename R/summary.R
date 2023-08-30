@@ -10,8 +10,6 @@ print.LinModelResult <- function(x, ...){
   print(x$result)
   cat("\nVariance-Covariance Matrix:\n")
   print(x$varcov)
-  cat("\nData Structure:\n")
-  print(head(x$original_df))
 }
 
 #' Print glm model result
@@ -26,8 +24,6 @@ print.GLMModelResult <- function(x, ...){
   print(x$result)
   cat("\nVariance-Covariance Matrix:\n")
   print(x$varcov)
-  cat("\nData Structure:\n")
-  print(head(x$original_df))
 }
 
 #' Print contrast result
@@ -57,7 +53,8 @@ print.ContrastResult <- function(x, ...){
 #' @param x A TTEResult object
 #' @param ... Additional arguments
 #'
-#' @importFrom data.table data.table setorder setnames
+#' @importFrom data.table data.table setorder setnames .SD :=
+#' @import data.table
 #' @export
 print.TTEResult <- function(x, ...){
 
@@ -78,19 +75,39 @@ print.TTEResult <- function(x, ...){
   }
   if((x$settings$method == "CL") | (x$settings$method == "CSL" & !x$settings$car_strata)){
     if((x$settings$adj_cov) | x$settings$adj_strata){
-      cat("Performed covariate-adjusted logrank test with covariates ",
-          paste0(c(covariates, strata), sep=", "))
+      if("TTEResultEst" %in% class(x)){
+        cat("Performed covariate-adjusted cox hazard ratio estimation with covariates ",
+            paste0(c(covariates, strata), sep=", "))
+      } else {
+        cat("Performed covariate-adjusted logrank test with covariates ",
+            paste0(c(covariates, strata), sep=", "))
+      }
     } else {
-      cat("Performed logrank test.")
+      if("TTEResultEst" %in% class(x)){
+        cat("Performed cox hazard ratio estimation.")
+      } else {
+        cat("Performed logrank test.")
+      }
     }
   } else if(x$settings$method == "CSL"){
     if((x$settings$adj_cov)){
-      cat("Performed covariate-adjusted stratified logrank test with covariates ",
-          paste0(c(covariates), sep=", "),
-          " and stratifying by ", paste0(c(strata), sep=", "))
+      if("TTEResultEst" %in% class(x)){
+        cat("Performed covariate-adjusted cox hazard ratio estimation with covariates ",
+            paste0(c(covariates), sep=", "),
+            " and stratifying by ", paste0(c(strata), sep=", "))
+      } else {
+        cat("Performed covariate-adjusted stratified logrank test with covariates ",
+            paste0(c(covariates), sep=", "),
+            " and stratifying by ", paste0(c(strata), sep=", "))
+      }
     } else {
-      cat("Performed stratified logrank test stratifying by ",
-          paste0(c(strata), sep=", "))
+      if("TTEResultEst" %in% class(x)){
+        cat("Performed stratified cox hazard ratio estimation stratifying by ",
+            paste0(c(strata), sep=", "))
+      } else {
+        cat("Performed stratified logrank test stratifying by ",
+            paste0(c(strata), sep=", "))
+      }
     }
   } else if(x$settings$method == "coxscore"){
     cat("Performed coxscore test")
@@ -102,6 +119,12 @@ print.TTEResult <- function(x, ...){
     }
   }
   cat("\n------------------------------------\n")
+
+  # Make visible binding for global variables
+  # Recommended by data.table developers
+  # These are names of columns of the data.table created below
+  # and including them as NULL allows the R CMD CHECK to pass
+  # https://www.r-bloggers.com/2019/08/no-visible-binding-for-global-variable/
 
   df <- data.table::data.table(observed=x$data$event, treat=x$data$treat)
   df[, treat := as.character(treat)]
@@ -121,21 +144,32 @@ print.TTEResult <- function(x, ...){
 
   if(x$settings$car_strata){
     summ[, strata_col := paste0("strata = ", strata)]
-    summ <- summ[, .(strata_col, name, N, observed)]
+    summ <- summ[, c("strata_col", "name", "N", "observed"), with=F]
     data.table::setnames(summ, c("Strata", "Treatment", "N.total", "N.events"))
   } else {
-    summ <- summ[, .(name, N, observed)]
+    summ <- summ[, c("name", "N", "observed")]
     data.table::setnames(summ, c("Treatment", "N.total", "N.events"))
   }
 
   print(summ)
   cat("\nReference arm is ", x$data$treat_col, "=", x$settings$ref_arm, "\n")
-  cat("\nScore function:", x$result$U,
+  if("TTEResultEst" %in% class(x)){
+    stat <- x$result$theta_CL/x$result$se_theta_CL
+    cat(
+      "\nTest Stat:", x$result$theta_CL/x$result$se_theta_CL,
+      "\n2-side p-value:", 2*(1-stats::pnorm(abs(stat))),
+      "\nHR:", exp(x$result$theta_CL),
+      "\nLog HR:", (x$result$theta_CL),
+      "\nLog HR SE:", x$result$se_theta_CL
+    )
+  } else {
+    cat(
+      "\nScore function:", x$result$U,
       "\nStandard error:", x$result$se,
       "\nTest statistic:", x$result$statistic,
-      "\n2-side p-value:", 2*(1-pnorm(abs(x$result$statistic))))
-  cat("\n\nData Structure:\n")
-  print(head(x$original_df))
+      "\n2-side p-value:", 2*(1-stats::pnorm(abs(x$result$statistic)))
+    )
+  }
 }
 
 #' Print calibration result
@@ -168,6 +202,4 @@ print.CalibrationResult <- function(x, ...){
   print(x$result)
   cat("\nVariance-Covariance Matrix:\n")
   print(x$varcov)
-  cat("\nData Structure:\n")
-  print(head(x$original_df))
 }

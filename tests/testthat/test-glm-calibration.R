@@ -3,8 +3,7 @@ DATA$A <- as.factor(DATA$A)
 DATA$y <- ifelse(DATA$y > 2, 1, 0)
 
 test_that("test calibration", {
-
-  this <- robincar_glm(
+  this <- suppressWarnings(robincar_glm(
     df=DATA,
     response_col="y",
     treat_col="A",
@@ -14,8 +13,7 @@ test_that("test calibration", {
     car_scheme="biased-coin",
     g_family=binomial(link="logit"),
     g_accuracy=7,
-    adj_method="homogeneous",
-    vcovHC="HC0")
+    adj_method="homogeneous"))
 
   that <- Robin_g(
     robin.data=DATA,
@@ -26,19 +24,17 @@ test_that("test calibration", {
     robin.g_family=binomial(link="logit"),
     robin.g_accuracy=7,
     robin.formula=NULL,
-    robin.vcovHC="HC0",
     robin.adj_method="homogeneous"
   )
 
   for(joint in c(FALSE, TRUE)){
     for(add_x in c("x3", NULL)){
 
-      calib_this <- robincar_calibrate(
+      calib_this <- suppressWarnings(robincar_calibrate(
         result=this,
         joint=joint,
-        add_x=add_x,
-        vcovHC="HC0"
-      )
+        add_x=add_x
+      ))
       calib_that <- Robin_calibrate(
         robin.g_object=that$robin.g_object,
         robin.add_x=add_x,

@@ -17,6 +17,7 @@ Robust (potentially stratified) logrank adjustment
 \examples{
 library(magrittr)
 library(dplyr)
+library(forcats)
 set.seed(0)
 n=100
 data.simu0=data_gen(n=n,
