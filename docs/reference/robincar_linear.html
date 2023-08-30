@@ -70,7 +70,6 @@ treatment group contrasts using a linear working model for continuous outcomes.<
   covariate_cols <span class="op">=</span> <span class="cn">NULL</span>,
   car_scheme <span class="op">=</span> <span class="st">"simple"</span>,
   adj_method <span class="op">=</span> <span class="st">"ANOVA"</span>,
-  vcovHC <span class="op">=</span> <span class="st">"HC0"</span>,
   covariate_to_include_strata <span class="op">=</span> <span class="cn">NULL</span>,
   contrast_h <span class="op">=</span> <span class="cn">NULL</span>,
   contrast_dh <span class="op">=</span> <span class="cn">NULL</span>
@@ -105,10 +104,6 @@ treatment group contrasts using a linear working model for continuous outcomes.<
 
 <dt>adj_method</dt>
 <dd><p>Name of linear adjustment method to use. One of: "ANOVA", "ANCOVA", "ANHECOVA".</p></dd>
-
-
-<dt>vcovHC</dt>
-<dd><p>Type of heteroskedasticity-consistent variance estimates. One of: "HC0", "HC1", "HC3".</p></dd>
 
 
 <dt>covariate_to_include_strata</dt>
