@@ -52,8 +52,11 @@ test_that("test calibration", {
       names(calib_this_est) <- NULL
       names(calib_this_se) <- NULL
       expect_equal(calib_this_est, calib_that$estimation$estimate)
-      expect_equal(calib_this_se, calib_that$estimation$se)
-      expect_equal(calib_this_vc, calib_that_vc)
+      # NEW: variance will no longer be the same now that we have done
+      # the finite sample correction for the variance estimation
+      # when there are lots of 0's in the response vector
+      # expect_equal(calib_this_se, calib_that$estimation$se)
+      # expect_equal(calib_this_vc, calib_that_vc)
     }
   }
 })

@@ -79,7 +79,10 @@ test_that("GLM legacy", {
               names(this_est) <- NULL
               names(this_se) <- NULL
               expect_equal(this_est, that$estimation$estimate)
-              expect_equal(this_se, that$estimation$se)
+              # NEW: variance will no longer be the same now that we have done
+              # the finite sample correction for the variance estimation
+              # when there are lots of 0's in the response vector
+              # expect_equal(this_se, that$estimation$se)
             }
           }
         }
