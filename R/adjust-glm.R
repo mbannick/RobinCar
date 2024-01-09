@@ -43,6 +43,7 @@ adjust.GLMModel <- function(model, data){
 
   # Get g-computation predictions
   muhat <- get.muhat(model, data, glmod)
+  g.estimate <- colMeans(muhat)
 
   # Get mutilde from the GLM model, then estimate the treatment means by
   # taking the mean over all of the potential outcomes
@@ -66,7 +67,7 @@ adjust.GLMModel <- function(model, data){
     structure(
       class="GLMModelResult",
       list(result=result, varcov=variance, settings=model,
-           data=data, mod=glmod, mu_a=mutilde)
+           data=data, mod=glmod, mu_a=mutilde, g.estimate=g.estimate)
     )
   )
 }
