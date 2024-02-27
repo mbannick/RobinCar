@@ -65,9 +65,11 @@ adjust.CovHR <- function(model, data){
   score.adj <- function(theta) score.theta(theta, df=df_process) - cov_adjust
   thetaCLhat <- stats::uniroot(score.adj, interval=model$interval)$root
 
+  # Use thetaLhat rather than thetaCLhat below Both result in consistent
+  # variance estimators but using thetaLhat is expected behavior.
   df <- df %>% dplyr::mutate(
-    ssig_l = .data$event * exp(thetaCLhat) * .data$Y0 * .data$Y1 /
-      (exp(thetaCLhat) * .data$Y1 + .data$Y0)**2
+    ssig_l = .data$event * exp(thetaLhat) * .data$Y0 * .data$Y1 /
+      (exp(thetaLhat) * .data$Y1 + .data$Y0)**2
   )
 
   # Summarize by strata (if CL, then single strata)

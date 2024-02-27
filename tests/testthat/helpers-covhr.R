@@ -59,7 +59,8 @@ covariate_adjusted_logrank_estimation<-function(data.simu,p_trt){
   }
   theta_CL<-uniroot(score_CL,interval=c(-10,10))$root # get the adjusted estimator
 
-  sigma2_L<-exp(theta_CL)*sum(data.rev$delta*data.rev$Y0*data.rev$Y1/(exp(theta_CL)*data.rev$Y1+data.rev$Y0)^2)/n
+  # Modification for making consistent with current code for testing (theta_L in place of theta_CL)
+  sigma2_L<-exp(theta_L)*sum(data.rev$delta*data.rev$Y0*data.rev$Y1/(exp(theta_L)*data.rev$Y1+data.rev$Y0)^2)/n
   sigma2_CL<-sigma2_L-p_trt*(1-p_trt)*(beta1.Ohat+beta0.Ohat) %*% var(x.mat) %*% (beta1.Ohat+beta0.Ohat)
   var_est<-sigma2_CL/sigma2_L^2/n
   return(list(theta_L=theta_L,se.theta_L=sqrt(1/sigma2_L/n),
@@ -146,7 +147,8 @@ covariate_adjusted_stratified_logrank_estimation<-function(data.simu,p_trt){
     theta_CSL<-uniroot(score_CSL,interval=c(-10,10))$root # get the adjusted estimator
   }
   ### calculate variance ###
-  sigma2_SL<-exp(theta_CSL)*sum(data.rev$delta*data.rev$Y0*data.rev$Y1/(exp(theta_CSL)*data.rev$Y1+data.rev$Y0)^2)/n
+  # Modification for making consistent with current code for testing (theta_SL in place of theta_CSL)
+  sigma2_SL<-exp(theta_SL)*sum(data.rev$delta*data.rev$Y0*data.rev$Y1/(exp(theta_SL)*data.rev$Y1+data.rev$Y0)^2)/n
   sigma2_CSL<-sigma2_SL
   for(z in fz.n){
     pz<-length(which(data.rev$fz==z))/n
