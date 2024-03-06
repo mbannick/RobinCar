@@ -16,6 +16,7 @@ robincar_glm(
   g_family = stats::gaussian,
   g_accuracy = 7,
   formula = NULL,
+  exposure_col = NULL,
   contrast_h = NULL,
   contrast_dh = NULL
 )
@@ -43,6 +44,8 @@ If you wish to use a negative binomial working model with an unknown dispersion 
 \item{g_accuracy}{Level of accuracy to check prediction un-biasedness.}
 
 \item{formula}{An optional formula to use for adjustment specified using as.formula("..."). This overrides strata_cols and covariate_cols.}
+
+\item{exposure_col}{An offset variable to use for Poisson or negative binomial working models}
 
 \item{contrast_h}{An optional function to specify a desired contrast}
 
