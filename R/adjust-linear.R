@@ -35,7 +35,12 @@ linmod.ANOVA <- function(model, data, family=stats::gaussian, center=TRUE){
     treat=data$treat,
     response=data$response
   )
-  mod <- fitmod(family=family, formula=response ~ 0 + treat, data=df)
+  if(is.null(data$exposure)){
+    mod <- fitmod(family=family, formula=response ~ 0 + treat, data=df)
+  } else {
+    df <- cbind(df, exposure=data$exposure)
+    mod <- fitmod(family=family, formula=response ~ 0 + treat + offset(exposure), data=df)
+  }
   return(mod)
 }
 
@@ -48,10 +53,21 @@ linmod.ANCOVA <- function(model, data, family=stats::gaussian, center=TRUE){
   dmat <- get.dmat(data, model$adj_vars)
   if(center) dmat <- .center.dmat(dmat)
   df <- cbind(df, dmat)
+  if(!is.null(data$exposure)){
+    df <- cbind(df, exposure=data$exposure)
+  }
   if(center){
-    mod <- fitmod(family=family, formula=response ~ 0 + treat + ., data=df)
+    if(is.null(data$exposure)){
+      mod <- fitmod(family=family, formula=response ~ 0 + treat + ., data=df)
+    } else {
+      mod <- fitmod(family=family, formula=response ~ 0 + treat + . - exposure + offset(exposure), data=df)
+    }
   } else {
-    mod <- fitmod(family=family, formula=response ~ 1 + treat + ., data=df)
+    if(is.null(data$exposure)){
+      mod <- fitmod(family=family, formula=response ~ 1 + treat + ., data=df)
+    } else {
+      mod <- fitmod(family=family, formula=response ~ 1 + treat + . - exposure + offset(exposure), data=df)
+    }
   }
   return(mod)
 }
@@ -65,10 +81,21 @@ linmod.ANHECOVA <- function(model, data, family=stats::gaussian, center=TRUE){
   if(center) dmat <- .center.dmat(dmat)
   df <- cbind(df, dmat)
 
+  if(!is.null(data$exposure)){
+    df <- cbind(df, exposure=data$exposure)
+  }
   if(center){
-    mod <- fitmod(family=family, response ~ 0 + treat:., data=df)
+    if(is.null(data$exposure)){
+      mod <- fitmod(family=family, response ~ 0 + treat:., data=df)
+    } else {
+      mod <- fitmod(family=family, response ~ 0 + treat:(. - exposure) + offset(exposure), data=df)
+    }
   } else {
-    mod <- fitmod(family=family, response ~ 1 + treat:., data=df)
+    if(is.null(data$exposure)){
+      mod <- fitmod(family=family, response ~ 1 + treat:., data=df)
+    } else {
+      mod <- fitmod(family=family, response ~ 1 + treat:(. - exposure) + offset(exposure), data=df)
+    }
   }
   return(mod)
 }

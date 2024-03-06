@@ -176,6 +176,11 @@ validate.RoboDataTTE <- function(data, ref_arm){
   if(!is.null(data$event)){
     data$event <- as.vector(data$event[[1]])
   }
+  if(ncol(data$exposure) == 0){
+    data$exposure <- NULL
+  } else {
+    data$exposure <- as.vector(data$exposure[[1]])
+  }
   if(ncol(data$strata) == 0){
     data$strata <- NULL
   }

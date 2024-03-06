@@ -20,13 +20,14 @@
 #'                 If you wish to use a negative binomial working model with an unknown dispersion parameter, then use `g_family="nb"`.
 #' @param g_accuracy Level of accuracy to check prediction un-biasedness.
 #' @param formula An optional formula to use for adjustment specified using as.formula("..."). This overrides strata_cols and covariate_cols.
+#' @param exposure_col An offset variable to use for Poisson or negative binomial working models
 #'
 #' @export
 robincar_glm <- function(df,
                          treat_col, response_col, strata_cols=NULL, covariate_cols=NULL,
                          car_scheme="simple", adj_method="heterogeneous", # vcovHC="HC0",
                          covariate_to_include_strata=NULL,
-                         g_family=stats::gaussian, g_accuracy=7, formula=NULL,
+                         g_family=stats::gaussian, g_accuracy=7, formula=NULL, exposure_col=NULL,
                          contrast_h=NULL, contrast_dh=NULL){
 
   .check.car_scheme(car_scheme)
@@ -42,7 +43,8 @@ robincar_glm <- function(df,
     response_col=response_col,
     strata_cols=strata_cols,
     covariate_cols=covariate_cols,
-    formula=formula
+    formula=formula,
+    exposure_col=exposure_col
   )
   validate(data)
 

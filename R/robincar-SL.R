@@ -92,7 +92,8 @@ robincar_SL <- function(df,
     treat_col=treat_col,
     response_col=response_col,
     strata_cols=strata_cols,
-    covariate_cols=covariate_cols
+    covariate_cols=covariate_cols,
+    exposure_col=NULL
   )
   validate(data)
 

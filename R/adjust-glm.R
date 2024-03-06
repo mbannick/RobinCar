@@ -12,6 +12,9 @@ predictions.GLMModel <- function(model, data, mod){
   if(!is.null(dmat)){
     df <- cbind(df, dmat)
   }
+  if(!is.null(data$exposure)){
+    df <- cbind(df, exposure=data$exposure)
+  }
   preds <- stats::predict(mod, newdata=df, type="response")
   return(preds)
 }
