@@ -159,6 +159,41 @@ test_that("GLM full function -- NEGATIVE binomial, permuted block", {
 
 })
 
+test_that("GLM full function -- NEGATIVE binomial, permuted block w offset", {
+
+  DATA2$offset1 <- DATA2$y + rbinom(n=nrow(DATA2), size=10, prob=0.5)
+
+  # Known dispersion parameter
+  non <- robincar_glm(
+    df=DATA2,
+    response_col="y",
+    treat_col="A",
+    strata_cols=c("z1"),
+    covariate_cols=c("x1"),
+    car_scheme="permuted-block",
+    g_family=negative.binomial(1),
+    g_accuracy=7,
+    adj_method="heterogeneous",
+    covariate_to_include_strata=TRUE,
+    exposure_col="offset1")
+  expect_equal(class(non), "GLMModelResult")
+
+  # Known dispersion parameter
+  non <- robincar_glm(
+    df=DATA2,
+    response_col="y",
+    treat_col="A",
+    strata_cols=c("z1"),
+    covariate_cols=c("x1"),
+    car_scheme="permuted-block",
+    g_family="nb",
+    g_accuracy=7,
+    adj_method="heterogeneous",
+    covariate_to_include_strata=TRUE)
+  expect_equal(class(non), "GLMModelResult")
+
+})
+
 test_that("GLM Settings", {
   non <- robincar_glm(
     df=DATA2,

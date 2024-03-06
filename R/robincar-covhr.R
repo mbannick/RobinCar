@@ -36,7 +36,8 @@ robincar_covhr <- function(df,
     response_col=response_col,
     event_col=event_col,
     strata_cols=strata_cols,
-    covariate_cols=covariate_cols
+    covariate_cols=covariate_cols,
+    exposure_col=NULL
   )
   validate(data, ref_arm)
 
