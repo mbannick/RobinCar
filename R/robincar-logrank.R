@@ -37,8 +37,8 @@
 #'                     case="case1")
 #'
 #' data.simu <- data.simu0 %>%
-#'   tidyr::pivot_longer(cols=starts_with("strata"),
-#'                       names_prefix="strata",
+#'   tidyr::pivot_longer(cols=starts_with("car_strata"),
+#'                       names_prefix="car_strata",
 #'                       names_to="strt") %>%
 #'   filter(value==1) %>% select(-value) %>%
 #'   mutate(strt=forcats::as_factor(strt)) %>%
@@ -51,7 +51,7 @@
 #'                          ref_arm=0,
 #'                          response_col="t",
 #'                          event_col="delta",
-#'                          strata_cols="strt",
+#'                          car_strata_cols="strt",
 #'                          covariate_cols=NULL,
 #'                          car_scheme=c("permuted-block"),
 #'                          adj_method=c("CSL")

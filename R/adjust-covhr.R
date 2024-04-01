@@ -5,7 +5,7 @@ get.ordered.data.est <- function(df, lin_predictors){
   data <- df %>% dplyr::mutate(lin_pred=lin_predictors)
 
   data <- data %>%
-    dplyr::group_by(.data$strata) %>%
+    dplyr::group_by(.data$car_strata) %>%
     dplyr::mutate(
       s0_seq          = exp(.data$lin_pred)
     ) %>% dplyr::mutate(
@@ -72,15 +72,15 @@ adjust.CovHR <- function(model, data){
       (exp(thetaLhat) * .data$Y1 + .data$Y0)**2
   )
 
-  # Summarize by strata (if CL, then single strata)
+  # Summarize by car_strata (if CL, then single car_strata)
   ss <- df %>%
     dplyr::filter(!is.na(.data$uu_cl)) %>%
-    dplyr::group_by(.data$strata) %>%
+    dplyr::group_by(.data$car_strata) %>%
     dplyr::summarise(
       var_adj = model$p_trt * (1 - model$p_trt) * unique(.data$bsigb) * dplyr::n(),
       .groups = "drop"
     ) %>%
-    dplyr::arrange(.data$strata)
+    dplyr::arrange(.data$car_strata)
 
   # Final quantities for the C(S)L statistic
   sig2_L  <- mean(df$ssig_l)

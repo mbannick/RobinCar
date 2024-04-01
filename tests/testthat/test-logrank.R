@@ -50,8 +50,8 @@ test_that("No X yes Z case under CAR, CSL = stratified logrank test",{
 
   data.simu <- data.simu0 %>%
     tidyr::pivot_longer(
-      cols=starts_with("strata"),
-      names_prefix="strata",
+      cols=starts_with("car_strata"),
+      names_prefix="car_strata",
       names_to="strt"
     ) %>%
     dplyr::filter(value == 1) %>%
@@ -67,7 +67,7 @@ test_that("No X yes Z case under CAR, CSL = stratified logrank test",{
     ref_arm=0,
     response_col="t",
     event_col="delta",
-    strata_cols=c("strt"),
+    car_strata_cols=c("strt"),
     car_scheme=c("permuted-block"),
     adj_method=c("CSL")
   )
@@ -95,8 +95,8 @@ test_that("X yes Z yes, case1, CL",{
   data.simu <-
     data.simu0 %>%
     tidyr::pivot_longer(
-      cols=starts_with("strata"),
-      names_prefix="strata",
+      cols=starts_with("car_strata"),
+      names_prefix="car_strata",
       names_to="strt"
     ) %>%
     dplyr::filter(value == 1) %>%
@@ -110,7 +110,7 @@ test_that("X yes Z yes, case1, CL",{
     treat_col="I1",
     response_col="t",
     event_col="delta",
-    strata_cols=c("strt"),
+    car_strata_cols=c("strt"),
     covariate_cols=c("model_Z1", "model_Z21", "model_Z22"),
     car_scheme="permuted-block",
     adj_method=c("CL"),
@@ -130,8 +130,8 @@ test_that("X yes Z yes, case1, CL",{
 
   data.simu1 <- data.simu01 %>%
     tidyr::pivot_longer(
-      cols=starts_with("strata"),
-      names_prefix="strata",
+      cols=starts_with("car_strata"),
+      names_prefix="car_strata",
       names_to="strt"
     ) %>%
     dplyr::filter(value == 1) %>%
@@ -145,7 +145,7 @@ test_that("X yes Z yes, case1, CL",{
     treat_col="I1",
     response_col="t",
     event_col="delta",
-    strata_cols=c("strt"),
+    car_strata_cols=c("strt"),
     covariate_cols=c("model_w3"),
     car_scheme="permuted-block",
     adj_method=c("CL"),
@@ -207,8 +207,8 @@ test_that("X yes Z yes, case1, CSL",{
 
   data.simu1 <-
     data.simu01 %>% tidyr::pivot_longer(
-      cols=starts_with("strata"),
-      names_prefix="strata",
+      cols=starts_with("car_strata"),
+      names_prefix="car_strata",
       names_to="strt"
     ) %>%
     dplyr::filter(value == 1) %>% select(-value) %>%
@@ -220,7 +220,7 @@ test_that("X yes Z yes, case1, CSL",{
     treat_col="I1",
     response_col="t",
     event_col="delta",
-    strata_cols="strt",
+    car_strata_cols="strt",
     covariate_cols=c("model_w3"),
     car_scheme="permuted-block",
     adj_method=c("CSL"),

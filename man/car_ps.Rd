@@ -7,7 +7,7 @@
 car_ps(z, treat, ratio, imb_measure, p_bc = 0.8)
 }
 \arguments{
-\item{z}{The strata design matrix}
+\item{z}{The car_strata design matrix}
 
 \item{treat}{A vector of length k (the number of treatment arms), which labels the treatment arms being compared.}
 
@@ -27,7 +27,7 @@ Generate Pocock-Simon minimization treatment assignments
 }
 \examples{
 
-# Create strata variables
+# Create car_strata variables
 library(fastDummies)
 library(dplyr)
 

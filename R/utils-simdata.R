@@ -41,7 +41,7 @@ data_gen <- function(n, theta, randomization, p_trt,
         "model_Z1",
         "model_Z21",
         "model_Z22",
-        paste0("strata", 1:n_strata),
+        paste0("car_strata", 1:n_strata),
         paste0("minimization", 1:5)
       )
     return(data.simu)
@@ -85,7 +85,7 @@ data_gen <- function(n, theta, randomization, p_trt,
         "I1",
         "I0",
         paste0("model_z", 1:2),
-        paste0("strata", 1:n_strata),
+        paste0("car_strata", 1:n_strata),
         paste("minimization", 1:minimization_n_col)
       )
     return(data.simu)
@@ -129,7 +129,7 @@ data_gen <- function(n, theta, randomization, p_trt,
         "I1",
         "I0",
         paste0("model_z", 1:2),
-        paste0("strata", 1:n_strata),
+        paste0("car_strata", 1:n_strata),
         paste("minimization", 1:minimization_n_col)
       )
     return(data.simu)
@@ -159,7 +159,7 @@ data_gen <- function(n, theta, randomization, p_trt,
         "I1",
         "I0",
         "model_Z1",
-        paste0("strata", 1:n_strata),
+        paste0("car_strata", 1:n_strata),
         paste0("minimization", 1:minimization_n_col)
       )
     return(data.simu)
@@ -189,7 +189,7 @@ data_gen <- function(n, theta, randomization, p_trt,
         "I1",
         "I0",
         "model_Z1",
-        paste0("strata", 1:n_strata),
+        paste0("car_strata", 1:n_strata),
         paste0("minimization", 1:minimization_n_col)
       )
     return(data.simu)
@@ -250,7 +250,7 @@ data_gen2 <-
           "I1",
           "I0",
           "model_w3",
-          paste0("strata", 1:n_strata))
+          paste0("car_strata", 1:n_strata))
       return(data.simu)
     } else if (case == "case2") {
       # Cox failure time and censoring depends on I
@@ -295,7 +295,7 @@ data_gen2 <-
           "I1",
           "I0",
           "model_w3",
-          paste0("strata", 1:n_strata))
+          paste0("car_strata", 1:n_strata))
       return(data.simu)
     } else if (case == "case3") {
       # Non-Cox failure time and uniform censoring
@@ -337,7 +337,7 @@ data_gen2 <-
           "I1",
           "I0",
           "model_w3",
-          paste0("strata", 1:n_strata))
+          paste0("car_strata", 1:n_strata))
       return(data.simu)
     } else if (case == "case4") {
       # Non-Cox failure time and censoring depends on I
@@ -379,7 +379,7 @@ data_gen2 <-
           "I1",
           "I0",
           "model_w3",
-          paste0("strata", 1:n_strata))
+          paste0("car_strata", 1:n_strata))
       return(data.simu)
     } else if (case == "case5") {
       # Non-Cox failure time and censoring depends on I
@@ -408,7 +408,7 @@ data_gen2 <-
           "I1",
           "I0",
           "model_w1",
-          paste0("strata", 1:n_strata))
+          paste0("car_strata", 1:n_strata))
       return(data.simu)
     } else if (case == "case4_test") {
       # Non-Cox failure time and censoring depends on I
@@ -456,7 +456,7 @@ data_gen2 <-
           "I1",
           "I0",
           "model_w3",
-          paste0("strata", 1:n_strata))
+          paste0("car_strata", 1:n_strata))
       return(data.simu)
     }
   }

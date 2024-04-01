@@ -11,7 +11,7 @@ robincar_SL_median(
   df,
   treat_col,
   response_col,
-  strata_cols = NULL,
+  car_strata_cols = NULL,
   covariate_cols = NULL,
   car_scheme = "simple",
   covariate_to_include_strata = NULL,
@@ -34,13 +34,13 @@ robincar_SL_median(
 
 \item{response_col}{Name of the column in df with response variable}
 
-\item{strata_cols}{Names of columns in df with strata variables}
+\item{car_strata_cols}{Names of columns in df with car_strata variables}
 
 \item{covariate_cols}{Names of columns in df with covariate variables}
 
 \item{car_scheme}{Name of the type of covariate-adaptive randomization scheme. One of: "simple", "pocock-simon", "biased-coin", "permuted-block".}
 
-\item{covariate_to_include_strata}{Whether to include strata variables in covariate adjustment. Defaults to F for ANOVA and ANCOVA; defaults to T for ANHECOVA. User may override by passing in this argument.}
+\item{covariate_to_include_strata}{Whether to include car_strata variables in covariate adjustment. Defaults to F for ANOVA and ANCOVA; defaults to T for ANHECOVA. User may override by passing in this argument.}
 
 \item{SL_libraries}{Vector of super-learner libraries to use for the covariate adjustment (see SuperLearner::listWrappers())}
 

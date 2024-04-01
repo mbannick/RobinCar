@@ -25,7 +25,7 @@ test_that("No X no Z case under SR, CL = logrank test",{
                         ref_arm=0,
                         response_col="t",
                         event_col="delta",
-                        strata_cols=NULL,
+                        car_strata_cols=NULL,
                         covariate_cols=NULL,
                         car_scheme=c("simple"),
                         adj_method=c("CL")
@@ -58,8 +58,8 @@ test_that("X yes Z yes, case1, CL", {
   )
 
   data.simu <- data.simu0 %>%
-    tidyr::pivot_longer(cols=starts_with("strata"),
-                        names_prefix = "strata",
+    tidyr::pivot_longer(cols=starts_with("car_strata"),
+                        names_prefix = "car_strata",
                         names_to = "strt") %>%
     filter(value==1) %>% select(-value) %>%
     mutate(strt=forcats::as_factor(strt)) %>%
@@ -71,7 +71,7 @@ test_that("X yes Z yes, case1, CL", {
     treat_col="I1",
     response_col="t",
     event_col="delta",
-    strata_cols="strt",
+    car_strata_cols="strt",
     covariate_cols=c("model_Z1", "model_Z21", "model_Z22"),
     car_scheme="permuted-block",
     adj_method=c("CL"),
@@ -92,8 +92,8 @@ test_that("X yes Z yes, case1, CL", {
   )
 
   data.simu1 <- data.simu01 %>%
-    tidyr::pivot_longer(cols=starts_with("strata"),
-                        names_prefix = "strata",
+    tidyr::pivot_longer(cols=starts_with("car_strata"),
+                        names_prefix = "car_strata",
                         names_to = "strt") %>%
     filter(value==1) %>% select(-value) %>%
     mutate(strt=forcats::as_factor(strt)) %>%
@@ -105,7 +105,7 @@ test_that("X yes Z yes, case1, CL", {
     treat_col="I1",
     response_col="t",
     event_col="delta",
-    strata_cols="strt",
+    car_strata_cols="strt",
     covariate_cols=c("model_w3"),
     car_scheme="permuted-block",
     adj_method=c("CL"),
@@ -134,8 +134,8 @@ test_that("X yes Z yes, case1, CSL",{
   )
 
   data.simu1 <- data.simu01 %>%
-    tidyr::pivot_longer(cols=starts_with("strata"),
-                        names_prefix = "strata",
+    tidyr::pivot_longer(cols=starts_with("car_strata"),
+                        names_prefix = "car_strata",
                         names_to = "strt") %>%
     filter(value==1) %>% select(-value) %>%
     mutate(strt=forcats::as_factor(strt)) %>%
@@ -147,7 +147,7 @@ test_that("X yes Z yes, case1, CSL",{
     treat_col="I1",
     response_col="t",
     event_col="delta",
-    strata_cols="strt",
+    car_strata_cols="strt",
     covariate_cols=c("model_w3"),
     car_scheme="permuted-block",
     adj_method=c("CSL"),

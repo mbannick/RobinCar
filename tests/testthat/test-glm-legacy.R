@@ -44,7 +44,7 @@ test_that("GLM legacy", {
                 df=DATA2,
                 response_col="y",
                 treat_col="A",
-                strata_cols=zs,
+                car_strata_cols=zs,
                 covariate_cols=cov,
                 covariate_to_include_strata=ctis,
                 car_scheme=scheme0,

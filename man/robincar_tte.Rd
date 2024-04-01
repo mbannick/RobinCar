@@ -10,7 +10,7 @@ robincar_tte(
   response_col,
   event_col,
   adj_method,
-  strata_cols = NULL,
+  car_strata_cols = NULL,
   covariate_cols = NULL,
   p_trt = 0.5,
   ref_arm = NULL,
@@ -30,7 +30,7 @@ robincar_tte(
 
 \item{adj_method}{Adjustment method (one of "CL", "CSL", or "coxscore")}
 
-\item{strata_cols}{Names of columns in df with strata variables}
+\item{car_strata_cols}{Names of columns in df with car_strata variables}
 
 \item{covariate_cols}{Names of columns in df with covariate variables}
 
@@ -39,7 +39,7 @@ robincar_tte(
 \item{ref_arm}{Reference arm of the treatment group, defaults to NULL,
 which results in using the first element of `unique(data[, treat_col])`.}
 
-\item{sparse_remove}{Remove sparse strata from calculation}
+\item{sparse_remove}{Remove sparse car_strata from calculation}
 
 \item{car_scheme}{Name of the type of covariate-adaptive randomization scheme. One of: "simple", "pocock-simon", "biased-coin", "permuted-block".}
 }

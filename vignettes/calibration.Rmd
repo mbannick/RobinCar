@@ -45,7 +45,7 @@ result <- robincar_glm(
   df=data,
   response_col="y_bin",
   treat_col="A",
-  strata_cols=c("z1"),
+  car_strata_cols=c("z1"),
   covariate_cols=c("x3"),
   car_scheme="biased-coin",
   g_family=binomial(link="logit"),

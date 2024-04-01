@@ -15,8 +15,8 @@ test_that("X yes Z yes, permuted-block, coxscore",{
 
   data.simu <-
     data.simu0 %>% tidyr::pivot_longer(
-      cols=starts_with("strata"),
-      names_prefix="strata",
+      cols=starts_with("car_strata"),
+      names_prefix="car_strata",
       names_to="strt"
     ) %>%
     dplyr::filter(value == 1) %>%
@@ -30,7 +30,7 @@ test_that("X yes Z yes, permuted-block, coxscore",{
     treat_col="I1",
     response_col="t",
     event_col="delta",
-    strata_cols="strt",
+    car_strata_cols="strt",
     covariate_cols=c("model_z1", "model_z2"),
     car_scheme="permuted-block",
     ref_arm=0
@@ -53,8 +53,8 @@ test_that("X yes Z yes, permuted-block, coxscore",{
 
   data.simu1 <-
     data.simu01 %>% tidyr::pivot_longer(
-      cols=starts_with("strata"),
-      names_prefix="strata",
+      cols=starts_with("car_strata"),
+      names_prefix="car_strata",
       names_to="strt"
     ) %>%
     dplyr::filter(value == 1) %>%
@@ -68,7 +68,7 @@ test_that("X yes Z yes, permuted-block, coxscore",{
     treat_col="I1",
     response_col="t",
     event_col="delta",
-    strata_cols="strt",
+    car_strata_cols="strt",
     covariate_cols=c("model_w3"),
     car_scheme="permuted-block",
     ref_arm=0
@@ -98,8 +98,8 @@ test_that("No X no Z case under SR, coxscore",{
 
   data.simu <-
     data.simu0 %>% tidyr::pivot_longer(
-      cols=starts_with("strata"),
-      names_prefix="strata",
+      cols=starts_with("car_strata"),
+      names_prefix="car_strata",
       names_to="strt"
     ) %>%
     dplyr::filter(value == 1) %>%
@@ -113,7 +113,7 @@ test_that("No X no Z case under SR, coxscore",{
     treat_col="I1",
     response_col="t",
     event_col="delta",
-    strata_cols=NULL,
+    car_strata_cols=NULL,
     covariate_cols=NULL,
     car_scheme="simple",
     ref_arm=0

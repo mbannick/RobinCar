@@ -7,7 +7,7 @@
 car_pb(z, trt_label, trt_alc, blocksize = 4L)
 }
 \arguments{
-\item{z}{The strata design matrix, as a data frame with factor variables}
+\item{z}{The car_strata design matrix, as a data frame with factor variables}
 
 \item{trt_label}{Treatment label}
 
@@ -19,7 +19,7 @@ car_pb(z, trt_label, trt_alc, blocksize = 4L)
 Generate permuted block treatment assignments
 }
 \examples{
-# Create strata variables
+# Create car_strata variables
 library(fastDummies)
 library(dplyr)
 

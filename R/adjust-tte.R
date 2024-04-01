@@ -21,9 +21,9 @@ create.tte.df <- function(model, data){
   }
   # Covariate-adaptive randomization
   if(model$car_strata){
-    df$strata <- data$joint_strata
+    df$car_strata <- data$joint_strata
   } else {
-    df$strata <- 0
+    df$car_strata <- 0
   }
 
   return(df)
@@ -52,8 +52,8 @@ process.tte.df <- function(df, ref_arm=NULL){
 
   # Calculate risk set sizes at each failure time
   df <- df %>%
-    dplyr::arrange(.data$strata, .data$response) %>%
-    group_by(.data$strata) %>%
+    dplyr::arrange(.data$car_strata, .data$response) %>%
+    group_by(.data$car_strata) %>%
     mutate(Y=dplyr::n():1,
            trt0=as.integer(.data$treat == trts[1]),
            trt1=as.integer(.data$treat == trts[2]),
@@ -71,7 +71,7 @@ process.tte.df <- function(df, ref_arm=NULL){
 get.ordered.data <- function(df, ref_arm){
 
   df <- df %>%
-    group_by(.data$strata) %>%
+    group_by(.data$car_strata) %>%
     mutate(
       mu_t            = .data$Y1 / .data$Y,
 
@@ -122,17 +122,17 @@ get_design_matrix <- function(df, covnames){
   # Center each column of the design matrix
   # This shouldn't do anything for the covariates, because
   # they should already be centered in the .make.data function,
-  # but this will center the strata variables also, if they are included.
+  # but this will center the car_strata variables also, if they are included.
   mat <- data.frame(mat) %>%
-    dplyr::mutate(strata=df$strata) %>%
-    dplyr::group_by(.data$strata, ) %>%
+    dplyr::mutate(car_strata=df$car_strata) %>%
+    dplyr::group_by(.data$car_strata, ) %>%
     dplyr::mutate(dplyr::across(
       .cols=everything(),
       .fns=list(center=~scale(., center=TRUE, scale=FALSE)),
       .names="{col}_{fn}"
     )) %>%
     dplyr::ungroup() %>%
-    subset(select=-strata)
+    subset(select=-car_strata)
   return(mat)
 }
 
@@ -182,9 +182,9 @@ regress_to_Ohat <- function(df, stratified){
   betas <- res %>%
     dplyr::ungroup() %>%
     tidyr::expand_grid(
-      # strata-specific betas (same)
-      strata=unique(df$strata), .) %>%
-    dplyr::select(.data$strata,
+      # car_strata-specific betas (same)
+      car_strata=unique(df$car_strata), .) %>%
+    dplyr::select(.data$car_strata,
                   .data$trt1,
                   .data$term,
                   .data$estimate) %>%
@@ -200,7 +200,7 @@ regress_to_Ohat <- function(df, stratified){
 #' @importFrom dplyr left_join mutate group_by group_modify
 calculate.adjustment <- function(df, betas, covnames, stratified){
 
-  dat <- dplyr::left_join(df, betas, by="strata")
+  dat <- dplyr::left_join(df, betas, by="car_strata")
 
   if(stratified){
     covnames_carcov <- grepl("carcov_z", covnames)
@@ -217,7 +217,7 @@ calculate.adjustment <- function(df, betas, covnames, stratified){
     beta0_names <- paste0("trt1_0_xmat_", covnames_use)
 
     dat <- dat %>%
-      dplyr::group_by(.data$strata) %>%
+      dplyr::group_by(.data$car_strata) %>%
       dplyr::group_modify(~ {
         matcx   <- dplyr::select(.x, all_of(covnames_xc)) %>% as.matrix(ncol=p)
         matx    <- dplyr::select(.x, all_of(covnames_x)) %>% as.matrix(ncol=p)
@@ -242,7 +242,7 @@ calculate.adjustment <- function(df, betas, covnames, stratified){
 get.tte.adjustment <- function(df, model, data){
   if(model$adj_strata | model$adj_cov){
     # Add covariate names in order
-    # with the strata covariates first
+    # with the car_strata covariates first
     # so that if there is collinearity, they
     # are chosen first over the x covariates.
     covnames <- c()

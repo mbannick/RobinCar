@@ -128,31 +128,31 @@ get.erb <- function(model, data, mod, mu_hat=NULL){
   omegaz <- model$omegaz_func(data$pie)
 
   # Calculate the expectation of the residuals within each level of
-  # strata variables Z
+  # car_strata variables Z
   dat <- dplyr::tibble(
     treat=data$treat,
-    strata=data$joint_strata,
+    car_strata=data$joint_strata,
     resid=residual
   ) %>%
-    dplyr::group_by(.data$treat, .data$strata) %>%
+    dplyr::group_by(.data$treat, .data$car_strata) %>%
     dplyr::summarize(mean=mean(.data$resid), .groups="drop")
 
-  # Calculate strata levels and proportions for
+  # Calculate car_strata levels and proportions for
   # the outer expectation
   strata_levels <- data$joint_strata %>% levels
   strata_props <- data$joint_strata %>% table %>% proportions
 
   # Estimate R(B) by first getting the conditional expectation
-  # vector for a particular strata (vector contains
+  # vector for a particular car_strata (vector contains
   # all treatment groups), then dividing by the pi_t
   .get.cond.exp <- function(s) dat %>%
-    dplyr::filter(.data$strata==s) %>%
+    dplyr::filter(.data$car_strata==s) %>%
     dplyr::arrange(.data$treat) %>%
     dplyr::pull(mean)
 
   .get.rb <- function(s) diag(.get.cond.exp(s) / c(data$pie))
 
-  # Get the R(B) matrix for all strata levels
+  # Get the R(B) matrix for all car_strata levels
   rb_z <- lapply(strata_levels, .get.rb)
 
   # Compute the R(B)[Omega_{SR} - Omega_{Z_i}]R(B) | Z_i

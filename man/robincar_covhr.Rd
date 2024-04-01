@@ -9,7 +9,7 @@ robincar_covhr(
   treat_col,
   response_col,
   event_col,
-  strata_cols = NULL,
+  car_strata_cols = NULL,
   covariate_cols = NULL,
   p_trt = 0.5,
   ref_arm = NULL,
@@ -28,7 +28,7 @@ robincar_covhr(
 \item{event_col}{Name of column in df with event indicator
 (0/FALSE=no event, 1/TRUE=event)}
 
-\item{strata_cols}{Names of columns in df with strata variables}
+\item{car_strata_cols}{Names of columns in df with car_strata variables}
 
 \item{covariate_cols}{Names of columns in df with covariate variables}
 

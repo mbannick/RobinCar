@@ -26,7 +26,7 @@ robincar_calibrate <- function(result, joint=FALSE,
     mu_a
   )
 
-  # Add on covariates and strata from the original
+  # Add on covariates and car_strata from the original
   # robincar_glm function call
   if(!is.null(result$data$covariate)){
     newdat <- cbind(newdat, result$data$covariate)
@@ -38,10 +38,10 @@ robincar_calibrate <- function(result, joint=FALSE,
       newdat <- cbind(newdat, result$original_df[cname])
     }
   }
-  if(!is.null(result$data$strata)){
-    for(cname in colnames(result$data$strata)){
+  if(!is.null(result$data$car_strata)){
+    for(cname in colnames(result$data$car_strata)){
       if(cname %in% colnames(newdat)) next
-      newdat <- cbind(newdat, result$data$strata[cname])
+      newdat <- cbind(newdat, result$data$car_strata[cname])
     }
   }
 
@@ -52,7 +52,7 @@ robincar_calibrate <- function(result, joint=FALSE,
     response_col="response",
     treat_col="treat",
     covariate_cols=c(mu_names, add_x),
-    strata_cols=colnames(result$data$strata),
+    car_strata_cols=colnames(result$data$car_strata),
     covariate_to_include_strata=joint,
     car_scheme=result$settings$car_scheme,
     adj_method="heterogeneous",

@@ -6,5 +6,5 @@ if(getRversion() >= "2.15.1"){
   utils::globalVariables(c("."))
 
   # This is for print.TTEResult and data.table dplyr issues
-  utils::globalVariables(c("strata", "treat", "N", "name", "strata_col"))
+  utils::globalVariables(c("car_strata", "treat", "N", "name", "strata_col"))
 }

@@ -12,20 +12,20 @@
 #' @param response_col Name of the column in df with response variable
 #' @param event_col Name of column in df with event indicator
 #'                  (0/FALSE=no event, 1/TRUE=event)
-#' @param strata_cols Names of columns in df with strata variables
+#' @param car_strata_cols Names of columns in df with car_strata variables
 #' @param covariate_cols Names of columns in df with covariate variables
 #' @param car_scheme Name of the type of covariate-adaptive randomization scheme. One of: "simple", "pocock-simon", "biased-coin", "permuted-block".
 #' @param ref_arm Reference arm of the treatment group, defaults to NULL,
 #'                which results in using the first element of `unique(data[, treat_col])`.
 #' @param p_trt Treatment allocation ratio for the reference arm.
 #' @param adj_method Adjustment method (one of "CL", "CSL", or "coxscore")
-#' @param sparse_remove Remove sparse strata from calculation
+#' @param sparse_remove Remove sparse car_strata from calculation
 #'
 #' @export
 robincar_tte <- function(df,
                          treat_col, response_col, event_col,
                          adj_method,
-                         strata_cols=NULL, covariate_cols=NULL,
+                         car_strata_cols=NULL, covariate_cols=NULL,
                          p_trt=0.5, ref_arm=NULL, sparse_remove=TRUE,
                          car_scheme="simple"){
 
@@ -37,7 +37,7 @@ robincar_tte <- function(df,
     treat_col=treat_col,
     response_col=response_col,
     event_col=event_col,
-    strata_cols=strata_cols,
+    car_strata_cols=car_strata_cols,
     covariate_cols=covariate_cols
   )
   validate(data, ref_arm)

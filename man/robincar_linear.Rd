@@ -8,7 +8,7 @@ robincar_linear(
   df,
   treat_col,
   response_col,
-  strata_cols = NULL,
+  car_strata_cols = NULL,
   covariate_cols = NULL,
   car_scheme = "simple",
   adj_method = "ANOVA",
@@ -24,7 +24,7 @@ robincar_linear(
 
 \item{response_col}{Name of the column in df with response variable}
 
-\item{strata_cols}{Names of columns in df with strata variables}
+\item{car_strata_cols}{Names of columns in df with car_strata variables}
 
 \item{covariate_cols}{Names of columns in df with covariate variables}
 
@@ -32,7 +32,7 @@ robincar_linear(
 
 \item{adj_method}{Name of linear adjustment method to use. One of: "ANOVA", "ANCOVA", "ANHECOVA".}
 
-\item{covariate_to_include_strata}{Whether to include strata variables in covariate adjustment. Defaults to F for ANOVA and ANCOVA; defaults to T for ANHECOVA. User may override by passing in this argument.}
+\item{covariate_to_include_strata}{Whether to include car_strata variables in covariate adjustment. Defaults to F for ANOVA and ANCOVA; defaults to T for ANHECOVA. User may override by passing in this argument.}
 
 \item{contrast_h}{An optional function to specify a desired contrast}
 

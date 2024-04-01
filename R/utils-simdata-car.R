@@ -15,7 +15,7 @@ car_sr <- function(n, p_trt){
 
 #' Generate permuted block treatment assignments
 #'
-#' @param z The strata design matrix, as a data frame with factor variables
+#' @param z The car_strata design matrix, as a data frame with factor variables
 #' @param trt_label Treatment label
 #' @param trt_alc Treatment allocation vector
 #' @param blocksize Permuted block blocksize
@@ -24,7 +24,7 @@ car_sr <- function(n, p_trt){
 #' @importFrom dplyr summarise_all group_by_all cur_group_id mutate
 #'
 #' @examples
-#' # Create strata variables
+#' # Create car_strata variables
 #' library(fastDummies)
 #' library(dplyr)
 #'
@@ -36,9 +36,9 @@ car_sr <- function(n, p_trt){
 #' car_pb(z[, 2:5], c(0, 1, 2), trt_alc=c(1/4, 1/2, 1/4), blocksize=4L)
 car_pb <- function(z, trt_label, trt_alc, blocksize=4L) {
 
-  strata <- z
+  car_strata <- z
 
-  if(!all(summarise_all(strata, is.factor) == TRUE)){
+  if(!all(summarise_all(car_strata, is.factor) == TRUE)){
    stop("Please make sure every feature(column) of z is a factor!")
   }
   if(!is.integer(blocksize)){
@@ -52,18 +52,18 @@ car_pb <- function(z, trt_label, trt_alc, blocksize=4L) {
     stop(print("car.blocksize*car.trt_alc/sum(car.trt_alc) should be integers!"))
   }
 
-  strata_cross <- strata %>%
+  strata_cross <- car_strata %>%
     group_by_all %>%
     dplyr::mutate(strata_ind = dplyr::cur_group_id()) %>%
     ungroup()
 
-  A <- rep(NA, nrow(strata))
+  A <- rep(NA, nrow(car_strata))
   for (i in 1 : max(strata_cross$strata_ind)){
-    strata.index.temp <- which(strata_cross$strata_ind == i)
-    strata.size.temp <- length(strata.index.temp)
-    A[strata.index.temp] <- as.vector(
-      replicate(n = ceiling(strata.size.temp/blocksize),
-                expr = sample(x = A_blk, size = blocksize))[1:strata.size.temp]
+    car_strata.index.temp <- which(strata_cross$strata_ind == i)
+    car_strata.size.temp <- length(car_strata.index.temp)
+    A[car_strata.index.temp] <- as.vector(
+      replicate(n = ceiling(car_strata.size.temp/blocksize),
+                expr = sample(x = A_blk, size = blocksize))[1:car_strata.size.temp]
     )
   }
 
@@ -72,7 +72,7 @@ car_pb <- function(z, trt_label, trt_alc, blocksize=4L) {
 
 #' Generate Pocock-Simon minimization treatment assignments
 #'
-#' @param z The strata design matrix
+#' @param z The car_strata design matrix
 #' @param treat A vector of length k (the number of treatment arms), which labels the treatment arms being compared.
 #' @param ratio A vector of length k (the number of treatment arms), which indicates the allocation ratio, e.g., c(1,1,1) for equal allocation with three treatment arms.
 #' @param imb_measure What measure of imbalance should be minimzed during randomization -- either "Range" or "SD"
@@ -90,7 +90,7 @@ car_pb <- function(z, trt_label, trt_alc, blocksize=4L) {
 #'
 #' @examples
 #'
-#' # Create strata variables
+#' # Create car_strata variables
 #' library(fastDummies)
 #' library(dplyr)
 #'

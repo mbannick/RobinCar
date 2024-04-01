@@ -20,7 +20,7 @@ get.dmat <- function(data, adj_vars){
   } else if(adj_vars == "x"){
     dmat <- data$covariate
   } else if(adj_vars == "z"){
-    dmat <- data$strata
+    dmat <- data$car_strata
   } else if(adj_vars == "joint_z"){
     dmat <- as.matrix(data$joint_strata, ncol=1)
     colnames(dmat) <- "joint_strata"
@@ -55,20 +55,20 @@ get.mutilde <- function(model, data, muhat){
     center_mus <- as.list(data.frame(muhat))
   } else {
 
-    # Will create matrix for combination of strata and treatment groups
+    # Will create matrix for combination of car_strata and treatment groups
     sl <- data$joint_strata_levels
     tl <- data$treat_levels
 
-    # Get indicators for joint strata group
+    # Get indicators for joint car_strata group
     s_ids <- sapply(sl, function(x) data$joint_strata == x)
 
-    # Get joint levels of treatment and strata groups
+    # Get joint levels of treatment and car_strata groups
     center_ids <- as.list(data.frame(
       t_ids[, rep(1:ncol(t_ids), each=length(sl))] &
         s_ids[, rep(1:ncol(s_ids), times=length(tl))]
     ))
 
-    # Repeat the mu columns for each strata
+    # Repeat the mu columns for each car_strata
     center_mus <- as.list(data.frame(muhat[, rep(1:ncol(muhat), each=length(sl))]))
   }
 
@@ -98,7 +98,7 @@ get.mutilde <- function(model, data, muhat){
                                    digits=model$g_accuracy)
 
   # Calculate the group-specific residuals
-  # where the groups are defined as treatment or treatment x strata above
+  # where the groups are defined as treatment or treatment x car_strata above
   resid <- mapply(
     FUN=check.pu,
     u=center_mus,

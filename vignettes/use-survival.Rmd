@@ -45,8 +45,8 @@ data.simu0 <- data_gen2(
 # Restructure data
 data.simu <- data.simu0 %>%
   tidyr::pivot_longer(
-    cols=starts_with("strata"),
-    names_prefix="strata",
+    cols=starts_with("car_strata"),
+    names_prefix="car_strata",
     names_to="strt"
   ) %>%
   dplyr::filter(value == 1) %>%
@@ -63,7 +63,7 @@ cox <- robincar_coxscore(
   treat_col="I1",
   response_col="t",
   event_col="delta",
-  strata_cols="strt",
+  car_strata_cols="strt",
   covariate_cols=c("model_w3"),
   car_scheme="permuted-block",
   ref_arm=0
@@ -79,7 +79,7 @@ cl <- robincar_logrank(
   treat_col="I1",
   response_col="t",
   event_col="delta",
-  strata_cols="strt",
+  car_strata_cols="strt",
   covariate_cols=c("model_w3"),
   car_scheme="permuted-block",
   adj_method="CL",
@@ -95,7 +95,7 @@ csl <- robincar_logrank(
   treat_col="I1",
   response_col="t",
   event_col="delta",
-  strata_cols="strt",
+  car_strata_cols="strt",
   covariate_cols=c("model_w3"),
   car_scheme="permuted-block",
   adj_method="CSL",
