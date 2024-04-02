@@ -97,7 +97,7 @@ treatment group contrasts using a linear working model for continuous outcomes.<
 
 
 <dt>covariate_cols</dt>
-<dd><p>Names of columns in df with covariate variables</p></dd>
+<dd><p>Names of columns in df with covariate variables. **If you want to include the strata variables as covariates also, add them here.**</p></dd>
 
 
 <dt>car_scheme</dt>
@@ -115,11 +115,11 @@ treatment group contrasts using a linear working model for continuous outcomes.<
 <dt>contrast_dh</dt>
 <dd><p>An optional jacobian function for the contrast (otherwise use numerical derivative)</p></dd>
 
-
-<dt>covariate_to_include_strata</dt>
-<dd><p>Whether to include car_strata variables in covariate adjustment. Defaults to F for ANOVA and ANCOVA; defaults to T for ANHECOVA. User may override by passing in this argument.</p></dd>
-
 </dl></div>
+    <div id="details">
+    <h2>Details</h2>
+    <p>Note the difference between `robincar_linear` and `robincar_linear2` with regards to their `covariate_cols` argument.</p>
+    </div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
