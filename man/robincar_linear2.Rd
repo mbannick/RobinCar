@@ -25,7 +25,7 @@ robincar_linear2(
 
 \item{car_strata_cols}{Names of columns in df with car_strata variables}
 
-\item{covariate_cols}{Names of columns in df with covariate variables}
+\item{covariate_cols}{Names of columns in df with covariate variables. **If you want to include the strata variables as covariates also, add them here.**}
 
 \item{car_scheme}{Name of the type of covariate-adaptive randomization scheme. One of: "simple", "pocock-simon", "biased-coin", "permuted-block".}
 
@@ -38,4 +38,7 @@ robincar_linear2(
 \description{
 Estimate treatment-group-specific response means and (optionally)
 treatment group contrasts using a linear working model for continuous outcomes.
+}
+\details{
+Note the difference between `robincar_linear` and `robincar_linear2` with regards to their `covariate_cols` argument.
 }

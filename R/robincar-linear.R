@@ -54,11 +54,13 @@ robincar_linear <- function(df,
 #' Estimate treatment-group-specific response means and (optionally)
 #' treatment group contrasts using a linear working model for continuous outcomes.
 #'
+#' Note the difference between `robincar_linear` and `robincar_linear2` with regards to their `covariate_cols` argument.
+#'
 #' @param df A data.frame with the required columns
 #' @param treat_col Name of column in df with treatment variable
 #' @param response_col Name of the column in df with response variable
 #' @param car_strata_cols Names of columns in df with car_strata variables
-#' @param covariate_cols Names of columns in df with covariate variables
+#' @param covariate_cols Names of columns in df with covariate variables. **If you want to include the strata variables as covariates also, add them here.**
 #' @param car_scheme Name of the type of covariate-adaptive randomization scheme. One of: "simple", "pocock-simon", "biased-coin", "permuted-block".
 #' @param adj_method Name of linear adjustment method to use. One of: "ANOVA", "ANCOVA", "ANHECOVA".
 #' @param contrast_h An optional function to specify a desired contrast
