@@ -39,38 +39,38 @@ data$A <- as.factor(data$A)
 ### ANOVA Model
 
 ```{r}
-fit.anova <- robincar_linear(df = data, 
-                             response_col="y",
-                             treat_col="A",
-                             covariate_cols=c("x1", "x3"),
-                             car_scheme="simple",
-                             adj_method="ANOVA")
+fit.anova <- robincar_linear2(df = data, 
+                              response_col="y",
+                              treat_col="A",
+                              covariate_cols=c("x1", "x3"),
+                              car_scheme="simple",
+                              adj_method="ANOVA")
 ```
 
 ### ANCOVA model with biased coin randomization
 
 ```{r}
-fit.ancova <- robincar_linear(df = data, 
-                            response_col="y",
-                            treat_col="A",
-                            car_strata_cols=c("z1", "z2"),
-                            covariate_cols=c("x1", "x3"),
-                            car_scheme="biased-coin",
-                            adj_method="ANCOVA")
+fit.ancova <- robincar_linear2(df = data, 
+                               response_col="y",
+                               treat_col="A",
+                               car_strata_cols=c("z1", "z2"),
+                               covariate_cols=c("x1", "x3"),
+                               car_scheme="biased-coin",
+                               adj_method="ANCOVA")
 
 ```
 
 ### ANHECOVA model with Pocock-Simon randomization and linear contrast
 
 ```{r}
-fit.anhecova <- robincar_linear(df = data, 
-                                response_col="y",
-                                treat_col="A",
-                                car_strata_cols=c("z1", "z2"),
-                                covariate_cols=c("x1", "x3"),
-                                car_scheme="pocock-simon",
-                                adj_method="ANHECOVA",
-                                contrast_h="diff")
+fit.anhecova <- robincar_linear2(df = data, 
+                                 response_col="y",
+                                 treat_col="A",
+                                 car_strata_cols=c("z1", "z2"),
+                                 covariate_cols=c("x1", "x3"),
+                                 car_scheme="pocock-simon",
+                                 adj_method="ANHECOVA",
+                                 contrast_h="diff")
 ```
 
 ## Adjustment with Binary Outcomes
@@ -84,14 +84,13 @@ data$y_bin <- ifelse(data$y > 2, 1, 0)
 
 ```{r}
 glm.homogeneous<-robincar_glm(df = data,
-                              response_col="y_bin",
-                              treat_col="A",
-                              car_strata_cols=c("z1"),
-                              car_scheme="pocock-simon",
-                              g_family=binomial(link="logit"),
-                              g_accuracy=7,
-                              adj_method="heterogeneous",
-                              covariate_to_include_strata=TRUE)
+                               response_col="y_bin",
+                               treat_col="A",
+                               car_strata_cols=c("z1"),
+                               formula="y_bin ~ A*z1",
+                               car_scheme="pocock-simon",
+                               g_family=binomial(link="logit"),
+                               g_accuracy=7)
 glm.homogeneous
 ```
 
@@ -99,45 +98,42 @@ glm.homogeneous
 
 ```{r}
 glm.heterogeneous<-robincar_glm(df = data,
-                              response_col="y_bin",
-                              treat_col="A",
-                              car_strata_cols=c("z2"),
-                              covariate_cols=c("x1"),
-                              car_scheme="biased-coin",
-                              g_family=binomial(link="logit"),
-                              g_accuracy=7,
-                              covariate_to_include_strata=TRUE,
-                              adj_method="heterogeneous")
+                               response_col="y_bin",
+                               treat_col="A",
+                               car_strata_cols=c("z2"),
+                               formula="y_bin ~ A:(x1+z2)",
+                               car_scheme="biased-coin",
+                               g_family=binomial(link="logit"),
+                               g_accuracy=7)
+
 glm.heterogeneous
 ```
 
 ### Working model specified using a formula, with biased-coin randomization
 
 ```{r}
-glm.formula <- robincar_glm(df = data,
-                            response_col="y_bin",
-                            treat_col="A",
-                            formula="y_bin ~ A + z2:x1",
-                            car_strata_cols=c("z2"),
-                            car_scheme="biased-coin",
-                            g_family=binomial(link="logit"),
-                            g_accuracy=7)
+glm.formula <- robincar_glm2(df = data,
+                             response_col="y_bin",
+                             treat_col="A",
+                             formula="y_bin ~ A + z2:x1",
+                             car_strata_cols=c("z2"),
+                             car_scheme="biased-coin",
+                             g_family=binomial(link="logit"),
+                             g_accuracy=7)
 glm.formula
 ```
 
 ### Heterogeneous working model with biased-coin randomization, differences contrast
 
 ```{r}
-glm.heterogeneous <- robincar_glm(df = data,
-                                  response_col="y_bin",
-                                  treat_col="A",
-                                  car_strata_cols=c("z2"),
-                                  covariate_cols=c("x1"),
-                                  car_scheme="biased-coin",
-                                  g_family=binomial(link="logit"),
-                                  g_accuracy=7,
-                                  covariate_to_include_strata=TRUE,
-                                  adj_method="heterogeneous",
-                                  contrast_h="diff")
+glm.heterogeneous <- robincar_glm2(df = data,
+                                   response_col="y_bin",
+                                   treat_col="A",
+                                   car_strata_cols=c("z2"),
+                                   formula="y_bin ~ A * (x1 + z2)",
+                                   car_scheme="biased-coin",
+                                   g_family=binomial(link="logit"),
+                                   g_accuracy=7,
+                                   contrast_h="diff")
 glm.heterogeneous
 ```
