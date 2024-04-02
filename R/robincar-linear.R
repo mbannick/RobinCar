@@ -48,3 +48,39 @@ robincar_linear <- function(df,
 
   return(result)
 }
+
+#' Covariate adjustment using linear working model, with simplified interface.
+#'
+#' Estimate treatment-group-specific response means and (optionally)
+#' treatment group contrasts using a linear working model for continuous outcomes.
+#'
+#' @param df A data.frame with the required columns
+#' @param treat_col Name of column in df with treatment variable
+#' @param response_col Name of the column in df with response variable
+#' @param car_strata_cols Names of columns in df with car_strata variables
+#' @param covariate_cols Names of columns in df with covariate variables
+#' @param car_scheme Name of the type of covariate-adaptive randomization scheme. One of: "simple", "pocock-simon", "biased-coin", "permuted-block".
+#' @param adj_method Name of linear adjustment method to use. One of: "ANOVA", "ANCOVA", "ANHECOVA".
+#' @param contrast_h An optional function to specify a desired contrast
+#' @param contrast_dh An optional jacobian function for the contrast (otherwise use numerical derivative)
+#' @export
+robincar_linear2 <- function(df,
+                             treat_col, response_col, car_strata_cols=NULL, covariate_cols=NULL,
+                             car_scheme="simple", adj_method="ANOVA",
+                             contrast_h=NULL, contrast_dh=NULL){
+
+  obj <- robincar_linear(
+    df=df,
+    treat_col=treat_col,
+    response_col=response_col,
+    car_strata_cols=car_strata_cols,
+    covariate_cols=covariate_cols,
+    car_scheme=car_scheme,
+    adj_method=adj_method,
+    covariate_to_include_strata=FALSE,
+    contrast_h=contrast_h,
+    contrast_dh=contrast_dh
+  )
+
+  return(obj)
+}

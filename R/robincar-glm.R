@@ -1,10 +1,5 @@
 #' Covariate adjustment using generalized linear working model
 #'
-#' WARNING: this function is still under development.
-#' Estimate treatment-group-specific response means and (optionally)
-#' treatment group contrasts using a generalized linear working model.
-#'
-#'
 #' @param df A data.frame with the required columns
 #' @param treat_col Name of column in df with treatment variable
 #' @param response_col Name of the column in df with response variable
@@ -73,4 +68,41 @@ robincar_glm <- function(df,
   }
 
   return(result)
+}
+
+#' Covariate adjustment using generalized linear working model, with simplified interface.
+#'
+#' @param df A data.frame with the required columns
+#' @param treat_col Name of column in df with treatment variable
+#' @param response_col Name of the column in df with response variable
+#' @param formula The formula to use for adjustment specified using as.formula("..."). This overrides car_strata_cols and covariate_cols.
+#' @param car_strata_cols Names of columns in df with car_strata variables
+#' @param car_scheme Name of the type of covariate-adaptive randomization scheme. One of: "simple", "pocock-simon", "biased-coin", "permuted-block".
+#' @param contrast_h An optional function to specify a desired contrast
+#' @param contrast_dh An optional jacobian function for the contrast (otherwise use numerical derivative)
+#' @param g_family Family that would be supplied to glm(...), e.g., binomial. If no link specified, will use default link, like behavior in glm.
+#'                 If you wish to use a negative binomial working model with an unknown dispersion parameter, then use `g_family="nb"`.
+#' @param g_accuracy Level of accuracy to check prediction un-biasedness.
+#' @export
+robincar_glm2 <- function(df,
+                          treat_col, response_col,
+                          formula=NULL, car_strata_cols=NULL,
+                          car_scheme="simple",
+                          g_family=stats::gaussian, g_accuracy=7,
+                          contrast_h=NULL, contrast_dh=NULL){
+
+  obj <- robincar_glm(
+    df=df,
+    treat_col=treat_col,
+    response_col=response_col,
+    car_strata_cols=car_strata_cols,
+    car_scheme=car_scheme,
+    g_family=g_family,
+    g_accuracy=g_accuracy,
+    formula=formula,
+    contrast_h=contrast_h,
+    contrast_dh=contrast_dh
+  )
+
+  return(obj)
 }
