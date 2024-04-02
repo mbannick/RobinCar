@@ -90,12 +90,16 @@ validate.RoboDataTTE <- function(data, ref_arm){
   form <- deparse(stats::as.formula(form))
 
   # Replace formula with proper names for response and treatment
-  newform <- gsub(response_col, "response", form)
-  newform <- gsub(treat_col, "treat", newform)
+  # -- response should only be at beginning
+  newform <- gsub(paste0("^", response_col), "response", form)
+  # -- only replace for the entire word
+  newform <- gsub(paste0("\\b", treat_col, "\\b"), "treat", newform)
 
   # Extract covariate names from formula
   vars <- strsplit(newform, c("(~|\\+|:|\\*)"))[[1]]
   vars <- sapply(vars, function(x) gsub(" ", "", x))
+  vars <- sapply(vars, function(x) gsub("\\(", "", x))
+  vars <- sapply(vars, function(x) gsub("\\)", "", x))
 
   # Check to make sure that response and treatment columns
   # are in the formula
