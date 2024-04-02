@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RobinCar</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -59,6 +59,9 @@
       <a href="../articles/use-survival.html">Robust Testing for Time-to-Event Data</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right"></ul>
@@ -111,7 +114,7 @@ then perform linear and joint calibration.</p>
   df<span class="op">=</span><span class="va">data</span>,
   response_col<span class="op">=</span><span class="st">"y_bin"</span>,
   treat_col<span class="op">=</span><span class="st">"A"</span>,
-  strata_cols<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"z1"</span><span class="op">)</span>,
+  car_strata_cols<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"z1"</span><span class="op">)</span>,
   covariate_cols<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x3"</span><span class="op">)</span>,
   car_scheme<span class="op">=</span><span class="st">"biased-coin"</span>,
   g_family<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">binomial</a></span><span class="op">(</span>link<span class="op">=</span><span class="st">"logit"</span><span class="op">)</span>,
@@ -125,22 +128,22 @@ then perform linear and joint calibration.</p>
 <span class="co">#&gt; using adjustment variables: x3, joint levels of z1.</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Used HC0-type of heteroskedasticity-consistent variance estimates </span>
-<span class="co">#&gt; and adjusted variance-covariance matrix for randomization strata z1 </span>
+<span class="co">#&gt; and adjusted variance-covariance matrix for randomization car_strata z1 </span>
 <span class="co">#&gt; consistent with the biased-coin design.</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Estimates:</span>
 <span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 4</span></span>
 <span class="co">#&gt;   treat estimate     se `pval (2-sided)`</span>
 <span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 0        0.558 0.035<span style="text-decoration: underline;">4</span>        5.61<span style="color: #949494;">e</span><span style="color: #BB0000;">- 56</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 1        0.763 0.027<span style="text-decoration: underline;">6</span>        1.52<span style="color: #949494;">e</span><span style="color: #BB0000;">-168</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 2        0.718 0.030<span style="text-decoration: underline;">3</span>        3.18<span style="color: #949494;">e</span><span style="color: #BB0000;">-124</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 0        0.558 0.036<span style="text-decoration: underline;">9</span>        1.12<span style="color: #949494;">e</span><span style="color: #BB0000;">- 51</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 1        0.763 0.027<span style="text-decoration: underline;">1</span>        7.01<span style="color: #949494;">e</span><span style="color: #BB0000;">-175</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 2        0.718 0.030<span style="text-decoration: underline;">3</span>        3.42<span style="color: #949494;">e</span><span style="color: #BB0000;">-124</span></span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Variance-Covariance Matrix:</span>
 <span class="co">#&gt;           [,1]         [,2]         [,3]</span>
-<span class="co">#&gt; 0 1.251627e-03 1.002508e-04 3.171744e-05</span>
-<span class="co">#&gt; 1 1.002508e-04 7.611831e-04 9.390325e-05</span>
-<span class="co">#&gt; 2 3.171744e-05 9.390325e-05 9.164210e-04</span></code></pre></div>
+<span class="co">#&gt; 0 1.359508e-03 1.002508e-04 3.171744e-05</span>
+<span class="co">#&gt; 1 1.002508e-04 7.332810e-04 9.390325e-05</span>
+<span class="co">#&gt; 2 3.171744e-05 9.390325e-05 9.166562e-04</span></code></pre></div>
 <div class="section level3">
 <h3 id="calibration">Calibration<a class="anchor" aria-label="anchor" href="#calibration"></a>
 </h3>
@@ -158,22 +161,22 @@ fits a model with the predicted potential outcomes as covariates.</p>
 <span class="co">#&gt; using adjustment variables: x3, joint levels of z1.</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Used HC0-type of heteroskedasticity-consistent variance estimates </span>
-<span class="co">#&gt; and adjusted variance-covariance matrix for randomization strata z1 </span>
+<span class="co">#&gt; and adjusted variance-covariance matrix for randomization car_strata z1 </span>
 <span class="co">#&gt; consistent with the biased-coin design.</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Estimates:</span>
 <span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 4</span></span>
 <span class="co">#&gt;   treat estimate     se `pval (2-sided)`</span>
 <span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 0        0.607 0.035<span style="text-decoration: underline;">2</span>        1.25<span style="color: #949494;">e</span><span style="color: #BB0000;">- 66</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 1        0.765 0.027<span style="text-decoration: underline;">6</span>        3.52<span style="color: #949494;">e</span><span style="color: #BB0000;">-169</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 2        0.717 0.030<span style="text-decoration: underline;">4</span>        9.73<span style="color: #949494;">e</span><span style="color: #BB0000;">-123</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 0        0.607 0.037<span style="text-decoration: underline;">4</span>        2.32<span style="color: #949494;">e</span><span style="color: #BB0000;">- 59</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 1        0.765 0.027<span style="text-decoration: underline;">0</span>        2.45<span style="color: #949494;">e</span><span style="color: #BB0000;">-177</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 2        0.717 0.030<span style="text-decoration: underline;">4</span>        1.14<span style="color: #949494;">e</span><span style="color: #BB0000;">-122</span></span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Variance-Covariance Matrix:</span>
 <span class="co">#&gt;           [,1]         [,2]         [,3]</span>
-<span class="co">#&gt; 0 1.241131e-03 7.442724e-05 5.110205e-05</span>
-<span class="co">#&gt; 1 7.442724e-05 7.620323e-04 9.210614e-05</span>
-<span class="co">#&gt; 2 5.110205e-05 9.210614e-05 9.263788e-04</span></code></pre></div>
+<span class="co">#&gt; 0 1.397997e-03 7.442724e-05 5.110205e-05</span>
+<span class="co">#&gt; 1 7.442724e-05 7.265707e-04 9.210614e-05</span>
+<span class="co">#&gt; 2 5.110205e-05 9.210614e-05 9.269001e-04</span></code></pre></div>
 <p>Use <code>joint = TRUE</code> to indicate joint calibration. This
 fits a model with the predicted potential outcomes <em>and</em> the
 joint strata variables.</p>
@@ -189,22 +192,22 @@ joint strata variables.</p>
 <span class="co">#&gt; using adjustment variables: x3, joint levels of z1.</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Used HC0-type of heteroskedasticity-consistent variance estimates </span>
-<span class="co">#&gt; and adjusted variance-covariance matrix for randomization strata z1 </span>
+<span class="co">#&gt; and adjusted variance-covariance matrix for randomization car_strata z1 </span>
 <span class="co">#&gt; consistent with the biased-coin design.</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Estimates:</span>
 <span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 4</span></span>
 <span class="co">#&gt;   treat estimate     se `pval (2-sided)`</span>
 <span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 0        0.581 0.029<span style="text-decoration: underline;">5</span>        4.13<span style="color: #949494;">e</span><span style="color: #BB0000;">- 86</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 1        0.762 0.027<span style="text-decoration: underline;">6</span>        4.90<span style="color: #949494;">e</span><span style="color: #BB0000;">-168</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 2        0.722 0.029<span style="text-decoration: underline;">9</span>        1.20<span style="color: #949494;">e</span><span style="color: #BB0000;">-128</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 0        0.581 0.028<span style="text-decoration: underline;">7</span>        3.10<span style="color: #949494;">e</span><span style="color: #BB0000;">- 91</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 1        0.762 0.026<span style="text-decoration: underline;">8</span>        2.17<span style="color: #949494;">e</span><span style="color: #BB0000;">-177</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 2        0.722 0.030<span style="text-decoration: underline;">0</span>        1.32<span style="color: #949494;">e</span><span style="color: #BB0000;">-127</span></span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Variance-Covariance Matrix:</span>
 <span class="co">#&gt;           [,1]         [,2]         [,3]</span>
-<span class="co">#&gt; 0 8.728651e-04 5.447923e-05 2.322831e-06</span>
-<span class="co">#&gt; 1 5.447923e-05 7.606109e-04 1.013007e-04</span>
-<span class="co">#&gt; 2 2.322831e-06 1.013007e-04 8.943043e-04</span></code></pre></div>
+<span class="co">#&gt; 0 8.227905e-04 5.447923e-05 2.322831e-06</span>
+<span class="co">#&gt; 1 5.447923e-05 7.200310e-04 1.013007e-04</span>
+<span class="co">#&gt; 2 2.322831e-06 1.013007e-04 9.017343e-04</span></code></pre></div>
 <p>Use <code>add_x</code> to include additional covariates in the
 calibration. This fits a model with the predicted potential outcomes and
 specified additional covariates (and the joint strata if
@@ -222,22 +225,22 @@ specified additional covariates (and the joint strata if
 <span class="co">#&gt; using adjustment variables: x3, joint levels of z1.</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Used HC0-type of heteroskedasticity-consistent variance estimates </span>
-<span class="co">#&gt; and adjusted variance-covariance matrix for randomization strata z1 </span>
+<span class="co">#&gt; and adjusted variance-covariance matrix for randomization car_strata z1 </span>
 <span class="co">#&gt; consistent with the biased-coin design.</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Estimates:</span>
 <span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 4</span></span>
 <span class="co">#&gt;   treat estimate     se `pval (2-sided)`</span>
 <span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 0        0.577 0.029<span style="text-decoration: underline;">5</span>        5.46<span style="color: #949494;">e</span><span style="color: #BB0000;">- 85</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 1        0.762 0.027<span style="text-decoration: underline;">6</span>        6.00<span style="color: #949494;">e</span><span style="color: #BB0000;">-168</span></span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 2        0.723 0.029<span style="text-decoration: underline;">8</span>        4.73<span style="color: #949494;">e</span><span style="color: #BB0000;">-130</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 0        0.581 0.028<span style="text-decoration: underline;">7</span>        1.42<span style="color: #949494;">e</span><span style="color: #BB0000;">- 91</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 1        0.762 0.026<span style="text-decoration: underline;">8</span>        1.63<span style="color: #949494;">e</span><span style="color: #BB0000;">-177</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 2        0.726 0.029<span style="text-decoration: underline;">9</span>        1.16<span style="color: #949494;">e</span><span style="color: #BB0000;">-129</span></span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Variance-Covariance Matrix:</span>
 <span class="co">#&gt;           [,1]         [,2]         [,3]</span>
-<span class="co">#&gt; 0 8.720724e-04 5.333174e-05 1.159832e-05</span>
-<span class="co">#&gt; 1 5.333174e-05 7.607829e-04 9.926183e-05</span>
-<span class="co">#&gt; 2 1.159832e-05 9.926183e-05 8.888054e-04</span></code></pre></div>
+<span class="co">#&gt; 0 8.208537e-04 5.410047e-05 6.143287e-06</span>
+<span class="co">#&gt; 1 5.410047e-05 7.199448e-04 1.005663e-04</span>
+<span class="co">#&gt; 2 6.143287e-06 1.005663e-04 8.967651e-04</span></code></pre></div>
 </div>
 </div>
   </div>

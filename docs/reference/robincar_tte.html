@@ -19,7 +19,7 @@ or a covariate-adjusted robust Cox score test (`adj_method="coxscore"`).'><!-- m
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RobinCar</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -43,6 +43,9 @@ or a covariate-adjusted robust Cox score test (`adj_method="coxscore"`).'><!-- m
       <a href="../articles/use-survival.html">Robust Testing for Time-to-Event Data</a>
     </li>
   </ul></li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul><ul class="nav navbar-nav navbar-right"></ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -70,7 +73,7 @@ or a covariate-adjusted robust Cox score test (`adj_method="coxscore"`).</p>
   <span class="va">response_col</span>,
   <span class="va">event_col</span>,
   <span class="va">adj_method</span>,
-  strata_cols <span class="op">=</span> <span class="cn">NULL</span>,
+  car_strata_cols <span class="op">=</span> <span class="cn">NULL</span>,
   covariate_cols <span class="op">=</span> <span class="cn">NULL</span>,
   p_trt <span class="op">=</span> <span class="fl">0.5</span>,
   ref_arm <span class="op">=</span> <span class="cn">NULL</span>,
@@ -102,8 +105,8 @@ or a covariate-adjusted robust Cox score test (`adj_method="coxscore"`).</p>
 <dd><p>Adjustment method (one of "CL", "CSL", or "coxscore")</p></dd>
 
 
-<dt>strata_cols</dt>
-<dd><p>Names of columns in df with strata variables</p></dd>
+<dt>car_strata_cols</dt>
+<dd><p>Names of columns in df with car_strata variables</p></dd>
 
 
 <dt>covariate_cols</dt>
@@ -120,7 +123,7 @@ which results in using the first element of `unique(data[, treat_col])`.</p></dd
 
 
 <dt>sparse_remove</dt>
-<dd><p>Remove sparse strata from calculation</p></dd>
+<dd><p>Remove sparse car_strata from calculation</p></dd>
 
 
 <dt>car_scheme</dt>
