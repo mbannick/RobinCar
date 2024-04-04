@@ -19,7 +19,7 @@
   }
 
   x_exists <- !is.null(data$covariate)
-  z_exists <- !is.null(data$strata)
+  z_exists <- !is.null(data$car_strata)
 
   # Get logic for adjustment methods
   logic <- lmlogic(meth=structure(list(), class=adj_method),
@@ -58,7 +58,7 @@
   }
 
   x_exists <- !is.null(data$covariate)
-  z_exists <- !is.null(data$strata)
+  z_exists <- !is.null(data$car_strata)
 
   # Get logic for adjustment methods
   logic <- glmlogic(adj_method=adj_method, car_scheme=car_scheme,
@@ -93,7 +93,7 @@
                                    g_accuracy) {
 
   x_exists <- !is.null(data$covariate)
-  z_exists <- !is.null(data$strata)
+  z_exists <- !is.null(data$car_strata)
 
   # Get logic for adjustment methods
   logic <- SLlogic(car_scheme=car_scheme,
@@ -127,7 +127,7 @@
                                     p_trt, ref_arm, ...) {
 
   x_exists <- !is.null(data$covariate)
-  z_exists <- !is.null(data$strata)
+  z_exists <- !is.null(data$car_strata)
 
   # Get logic for adjustment methods
   logic <- ttelogic(adj_method=adj_method, car_scheme=car_scheme,

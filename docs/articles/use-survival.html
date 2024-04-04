@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RobinCar</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -59,6 +59,9 @@
       <a href="../articles/use-survival.html">Robust Testing for Time-to-Event Data</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right"></ul>
@@ -126,8 +129,8 @@ functions.</p>
 <span class="co"># Restructure data</span>
 <span class="va">data.simu</span> <span class="op">&lt;-</span> <span class="va">data.simu0</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
   <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span>
-    cols<span class="op">=</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"strata"</span><span class="op">)</span>,
-    names_prefix<span class="op">=</span><span class="st">"strata"</span>,
+    cols<span class="op">=</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">starts_with</a></span><span class="op">(</span><span class="st">"car_strata"</span><span class="op">)</span>,
+    names_prefix<span class="op">=</span><span class="st">"car_strata"</span>,
     names_to<span class="op">=</span><span class="st">"strt"</span>
   <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">value</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
@@ -146,7 +149,7 @@ functions.</p>
   treat_col<span class="op">=</span><span class="st">"I1"</span>,
   response_col<span class="op">=</span><span class="st">"t"</span>,
   event_col<span class="op">=</span><span class="st">"delta"</span>,
-  strata_cols<span class="op">=</span><span class="st">"strt"</span>,
+  car_strata_cols<span class="op">=</span><span class="st">"strt"</span>,
   covariate_cols<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model_w3"</span><span class="op">)</span>,
   car_scheme<span class="op">=</span><span class="st">"permuted-block"</span>,
   ref_arm<span class="op">=</span><span class="fl">0</span>
@@ -154,7 +157,7 @@ functions.</p>
 <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">cox</span><span class="op">)</span>
 <span class="co">#&gt; Performed coxscore test, </span>
 <span class="co">#&gt;   adjusting for covariates model_w3, </span>
-<span class="co">#&gt;   adjusting SE for strata strt</span>
+<span class="co">#&gt;   adjusting SE for car_strata strt</span>
 <span class="co">#&gt; ------------------------------------</span>
 <span class="co">#&gt;    Treatment N.total N.events</span>
 <span class="co">#&gt; 1:    I1 = 0      48       48</span>
@@ -178,7 +181,7 @@ test.</p>
   treat_col<span class="op">=</span><span class="st">"I1"</span>,
   response_col<span class="op">=</span><span class="st">"t"</span>,
   event_col<span class="op">=</span><span class="st">"delta"</span>,
-  strata_cols<span class="op">=</span><span class="st">"strt"</span>,
+  car_strata_cols<span class="op">=</span><span class="st">"strt"</span>,
   covariate_cols<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model_w3"</span><span class="op">)</span>,
   car_scheme<span class="op">=</span><span class="st">"permuted-block"</span>,
   adj_method<span class="op">=</span><span class="st">"CL"</span>,
@@ -205,7 +208,7 @@ logrank test.</p>
   treat_col<span class="op">=</span><span class="st">"I1"</span>,
   response_col<span class="op">=</span><span class="st">"t"</span>,
   event_col<span class="op">=</span><span class="st">"delta"</span>,
-  strata_cols<span class="op">=</span><span class="st">"strt"</span>,
+  car_strata_cols<span class="op">=</span><span class="st">"strt"</span>,
   covariate_cols<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"model_w3"</span><span class="op">)</span>,
   car_scheme<span class="op">=</span><span class="st">"permuted-block"</span>,
   adj_method<span class="op">=</span><span class="st">"CSL"</span>,
@@ -214,19 +217,19 @@ logrank test.</p>
 <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">csl</span><span class="op">)</span>
 <span class="co">#&gt; Performed covariate-adjusted stratified logrank test with covariates  model_w3,   and stratifying by  strt, </span>
 <span class="co">#&gt; ------------------------------------</span>
-<span class="co">#&gt;         Strata Treatment N.total N.events</span>
-<span class="co">#&gt;  1: strata = 1    I1 = 0      12       12</span>
-<span class="co">#&gt;  2: strata = 1    I1 = 1       6        6</span>
-<span class="co">#&gt;  3: strata = 2    I1 = 0       7        7</span>
-<span class="co">#&gt;  4: strata = 2    I1 = 1       9        9</span>
-<span class="co">#&gt;  5: strata = 3    I1 = 0      13       13</span>
-<span class="co">#&gt;  6: strata = 3    I1 = 1       9        9</span>
-<span class="co">#&gt;  7: strata = 4    I1 = 0       6        6</span>
-<span class="co">#&gt;  8: strata = 4    I1 = 1      15       15</span>
-<span class="co">#&gt;  9: strata = 5    I1 = 0       2        2</span>
-<span class="co">#&gt; 10: strata = 5    I1 = 1       6        6</span>
-<span class="co">#&gt; 11: strata = 6    I1 = 0       8        8</span>
-<span class="co">#&gt; 12: strata = 6    I1 = 1       7        7</span>
+<span class="co">#&gt;             Strata Treatment N.total N.events</span>
+<span class="co">#&gt;  1: car_strata = 1    I1 = 0      12       12</span>
+<span class="co">#&gt;  2: car_strata = 1    I1 = 1       6        6</span>
+<span class="co">#&gt;  3: car_strata = 2    I1 = 0       7        7</span>
+<span class="co">#&gt;  4: car_strata = 2    I1 = 1       9        9</span>
+<span class="co">#&gt;  5: car_strata = 3    I1 = 0      13       13</span>
+<span class="co">#&gt;  6: car_strata = 3    I1 = 1       9        9</span>
+<span class="co">#&gt;  7: car_strata = 4    I1 = 0       6        6</span>
+<span class="co">#&gt;  8: car_strata = 4    I1 = 1      15       15</span>
+<span class="co">#&gt;  9: car_strata = 5    I1 = 0       2        2</span>
+<span class="co">#&gt; 10: car_strata = 5    I1 = 1       6        6</span>
+<span class="co">#&gt; 11: car_strata = 6    I1 = 0       8        8</span>
+<span class="co">#&gt; 12: car_strata = 6    I1 = 1       7        7</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Reference arm is  I1 = 0 </span>
 <span class="co">#&gt; </span>

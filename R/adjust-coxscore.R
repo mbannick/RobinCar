@@ -17,7 +17,7 @@ get.linear.predictor <- function(df, covnames){
 
 #' @importFrom stats var
 #' @importFrom dplyr n
-get.strata.sum <- function(df, n, p_trt, sparse_remove=FALSE){
+get.car_strata.sum <- function(df, n, p_trt, sparse_remove=FALSE){
 
   ss <- df %>%
     dplyr::group_by(.data$carcov_z, .drop=TRUE) %>%
@@ -34,7 +34,7 @@ get.strata.sum <- function(df, n, p_trt, sparse_remove=FALSE){
 
   if(sparse_remove){
     if(any(ss$na_ind)){
-      .sparse.strata.warn()
+      .sparse.car_strata.warn()
       ss <- ss %>% dplyr::filter(!.data$na_ind)
     } else {
       ss <- ss %>% tidyr::replace_na(
@@ -71,7 +71,7 @@ adjust.CoxScore <- function(model, data){
   }
 
   df <- get.ordered.data(df, ref_arm=model$ref_arm)
-  strata_sum <- get.strata.sum(df,
+  strata_sum <- get.car_strata.sum(df,
                                n=data$n,
                                p_trt=model$p_trt,
                                sparse_remove=model$sparse_remove)

@@ -26,7 +26,7 @@ wlogrank<-function(data.simu){
 }
 
 ind_to_factor<-function(data.simu){
-  z<-data.simu[,grepl("strata",names(data.simu))]
+  z<-data.simu[,grepl("car_strata",names(data.simu))]
   n_strata<-dim(z)[2]
   n<-dim(z)[1]
   fz<-numeric(n)
@@ -49,7 +49,7 @@ wlogrank_var_calibrated<-function(data.simu,randomization,p_trt){ # try new vers
     data.rev[ind,(n_col-2):n_col]<-data.rev[ind-1,(n_col-2):n_col]
   }
 
-  strata_z<-data.rev[,grepl("strata",names(data.rev))]
+  strata_z<-data.rev[,grepl("car_strata",names(data.rev))]
   mean_at_risk<-data.rev$delta/data.rev$Y
   cumsum_at_risk<-cumsum(mean_at_risk)
   mean_at_risk_2<-data.rev$delta*data.rev$Y1/(data.rev$Y)^2
@@ -58,7 +58,7 @@ wlogrank_var_calibrated<-function(data.simu,randomization,p_trt){ # try new vers
   O_i<-data.rev$delta*(data.rev$I1-data.rev$Y1/data.rev$Y)-data.rev$I1*cumsum_at_risk+cumsum_at_risk_2
   O_i1<-data.rev$I1*O_i
   O_i0<- -data.rev$I0*O_i
-  strata_z<-data.rev[,grepl("strata",names(data.rev))]
+  strata_z<-data.rev[,grepl("car_strata",names(data.rev))]
   n_strata<-dim(strata_z)[2]
   z<-strata_z
   cond_var_1<-numeric(n_strata)
@@ -98,7 +98,7 @@ wlogrank_var_calibrated<-function(data.simu,randomization,p_trt){ # try new vers
 # score_robust<-function(data.simu,randomization,p_trt){
 #   data.rev<-data.sort(data.simu)
 #   x<-data.rev[,grepl("model",names(data.rev))] #only those has model
-#   x<-cbind(x,data.rev[,grepl("strata",names(data.rev))][,-1])
+#   x<-cbind(x,data.rev[,grepl("car_strata",names(data.rev))][,-1])
 #   n<-dim(data.rev)[1]
 #   data_sub<-data.frame(t=data.rev$t,delta=data.rev$delta,x)
 #   fit<-survival::coxph(survival::Surv(t,delta)~.,data=data_sub)
@@ -118,7 +118,7 @@ wlogrank_var_calibrated<-function(data.simu,randomization,p_trt){ # try new vers
 #   O_i1<-data.rev$I1*O_i
 #   O_i0<- -data.rev$I0*O_i
 #
-#   strata_z<-data.rev[,grepl("strata",names(data.rev))]
+#   strata_z<-data.rev[,grepl("car_strata",names(data.rev))]
 #   n_strata<-dim(strata_z)[2]
 #   z<-strata_z
 #   cond_var_1<-numeric(n_strata)
@@ -178,7 +178,7 @@ score_robust<-function(data.simu,randomization,p_trt){
   O_i1<-data.rev$I1*O_i
   O_i0<- -data.rev$I0*O_i
 
-  strata_z<-data.rev[,grepl("strata",names(data.rev))]
+  strata_z<-data.rev[,grepl("car_strata",names(data.rev))]
   n_strata<-dim(strata_z)[2]
   z<-strata_z
   cond_var_1<-numeric(n_strata)
@@ -223,7 +223,7 @@ score_robust<-function(data.simu,randomization,p_trt){
 score<-function(data.simu){
   data.rev<-data.sort(data.simu)
   x<-data.rev[,grepl("model",names(data.rev))] #only those has model
-  x<-cbind(x,data.rev[,grepl("strata",names(data.rev))][,-1])
+  x<-cbind(x,data.rev[,grepl("car_strata",names(data.rev))][,-1])
   n<-dim(data.rev)[1]
   data_sub<-data.frame(t=data.rev$t,delta=data.rev$delta,x)
   fit<-survival::coxph(survival::Surv(t,delta)~.,data=data_sub)
@@ -248,7 +248,7 @@ score<-function(data.simu){
 score_numerator<-function(data.simu){
   data.rev<-data.sort(data.simu)
   x<-data.rev[,grepl("model",names(data.rev))] #only those has model
-  x<-cbind(x,data.rev[,grepl("strata",names(data.rev))][,-1])
+  x<-cbind(x,data.rev[,grepl("car_strata",names(data.rev))][,-1])
   n<-dim(data.rev)[1]
   data_sub<-data.frame(t=data.rev$t,delta=data.rev$delta,x)
   fit<-survival::coxph(survival::Surv(t,delta)~.,data=data_sub)
@@ -498,7 +498,7 @@ covariate_adjusted_logrank <- function(data.simu, p_trt, Z=TRUE) {
     x.mat <- model.matrix( ~ x.model, data = data.rev)[, -1]
   }
 
-  # Need this if there's only one covariate and no strata
+  # Need this if there's only one covariate and no car_strata
   x.mat <- as.matrix(x.mat)
   x.centered <- sweep(x.mat, 2, colMeans(x.mat))
   # calculating beta0 and beta1 for variance estimation

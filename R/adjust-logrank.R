@@ -20,16 +20,16 @@ adjust.LogRank <- function(model, data){
       ssig_l = .data$event * .data$Y0 * .data$Y1 / .data$Y^2
     )
 
-  # Summarize by strata (if CL, then single strata)
+  # Summarize by car_strata (if CL, then single car_strata)
   ss <- df %>%
     dplyr::filter(!is.na(.data$uu_cl)) %>%
-    dplyr::group_by(.data$strata) %>%
+    dplyr::group_by(.data$car_strata) %>%
     dplyr::summarise(
       U_SL_z  = sum(.data$uu_cl),
       var_adj = model$p_trt * (1 - model$p_trt) * unique(.data$bsigb) * dplyr::n(),
       .groups = "drop"
     ) %>%
-    dplyr::arrange(.data$strata)
+    dplyr::arrange(.data$car_strata)
 
   # Final quantities for the C(S)L statistic
   U_CSL     <- mean(df$uu_cl)

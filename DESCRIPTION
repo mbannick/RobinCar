@@ -1,7 +1,7 @@
 Package: RobinCar
 Type: Package
 Title: Robust Estimation and Inference in Covariate-Adaptive Randomization
-Version: 0.1.0
+Version: 0.2.0
 Author: Ting Ye, Yanyao Yi, Marlena Bannick, Faith Bian
 Maintainer: Marlena Bannick <mnorwood@uw.edu>
 Description: Performs robust estimation and inference when using covariate adjustment and/or covariate-adaptive randomization in randomized controlled trials.

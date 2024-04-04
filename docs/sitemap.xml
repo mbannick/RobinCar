@@ -28,6 +28,9 @@
     <loc>/index.html</loc>
   </url>
   <url>
+    <loc>/news/index.html</loc>
+  </url>
+  <url>
     <loc>/reference/car_pb.html</loc>
   </url>
   <url>
@@ -85,7 +88,13 @@
     <loc>/reference/robincar_glm.html</loc>
   </url>
   <url>
+    <loc>/reference/robincar_glm2.html</loc>
+  </url>
+  <url>
     <loc>/reference/robincar_linear.html</loc>
+  </url>
+  <url>
+    <loc>/reference/robincar_linear2.html</loc>
   </url>
   <url>
     <loc>/reference/robincar_logrank.html</loc>

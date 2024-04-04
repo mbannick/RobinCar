@@ -7,7 +7,7 @@ test_that("test calibration", {
     df=DATA,
     response_col="y",
     treat_col="A",
-    strata_cols=c("z1"),
+    car_strata_cols=c("z1"),
     covariate_cols=c("x3"),
     covariate_to_include_strata=FALSE,
     car_scheme="biased-coin",

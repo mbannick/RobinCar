@@ -113,7 +113,7 @@ Robin_g <- function(robin.data = data.tmp,
       )){
       robin.predunbiased <- T
     }else{
-      stop("minimization requires estimator to be predictive unbiased across every strata of joint z!")
+      stop("minimization requires estimator to be predictive unbiased across every car_strata of joint z!")
     }
 
   }else{ # car.scheme != "minimization", i.e., car.scheme %in% SR or commonly used CAR
@@ -190,7 +190,7 @@ Robin_g <- function(robin.data = data.tmp,
   if(car.scheme %in% c("SR", "minimization")){
     robin.varcov.term5 <- 0
     # by definition, SR > robin.varcov.term5 to be zero
-    # by previous check, minimization requires predictive unbiasedness across all strata of joint_z
+    # by previous check, minimization requires predictive unbiasedness across all car_strata of joint_z
 
   }else if(car.scheme %in% c("PB", "stratified_biased_coin")){
     robin.varcov.term5.omiga.SR <- diag(robin.trt_pie$pie_A) - robin.trt_pie$pie_A %*% t(robin.trt_pie$pie_A)

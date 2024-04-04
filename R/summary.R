@@ -63,10 +63,10 @@ print.TTEResult <- function(x, ...){
   } else {
     covariates <- c()
   }
-  if(!is.null(x$data$strata)){
-    strata <- colnames(x$data$strata)
+  if(!is.null(x$data$car_strata)){
+    car_strata <- colnames(x$data$car_strata)
   } else {
-    strata <- c()
+    car_strata <- c()
   }
   if(x$settings$method == "CSL"){
     if((x$settings$car_strata)){
@@ -77,10 +77,10 @@ print.TTEResult <- function(x, ...){
     if((x$settings$adj_cov) | x$settings$adj_strata){
       if("TTEResultEst" %in% class(x)){
         cat("Performed covariate-adjusted cox hazard ratio estimation with covariates ",
-            paste0(c(covariates, strata), sep=", "))
+            paste0(c(covariates, car_strata), sep=", "))
       } else {
         cat("Performed covariate-adjusted logrank test with covariates ",
-            paste0(c(covariates, strata), sep=", "))
+            paste0(c(covariates, car_strata), sep=", "))
       }
     } else {
       if("TTEResultEst" %in% class(x)){
@@ -94,19 +94,19 @@ print.TTEResult <- function(x, ...){
       if("TTEResultEst" %in% class(x)){
         cat("Performed covariate-adjusted cox hazard ratio estimation with covariates ",
             paste0(c(covariates), sep=", "),
-            " and stratifying by ", paste0(c(strata), sep=", "))
+            " and stratifying by ", paste0(c(car_strata), sep=", "))
       } else {
         cat("Performed covariate-adjusted stratified logrank test with covariates ",
             paste0(c(covariates), sep=", "),
-            " and stratifying by ", paste0(c(strata), sep=", "))
+            " and stratifying by ", paste0(c(car_strata), sep=", "))
       }
     } else {
       if("TTEResultEst" %in% class(x)){
         cat("Performed stratified cox hazard ratio estimation stratifying by ",
-            paste0(c(strata), sep=", "))
+            paste0(c(car_strata), sep=", "))
       } else {
         cat("Performed stratified logrank test stratifying by ",
-            paste0(c(strata), sep=", "))
+            paste0(c(car_strata), sep=", "))
       }
     }
   } else if(x$settings$method == "coxscore"){
@@ -115,7 +115,7 @@ print.TTEResult <- function(x, ...){
       cat(", \n  adjusting for covariates", paste0(covariates, collapse=", "))
     }
     if(x$settings$adj_strata){
-      cat(", \n  adjusting SE for strata", paste0(strata, collapse=", "))
+      cat(", \n  adjusting SE for car_strata", paste0(car_strata, collapse=", "))
     }
   }
   cat("\n------------------------------------\n")
@@ -135,15 +135,15 @@ print.TTEResult <- function(x, ...){
   txtitle <- "Treatment Group"
 
   if(x$settings$car_strata){
-    df$strata <- x$data$joint_strata
-    id.cols <- c(id.cols, "strata")
-    data.table::setorder(df, strata, treat)
+    df$car_strata <- x$data$joint_strata
+    id.cols <- c(id.cols, "car_strata")
+    data.table::setorder(df, car_strata, treat)
   }
   summ <- df[, lapply(.SD, sum), by=id.cols, .SDcols=c("N", "observed")]
   summ[, name := paste0(x$data$treat_col, " = ", treat)]
 
   if(x$settings$car_strata){
-    summ[, strata_col := paste0("strata = ", strata)]
+    summ[, strata_col := paste0("car_strata = ", car_strata)]
     summ <- summ[, c("strata_col", "name", "N", "observed"), with=F]
     data.table::setnames(summ, c("Strata", "Treatment", "N.total", "N.events"))
   } else {

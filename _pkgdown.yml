@@ -16,7 +16,9 @@ reference:
     Robust estimation and inference for covariate-adaptive randomization schemes in randomized controlled trials. Includes linear and non-linear (glm) adjustment working models.
 - contents:
   - robincar_linear
+  - robincar_linear2
   - robincar_glm
+  - robincar_glm2
   - robincar_calibrate
   - robincar_contrast
   - robincar_logrank

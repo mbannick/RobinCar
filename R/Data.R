@@ -90,12 +90,16 @@ validate.RoboDataTTE <- function(data, ref_arm){
   form <- deparse(stats::as.formula(form))
 
   # Replace formula with proper names for response and treatment
-  newform <- gsub(response_col, "response", form)
-  newform <- gsub(treat_col, "treat", newform)
+  # -- response should only be at beginning
+  newform <- gsub(paste0("^", response_col), "response", form)
+  # -- only replace for the entire word
+  newform <- gsub(paste0("\\b", treat_col, "\\b"), "treat", newform)
 
   # Extract covariate names from formula
   vars <- strsplit(newform, c("(~|\\+|:|\\*)"))[[1]]
   vars <- sapply(vars, function(x) gsub(" ", "", x))
+  vars <- sapply(vars, function(x) gsub("\\(", "", x))
+  vars <- sapply(vars, function(x) gsub("\\)", "", x))
 
   # Check to make sure that response and treatment columns
   # are in the formula
@@ -176,17 +180,17 @@ validate.RoboDataTTE <- function(data, ref_arm){
   if(!is.null(data$event)){
     data$event <- as.vector(data$event[[1]])
   }
-  if(ncol(data$strata) == 0){
-    data$strata <- NULL
+  if(ncol(data$car_strata) == 0){
+    data$car_strata <- NULL
   }
-  if(!is.null(data$strata)){
-    # Create joint strata levels
-    data$joint_strata <- joint.strata(data$strata)
+  if(!is.null(data$car_strata)){
+    # Create joint car_strata levels
+    data$joint_strata <- joint.car_strata(data$car_strata)
     data$joint_strata_levels <- levels(data$joint_strata)
 
-    # Make sure all strata are factors
-    for(col in colnames(data$strata)){
-      data$strata[col] <- as.factor(data$strata[[col]])
+    # Make sure all car_strata are factors
+    for(col in colnames(data$car_strata)){
+      data$car_strata[col] <- as.factor(data$car_strata[[col]])
     }
   }
   if(ncol(data$covariate) == 0){

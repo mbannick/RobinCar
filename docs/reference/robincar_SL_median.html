@@ -21,7 +21,7 @@ Perform median adjustment to limit randomness induced from cross-fitting."><!-- 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RobinCar</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -45,6 +45,9 @@ Perform median adjustment to limit randomness induced from cross-fitting."><!-- 
       <a href="../articles/use-survival.html">Robust Testing for Time-to-Event Data</a>
     </li>
   </ul></li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul><ul class="nav navbar-nav navbar-right"></ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -73,7 +76,7 @@ Perform median adjustment to limit randomness induced from cross-fitting.</p>
   <span class="va">df</span>,
   <span class="va">treat_col</span>,
   <span class="va">response_col</span>,
-  strata_cols <span class="op">=</span> <span class="cn">NULL</span>,
+  car_strata_cols <span class="op">=</span> <span class="cn">NULL</span>,
   covariate_cols <span class="op">=</span> <span class="cn">NULL</span>,
   car_scheme <span class="op">=</span> <span class="st">"simple"</span>,
   covariate_to_include_strata <span class="op">=</span> <span class="cn">NULL</span>,
@@ -108,8 +111,8 @@ Perform median adjustment to limit randomness induced from cross-fitting.</p>
 <dd><p>Name of the column in df with response variable</p></dd>
 
 
-<dt>strata_cols</dt>
-<dd><p>Names of columns in df with strata variables</p></dd>
+<dt>car_strata_cols</dt>
+<dd><p>Names of columns in df with car_strata variables</p></dd>
 
 
 <dt>covariate_cols</dt>
@@ -121,7 +124,7 @@ Perform median adjustment to limit randomness induced from cross-fitting.</p>
 
 
 <dt>covariate_to_include_strata</dt>
-<dd><p>Whether to include strata variables in covariate adjustment. Defaults to F for ANOVA and ANCOVA; defaults to T for ANHECOVA. User may override by passing in this argument.</p></dd>
+<dd><p>Whether to include car_strata variables in covariate adjustment. Defaults to F for ANOVA and ANCOVA; defaults to T for ANHECOVA. User may override by passing in this argument.</p></dd>
 
 
 <dt>SL_libraries</dt>

@@ -12,10 +12,10 @@
 #' @param df A data.frame with the required columns
 #' @param treat_col Name of column in df with treatment variable
 #' @param response_col Name of the column in df with response variable
-#' @param strata_cols Names of columns in df with strata variables
+#' @param car_strata_cols Names of columns in df with car_strata variables
 #' @param covariate_cols Names of columns in df with covariate variables
 #' @param car_scheme Name of the type of covariate-adaptive randomization scheme. One of: "simple", "pocock-simon", "biased-coin", "permuted-block".
-#' @param covariate_to_include_strata Whether to include strata variables in covariate adjustment. Defaults to F for ANOVA and ANCOVA; defaults to T for ANHECOVA. User may override by passing in this argument.
+#' @param covariate_to_include_strata Whether to include car_strata variables in covariate adjustment. Defaults to F for ANOVA and ANCOVA; defaults to T for ANHECOVA. User may override by passing in this argument.
 #' @param contrast_h An optional function to specify a desired contrast
 #' @param contrast_dh An optional jacobian function for the contrast (otherwise use numerical derivative)
 #' @param SL_libraries Vector of super-learner libraries to use for the covariate adjustment (see SuperLearner::listWrappers())
@@ -60,7 +60,7 @@
 #'   df=DATA2,
 #'   response_col="y",
 #'   treat_col="A",
-#'   strata_cols=c("z1"),
+#'   car_strata_cols=c("z1"),
 #'   covariate_cols=c("x1"),
 #'   SL_libraries=c("SL.ranger"),
 #'   car_scheme="permuted-block",
@@ -70,7 +70,7 @@
 #' sl.mod$result
 #'
 robincar_SL <- function(df,
-                        treat_col, response_col, strata_cols=NULL, covariate_cols=NULL,
+                        treat_col, response_col, car_strata_cols=NULL, covariate_cols=NULL,
                         car_scheme="simple",
                         covariate_to_include_strata=NULL,
                         SL_libraries=c(), SL_learners=c(),
@@ -91,7 +91,7 @@ robincar_SL <- function(df,
     df=df, classname="RoboDataSL",
     treat_col=treat_col,
     response_col=response_col,
-    strata_cols=strata_cols,
+    car_strata_cols=car_strata_cols,
     covariate_cols=covariate_cols
   )
   validate(data)
@@ -144,7 +144,7 @@ robincar_SL <- function(df,
 #' @export
 robincar_SL_median <- function(n_times, seed, df,
                                treat_col, response_col,
-                               strata_cols=NULL, covariate_cols=NULL,
+                               car_strata_cols=NULL, covariate_cols=NULL,
                                car_scheme="simple",
                                covariate_to_include_strata=NULL,
                                SL_libraries=c(), SL_learners=c(),
@@ -164,7 +164,7 @@ robincar_SL_median <- function(n_times, seed, df,
       df=df,
       treat_col=treat_col,
       response_col=response_col,
-      strata_cols=strata_cols,
+      car_strata_cols=car_strata_cols,
       covariate_cols=covariate_cols,
       car_scheme=car_scheme,
       covariate_to_include_strata=covariate_to_include_strata,

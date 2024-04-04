@@ -43,7 +43,7 @@ descript.GLMModelResult <- function(x, ...){
       cov_name <- c(
         cov_name,
         sprintf("joint levels of %s",
-                paste0(names(x$data$strata), collapse=", "))
+                paste0(names(x$data$car_strata), collapse=", "))
       )
     }
     if(!is.null(x$settings$adj_vars)){
@@ -72,11 +72,11 @@ descript.GLMModelResult <- function(x, ...){
   )
   if(!is.null(x$settings$omegaz_func)){
     if(all(x$settings$omegaz_func(x$data$pie) == 0)){
-      strata <- colnames(x$data$strata)
+      car_strata <- colnames(x$data$car_strata)
       output <- c(
         output,
-        sprintf("\nand adjusted variance-covariance matrix for randomization strata %s \nconsistent with the %s design.",
-              paste0(strata, collapse=", "),
+        sprintf("\nand adjusted variance-covariance matrix for randomization car_strata %s \nconsistent with the %s design.",
+              paste0(car_strata, collapse=", "),
               x$settings$car_scheme)
       )
     }
