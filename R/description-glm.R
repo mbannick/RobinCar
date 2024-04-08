@@ -6,6 +6,7 @@ descript.GLMModelResult <- function(x, ...){
   } else {
     etype <- "g-computation-type"
   }
+
   if(is.character(x$settings$g_family)){
     if(x$settings$g_family == "nb"){
       family <- "negative binomial with unknown dispersion"
@@ -20,11 +21,16 @@ descript.GLMModelResult <- function(x, ...){
 
   if(!is.null(x$data$formula)){
 
-    if(x$settings$g_family == "nb"){
-      form <- x$data$formula
+    if(is.character(x$settings$g_family)){
+      if(x$settings$g_family == "nb"){
+        form <- x$data$formula
+      } else {
+        form <- x$mod$formula
+      }
     } else {
       form <- x$mod$formula
     }
+
     output <- c(
       output,
       sprintf("Treatment group mean estimates from a GLM working model of family %s and link %s using formula: \n",
