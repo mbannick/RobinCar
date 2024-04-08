@@ -241,6 +241,21 @@ test_that("GLM full function -- NEGATIVE binomial, permuted block", {
     covariate_to_include_strata=TRUE)
   expect_equal(class(non), "GLMModelResult")
 
+  non
+
+  # Test with formula
+  non <- robincar_glm2(
+    df=DATA2,
+    response_col="y",
+    treat_col="A",
+    car_strata_cols=c("z1"),
+    formula="y ~ A + z1",
+    car_scheme="permuted-block",
+    g_family="nb",
+    g_accuracy=7)
+
+  non
+
 })
 
 test_that("GLM Settings", {
