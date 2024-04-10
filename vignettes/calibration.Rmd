@@ -3,7 +3,7 @@ title: "Calibration for GLM Models"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Calibration for GLM Models}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{knitr::knitr}
   %\VignetteEncoding{UTF-8}
 ---
 

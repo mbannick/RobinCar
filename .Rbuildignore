@@ -1,4 +1,8 @@
 ^.*\.Rproj$
+RobinCar.Rproj
+*.tar.gz*
+docs/
+doc/
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^_pkgdown\.yml$
