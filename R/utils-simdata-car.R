@@ -8,6 +8,8 @@
 #'
 #' @examples
 #' car_sr(10, p_trt=0.4)
+#'
+#' @returns A vector of treatment assignments as 0's and 1's based on simple randomization.
 car_sr <- function(n, p_trt){
   I <- stats::rbinom(n, 1, p_trt)
   return(I)
@@ -34,6 +36,8 @@ car_sr <- function(n, p_trt){
 #'      mutate(across(where(is.numeric), as.factor))
 #'
 #' car_pb(z[, 2:5], c(0, 1, 2), trt_alc=c(1/4, 1/2, 1/4), blocksize=4L)
+#'
+#' @returns A vector of treatment assignments with labels from the `trt_label` argument, based on stratified permuted block randomization.
 car_pb <- function(z, trt_label, trt_alc, blocksize=4L) {
 
   car_strata <- z
@@ -49,7 +53,7 @@ car_pb <- function(z, trt_label, trt_alc, blocksize=4L) {
   A_blk <- rep(trt_label, ntrt_blk)
 
   if(length(A_blk) != blocksize){
-    stop(print("car.blocksize*car.trt_alc/sum(car.trt_alc) should be integers!"))
+    stop("car.blocksize*car.trt_alc/sum(car.trt_alc) should be integers!")
   }
 
   strata_cross <- car_strata %>%
@@ -103,6 +107,8 @@ car_pb <- function(z, trt_label, trt_alc, blocksize=4L) {
 #'   ratio=c(1, 1, 1),
 #'   imb_measure="Range"
 #' )
+#'
+#' @returns A vector of treatment assignments with labels from the `treat` argument, based on Pocock-Simon's minimization.
 car_ps <- function(z, treat, ratio, imb_measure, p_bc=0.8){
 
   if(!imb_measure %in% c("Range", "SD")) stop("Unrecognized imbalance measure.")

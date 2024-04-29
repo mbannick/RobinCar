@@ -42,9 +42,9 @@ robincar_SL_median(
 
 \item{covariate_to_include_strata}{Whether to include car_strata variables in covariate adjustment. Defaults to F for ANOVA and ANCOVA; defaults to T for ANHECOVA. User may override by passing in this argument.}
 
-\item{SL_libraries}{Vector of super-learner libraries to use for the covariate adjustment (see SuperLearner::listWrappers())}
+\item{SL_libraries}{Vector of super-learner libraries to use for the covariate adjustment (see \link{SuperLearner::listWrappers})}
 
-\item{SL_learners}{Optional list of super-learner "learners" to use for the covariate adjustment (see SuperLearner::create.Learner)}
+\item{SL_learners}{Optional list of super-learner "learners" to use for the covariate adjustment (see \link{SuperLearner::create.Learner})}
 
 \item{k_split}{Number of splits to use in cross-fitting}
 
@@ -53,6 +53,10 @@ robincar_SL_median(
 \item{contrast_h}{An optional function to specify a desired contrast}
 
 \item{contrast_dh}{An optional jacobian function for the contrast (otherwise use numerical derivative)}
+}
+\value{
+See value of \link{RobinCar::robincar_SL}.
+Attributes `mods` and `mu_as` are lists of `mod` and `mu_a` attributes, respectively, for each replicate of `robincar_SL` used in the median.
 }
 \description{
 Estimate treatment-group-specific response means and (optionally)

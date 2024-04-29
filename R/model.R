@@ -6,7 +6,7 @@
 # with settings for covariate randomization
 # scheme and vcovHC type.
 .make.model.RoboDataLinear <- function(data, adj_method, car_scheme, vcovHC,
-                                       covariate_to_include_strata) {
+                                       covariate_to_include_strata, ...) {
 
   if(is.null(covariate_to_include_strata)){
     if(adj_method == "ANHECOVA"){
@@ -45,7 +45,7 @@
 # scheme and vcovHC type.
 .make.model.RoboDataGLM <- function(data, adj_method, car_scheme, vcovHC,
                                     covariate_to_include_strata,
-                                    g_family, g_accuracy) {
+                                    g_family, g_accuracy, ...) {
 
   if(is.null(covariate_to_include_strata)){
     if(adj_method == "heterogeneous"){
@@ -90,7 +90,7 @@
                                    covariate_to_include_strata,
                                    SL_libraries, SL_learners,
                                    k_split,
-                                   g_accuracy) {
+                                   g_accuracy, ...) {
 
   x_exists <- !is.null(data$covariate)
   z_exists <- !is.null(data$car_strata)

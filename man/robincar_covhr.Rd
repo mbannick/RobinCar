@@ -43,6 +43,16 @@ which results in using the first element of `unique(data[, treat_col])`.}
 
 \item{interval}{Interval for uniroot function}
 }
+\value{
+An object with attribute named "result", which lists:
+
+\item{theta_L}{estimate of the hazard ratio}
+\item{se_theta_L}{SE estimate of the hazard ratio}
+\item{theta_CL}{estimate of the covariate-adjusted hazard ratio}
+\item{se_theta_CL}{SE estimate of the covariate-adjusted hazard ratio}
+
+Other attributes are the settings used, data attributes, and the original data frame supplied by the user.
+}
 \description{
 Estimate a covariate-adjusted hazard ratio (`adj_method="CL"`),
 or a covariate-adjusted stratified hazard ratio (`adj_method="CSL"`).

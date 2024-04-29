@@ -53,7 +53,8 @@ get.car_strata.sum <- function(df, n, p_trt, sparse_remove=FALSE){
   return(ss)
 }
 
-adjust.CoxScore <- function(model, data){
+#' @exportS3Method
+adjust.CoxScore <- function(model, data, ...){
 
   # Creates data
   df <- create.tte.df(model, data)

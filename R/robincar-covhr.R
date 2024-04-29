@@ -19,6 +19,16 @@
 #' @param interval Interval for uniroot function
 #'
 #' @export
+#'
+#' @returns An object with attribute named "result", which lists:
+#'
+#' \item{theta_L}{estimate of the hazard ratio}
+#' \item{se_theta_L}{SE estimate of the hazard ratio}
+#' \item{theta_CL}{estimate of the covariate-adjusted hazard ratio}
+#' \item{se_theta_CL}{SE estimate of the covariate-adjusted hazard ratio}
+#'
+#' Other attributes are the settings used, data attributes, and the original data frame supplied by the user.
+#'
 robincar_covhr <- function(df,
                            treat_col, response_col, event_col,
                            car_strata_cols=NULL, covariate_cols=NULL,

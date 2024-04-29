@@ -1,10 +1,5 @@
 ---
 title: "Robust Testing for Time-to-Event Data"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Robust Testing for Time-to-Event Data}
-  %\VignetteEngine{knitr::knitr}
-  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}

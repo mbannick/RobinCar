@@ -36,9 +36,9 @@ robincar_SL(
 
 \item{covariate_to_include_strata}{Whether to include car_strata variables in covariate adjustment. Defaults to F for ANOVA and ANCOVA; defaults to T for ANHECOVA. User may override by passing in this argument.}
 
-\item{SL_libraries}{Vector of super-learner libraries to use for the covariate adjustment (see SuperLearner::listWrappers())}
+\item{SL_libraries}{Vector of super-learner libraries to use for the covariate adjustment (see \link{SuperLearner::listWrappers})}
 
-\item{SL_learners}{Optional list of super-learner "learners" to use for the covariate adjustment (see SuperLearner::create.Learner)}
+\item{SL_learners}{Optional list of super-learner "learners" to use for the covariate adjustment (see \link{SuperLearner::create.Learner})}
 
 \item{k_split}{Number of splits to use in cross-fitting}
 
@@ -48,6 +48,10 @@ robincar_SL(
 
 \item{contrast_dh}{An optional jacobian function for the contrast (otherwise use numerical derivative)}
 }
+\value{
+See value of \link{RobinCar::robincar_glm}, but the working model for \eqn{\hat{\mu}(X_i)} is based on the \link{AIPW:AIPW} package that uses specified SuperLearner libraries and cross-fitting.
+Also, `mod` attribute is an object of class \link{AIPW::AIPW}.
+}
 \description{
 Estimate treatment-group-specific response means and (optionally)
 treatment group contrasts using a generalized linear working model.
@@ -55,7 +59,7 @@ treatment group contrasts using a generalized linear working model.
 \details{
 *WARNING: This function is still under development and has not been extensively tested.*
 This function currently only works for two treatment groups.
-Before using this function, you must load the SuperLearner library with
+Before using this function, you must load the \link{SuperLearner} library with
 `library(SuperLearner)`, otherwise the function call will fail.
 }
 \examples{

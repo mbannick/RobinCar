@@ -23,6 +23,16 @@ data_gen(
 
 \item{case}{simulation case in the paper}
 }
+\value{
+A data frame with the following columns:
+
+\item{t}{event time}
+\item{delta}{event indicator}
+\item{I1}{assignment to treatment group 1}
+\item{I0}{assignment to treatment group 0}
+\item{model_z1, model_z2}{covariates}
+\item{car_strata1, ...}{strata variables}
+}
 \description{
 Data generation function from JRSS-B paper
 }

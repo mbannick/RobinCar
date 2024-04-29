@@ -33,7 +33,8 @@ validate <- function (data, ...) {
   UseMethod("validate", data)
 }
 
-validate.RoboDataLinear <- function(data){
+#' @exportS3Method
+validate.RoboDataLinear <- function(data, ...){
 
   errors <- character()
   errors <- c(errors, .check.attributes(data, "treat", "response"))
@@ -43,21 +44,24 @@ validate.RoboDataLinear <- function(data){
   .return.error(errors)
 }
 
-validate.RoboDataGLM <- function(data){
+#' @exportS3Method
+validate.RoboDataGLM <- function(data, ...){
 
   errors <- character()
   .return.error(errors)
 
 }
 
-validate.RoboDataSL <- function(data){
+#' @exportS3Method
+validate.RoboDataSL <- function(data, ...){
 
   errors <- character()
   .return.error(errors)
 
 }
 
-validate.RoboDataTTE <- function(data, ref_arm){
+#' @exportS3Method
+validate.RoboDataTTE <- function(data, ref_arm, ...){
 
   errors <- character()
   errors <- c(errors, .check.attributes(data, "treat", "response", "event"))
@@ -72,7 +76,7 @@ validate.RoboDataTTE <- function(data, ref_arm){
     if(!ref_arm %in% data$treat_levels){
       errors <- c(
         errors,
-        sprintf(
+        message(
           "The reference group %s is not in the treatment levels %s",
           ref_arm,
           data$treat_levels

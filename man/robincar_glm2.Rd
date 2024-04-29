@@ -39,6 +39,9 @@ If you wish to use a negative binomial working model with an unknown dispersion 
 
 \item{contrast_dh}{An optional jacobian function for the contrast (otherwise use numerical derivative)}
 }
+\value{
+See value of \link{RobinCar::robincar_glm}. This function is a wrapper for \link{RobinCar::robincar_glm}.
+}
 \description{
 Covariate adjustment using generalized linear working model, with simplified interface.
 }

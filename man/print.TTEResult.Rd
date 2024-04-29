@@ -11,6 +11,11 @@
 
 \item{...}{Additional arguments}
 }
+\value{
+Prints results of time-to-event covariate adjusted analyses including covariate-adjusted (stratified) logrank,
+robust Cox score, and covariate-adjusted hazard ratio. Prints summary statistics about number of observations and events, possibly by strata,
+and the test statistics and/or estimates, and p-values. See \link{RobinCar::robincar_tte} and \link{RobinCar::robincar_covhr}.
+}
 \description{
 Print TTE result
 }

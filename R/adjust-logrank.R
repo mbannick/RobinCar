@@ -1,6 +1,7 @@
 
 #' @importFrom dplyr mutate group_by summarise arrange n
-adjust.LogRank <- function(model, data){
+#' @exportS3Method
+adjust.LogRank <- function(model, data, ...){
 
   # Creates data
   df <- create.tte.df(model, data)

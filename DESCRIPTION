@@ -10,7 +10,7 @@ Authors@R: c(
     person("Ting", "Ye", role="aut"),
     person("Yanyao", "Yi", role="aut"),
     person("Faith", "Bian", role="aut")
-)
+    )
 Description: Performs robust estimation and inference when using covariate adjustment and/or covariate-adaptive randomization in randomized controlled trials.
     Ting Ye, Jun Shao, Yanyao Yi, Qinyuan Zhao (2023) <doi:10.1080/01621459.2022.2049278>
     Ting Ye, Marlena Bannick, Yanyao Yi, Jun Shao (2023) <doi:10.1080/24754269.2023.2205802>

@@ -1,9 +1,9 @@
-
 predictions <- function(model, data, mod){
   UseMethod("predictions", model)
 }
 
-predictions.GLMModel <- function(model, data, mod){
+#' @exportS3Method
+predictions.GLMModel <- function(model, data, mod, ...){
   df <- data.frame(
     treat=data$treat,
     response=data$response
@@ -36,7 +36,8 @@ get.muhat <- function(model, data, mod){
 # of the model. Will perform adjustment based on the linear
 # model type of `model` and also do G-computation or AIPW
 # based on the second model type of `model`.
-adjust.GLMModel <- function(model, data){
+#' @exportS3Method
+adjust.GLMModel <- function(model, data, ...){
 
   # Get the generalized linear model and estimates by AIPW
   glmod <- linmod(model, data, family=model$g_family, center=FALSE)
@@ -61,7 +62,7 @@ adjust.GLMModel <- function(model, data){
   vcov_wt <- get.vcovHC(model$vcovHC, n=data$n, p=df_adjust)
   variance <- asympt.variance * vcov_wt / data$n
 
-  result <- format.results(data$treat_levels, estimate, variance)
+  result <- format_results(data$treat_levels, estimate, variance)
 
   return(
     structure(

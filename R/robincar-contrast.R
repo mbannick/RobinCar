@@ -11,16 +11,18 @@ ratio <- function(est){
   return(cont)
 }
 
-jacobian <- function (settings, ...) {
+jacobian <- function (settings, est) {
   UseMethod("jacobian", settings)
 }
 
+#' @exportS3Method
 jacobian.DIFF <- function(settings, est){
   k <- length(est)
   jacob <- cbind(rep(-1, k-1), diag(1, k-1))
   return(jacob)
 }
 
+#' @exportS3Method
 jacobian.RATIO <- function(settings, est){
   col1 <- -1 * est[-1] / est[1]^2
   mat1 <- diag(1/est[1], length(est)-1)
@@ -28,6 +30,7 @@ jacobian.RATIO <- function(settings, est){
   return(jacob)
 }
 
+#' @exportS3Method
 jacobian.CUSTOM <- function(settings, est){
   if(!is.null(settings$dh)){
     jacob <- settings$dh(est)
@@ -87,18 +90,28 @@ contrast <- function(settings, treat, est, varcov){
   vcv <- quad.tform(varcov, jac)
 
   # Format results
-  result <- format.results(lab, c_est, vcv, label_name="contrast")
+  result <- format_results(lab, c_est, vcv, label_name="contrast")
 
   return(list(result=result, varcov=vcv, settings=settings))
 }
 
-#' Create a contrast using a result object (that has both result and varcov)
+#' Estimate a treatment contrast
+#'
+#' Estimate a treatment contrast using the result of \link{RobinCar::robincar_linear}, \link{RobinCar::robincar_glm}, or \link{RobinCar::robincar_SL} using
+#' the delta method.
 #'
 #' @param result A LinModelResult or GLMModelResult
 #' @param contrast_h An optional function to specify a desired contrast
 #' @param contrast_dh An optional jacobian function for the contrast
 #' @importFrom rlang .data
 #' @export
+#'
+#' @returns A contrast object which has the following attributes:
+#'
+#'  \item{result}{A \link{dplyr::tibble} with the label of the treatment contrast (e.g., 1 vs. 0), the estimate of the treatment contrast, estimated SE, and p-value based on a z-test with estimate and SE.}
+#'  \item{varcov}{The variance-covariance matrix for the treatment contrast estimates.}
+#'  \item{settings}{List of model settings used for the contrast.}
+#'
 robincar_contrast <- function(result, contrast_h, contrast_dh=NULL){
 
   # Get input dimension

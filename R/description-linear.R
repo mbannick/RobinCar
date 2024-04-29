@@ -1,4 +1,5 @@
 
+#' @exportS3Method
 descript.LinModelResult <- function(x, ...){
   output <- c()
   output <- c(

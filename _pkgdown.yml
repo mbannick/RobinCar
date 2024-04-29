@@ -1,11 +1,11 @@
 url: ~
 articles:
-- title: Vignettes
+- title: Articles
   navbar: ~
   contents:
-  - use-linear-glm
-  - calibration
-  - use-survival
+  - articles/Continuous-and-GLM-Type-Outcomes
+  - articles/Calibration-for-GLM-Models
+  - articles/Robust-Testing-for-Time-to-Event-Data
 
 template:
   params:

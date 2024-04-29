@@ -36,7 +36,8 @@ score.theta <- function(theta, df){
 
 #' @importFrom dplyr mutate group_by summarise arrange
 #' @importFrom stats uniroot
-adjust.CovHR <- function(model, data){
+#' @exportS3Method
+adjust.CovHR <- function(model, data, ...){
 
   # Creates data
   df <- create.tte.df(model, data)

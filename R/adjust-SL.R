@@ -3,7 +3,9 @@
 # of the model. Will perform adjustment based on the linear
 # model type of `model` and also do G-computation or AIPW
 # based on the second model type of `model`.
-adjust.SLModel <- function(model, data){
+#' @rdname adjust.SLModel
+#' @exportS3Method
+adjust.SLModel <- function(model, data, ...){
 
   dmat <- get.dmat(data, model$adj_vars)
 
@@ -45,7 +47,7 @@ adjust.SLModel <- function(model, data){
   vcov_wt <- get.vcovHC(model$vcovHC, n=data$n, p=NULL)
   variance <- asympt.variance * vcov_wt / data$n
 
-  result <- format.results(data$treat_levels, estimate, variance)
+  result <- format_results(data$treat_levels, estimate, variance)
 
   return(
     structure(

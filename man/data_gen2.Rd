@@ -26,6 +26,16 @@ data_gen2(
 
 \item{blocksize}{block size for permuted block design}
 }
+\value{
+A data frame with the following columns:
+
+\item{t}{event time}
+\item{delta}{event indicator}
+\item{I1}{assignment to treatment group 1}
+\item{I0}{assignment to treatment group 0}
+\item{model_w3}{covariates}
+\item{car_strata1, ...}{strata variables}
+}
 \description{
 Data generation function from covariate adjusted log-rank paper
 }

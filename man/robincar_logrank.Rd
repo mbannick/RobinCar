@@ -11,8 +11,15 @@ robincar_logrank(adj_method, ...)
 
 \item{...}{Additional arguments to `robincar_tte`}
 }
+\value{
+A result object with the following attributes:
+
+\item{result}{A list: "statistic" is the adjusted logrank test statistic which can be used to obtain p-values; "U" and "se" are the numerator and denominator of the test statistic, respectively.}
+\item{settings}{The covariate adjustment settings used.}
+\item{original_df}{The dataset supplied by the user.}
+}
 \description{
-Robust (potentially stratified) logrank adjustment
+Perform a robust covariate-adjusted logrank test ("CL") that can be stratified ("CSL") if desired.
 }
 \examples{
 library(magrittr)
@@ -65,4 +72,5 @@ out1 <- robincar_logrank(df=data.simu,
                          car_scheme=c("permuted-block"),
                          adj_method=c("CSL")
 )
+
 }

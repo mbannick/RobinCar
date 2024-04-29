@@ -30,6 +30,7 @@ linmod <- function(model, data, family, center=TRUE){
 }
 
 #' @importFrom stats gaussian
+#' @exportS3Method
 linmod.ANOVA <- function(model, data, family=stats::gaussian, center=TRUE){
   df <- data.frame(
     treat=data$treat,
@@ -40,6 +41,7 @@ linmod.ANOVA <- function(model, data, family=stats::gaussian, center=TRUE){
 }
 
 #' @importFrom stats gaussian
+#' @exportS3Method
 linmod.ANCOVA <- function(model, data, family=stats::gaussian, center=TRUE){
   df <- data.frame(
     treat=data$treat,
@@ -56,6 +58,7 @@ linmod.ANCOVA <- function(model, data, family=stats::gaussian, center=TRUE){
   return(mod)
 }
 
+#' @exportS3Method
 linmod.ANHECOVA <- function(model, data, family=stats::gaussian, center=TRUE){
   df <- data.frame(
     treat=data$treat,
@@ -73,6 +76,7 @@ linmod.ANHECOVA <- function(model, data, family=stats::gaussian, center=TRUE){
   return(mod)
 }
 
+#' @exportS3Method
 linmod.CUSTOM <- function(model, data, family=stats::gaussian, center=TRUE){
   df <- data.frame(
     treat=data$treat,
@@ -88,7 +92,8 @@ linmod.CUSTOM <- function(model, data, family=stats::gaussian, center=TRUE){
 
 # Perform adjustment for linear models, including ANOVA, ANCOVA,
 # and ANHECOVA, with or without covariate-adaptive randomization.
-adjust.LinModel <- function(model, data){
+#' @exportS3Method
+adjust.LinModel <- function(model, data, ...){
 
   # Fit a model with the settings in model
   mod <- linmod(model, data, family=gaussian)
@@ -100,7 +105,7 @@ adjust.LinModel <- function(model, data){
 
   # Extract estimates and create results data
   est <- stats::coef(mod)[1:data$k]
-  result <- format.results(data$treat_levels, est, variance)
+  result <- format_results(data$treat_levels, est, variance)
 
   return(
     structure(

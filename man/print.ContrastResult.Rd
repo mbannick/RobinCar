@@ -11,6 +11,10 @@
 
 \item{...}{Additional arguments}
 }
+\value{
+Prints estimates (and variances) of treatment contrasts based on a linear or GLM working model,
+along with the settings used. See \link{RobinCar::robincar_contrast}
+}
 \description{
 Print contrast result
 }

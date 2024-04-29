@@ -18,10 +18,11 @@ lmlogic <- function(meth, x_exists, z_exists, car_scheme, cov_strata){
   UseMethod("lmlogic", meth)
 }
 
+#' @exportS3Method
 lmlogic.ANOVA <- function(meth, x_exists, z_exists, car_scheme, cov_strata){
-  
+
   s <- GENERIC.SETTINGS("ANOVA", car_scheme)
-  
+
   if(car_scheme == "simple"){
     if(x_exists) .x.exist.warn()
     if(z_exists) .z.exist.warn()
@@ -40,10 +41,11 @@ lmlogic.ANOVA <- function(meth, x_exists, z_exists, car_scheme, cov_strata){
   return(s)
 }
 
+#' @exportS3Method
 lmlogic.ANCOVA <- function(meth, x_exists, z_exists, car_scheme, cov_strata){
 
   s <- GENERIC.SETTINGS("ANCOVA", car_scheme)
-  
+
   if(car_scheme == "simple"){
     if(z_exists) .z.exist.warn.simple()
     if(x_exists){
@@ -79,10 +81,11 @@ lmlogic.ANCOVA <- function(meth, x_exists, z_exists, car_scheme, cov_strata){
   return(s)
 }
 
+#' @exportS3Method
 lmlogic.ANHECOVA <- function(meth, x_exists, z_exists, car_scheme, cov_strata){
-  
+
   s <- GENERIC.SETTINGS("ANHECOVA", car_scheme)
-  
+
   if(car_scheme == "simple"){
     if(z_exists) .z.exist.warn.simple()
     if(x_exists){

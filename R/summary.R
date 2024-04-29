@@ -3,6 +3,9 @@
 #' @param x A LinModelResult object
 #' @param ... Additional arguments
 #' @export
+#'
+#' @returns Prints the treatment mean estimates (and variances) based on a linear working model,
+#' along with the settings used. See \link{RobinCar::robincar_linear}.
 print.LinModelResult <- function(x, ...){
   descript(x)
   cat("\n\n")
@@ -17,6 +20,9 @@ print.LinModelResult <- function(x, ...){
 #' @param x A GLMModelResult object
 #' @param ... Additional arguments
 #' @export
+#'
+#' @returns Prints the treatment mean estimates (and variances) based on a GLM working model,
+#' along with the settings used. See \link{RobinCar::robincar_glm}.
 print.GLMModelResult <- function(x, ...){
   descript(x)
   cat("\n\n")
@@ -31,6 +37,9 @@ print.GLMModelResult <- function(x, ...){
 #' @param x A ContrastResult object
 #' @param ... Additional arguments
 #' @export
+#'
+#' @returns Prints estimates (and variances) of treatment contrasts based on a linear or GLM working model,
+#' along with the settings used. See \link{RobinCar::robincar_contrast}
 print.ContrastResult <- function(x, ...){
   if("DIFF" %in% class(x$settings)){
     c_type <- "linear contrast"
@@ -56,6 +65,10 @@ print.ContrastResult <- function(x, ...){
 #' @importFrom data.table data.table setorder setnames .SD :=
 #' @import data.table
 #' @export
+#'
+#' @returns Prints results of time-to-event covariate adjusted analyses including covariate-adjusted (stratified) logrank,
+#' robust Cox score, and covariate-adjusted hazard ratio. Prints summary statistics about number of observations and events, possibly by strata,
+#' and the test statistics and/or estimates, and p-values. See \link{RobinCar::robincar_tte} and \link{RobinCar::robincar_covhr}.
 print.TTEResult <- function(x, ...){
 
   if(!is.null(x$data$covariate)){
@@ -178,6 +191,9 @@ print.TTEResult <- function(x, ...){
 #'          adjustment, use `robincar_glm` instead of `robincar_linear`.
 #' @param ... Additional arguments
 #' @export
+#'
+#' @returns Prints the treatment mean estimates (and variances) based on a calibration on top of a
+#' GLM working model, along with the settings used. See \link{RobinCar::robincar_calibrate}.
 print.CalibrationResult <- function(x, ...){
   if(x$joint){
     type <- "Joint calibration"

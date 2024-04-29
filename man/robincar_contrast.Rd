@@ -2,7 +2,7 @@
 % Please edit documentation in R/robincar-contrast.R
 \name{robincar_contrast}
 \alias{robincar_contrast}
-\title{Create a contrast using a result object (that has both result and varcov)}
+\title{Estimate a treatment contrast}
 \usage{
 robincar_contrast(result, contrast_h, contrast_dh = NULL)
 }
@@ -13,6 +13,14 @@ robincar_contrast(result, contrast_h, contrast_dh = NULL)
 
 \item{contrast_dh}{An optional jacobian function for the contrast}
 }
+\value{
+A contrast object which has the following attributes:
+
+ \item{result}{A \link{dplyr::tibble} with the label of the treatment contrast (e.g., 1 vs. 0), the estimate of the treatment contrast, estimated SE, and p-value based on a z-test with estimate and SE.}
+ \item{varcov}{The variance-covariance matrix for the treatment contrast estimates.}
+ \item{settings}{List of model settings used for the contrast.}
+}
 \description{
-Create a contrast using a result object (that has both result and varcov)
+Estimate a treatment contrast using the result of \link{RobinCar::robincar_linear}, \link{RobinCar::robincar_glm}, or \link{RobinCar::robincar_SL} using
+the delta method.
 }

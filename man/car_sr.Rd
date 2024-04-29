@@ -11,9 +11,13 @@ car_sr(n, p_trt)
 
 \item{p_trt}{Proportion allotted to treatment}
 }
+\value{
+A vector of treatment assignments as 0's and 1's based on simple randomization.
+}
 \description{
 Generate simple randomization treatment assignments
 }
 \examples{
 car_sr(10, p_trt=0.4)
+
 }

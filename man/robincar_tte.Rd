@@ -43,6 +43,9 @@ which results in using the first element of `unique(data[, treat_col])`.}
 
 \item{car_scheme}{Name of the type of covariate-adaptive randomization scheme. One of: "simple", "pocock-simon", "biased-coin", "permuted-block".}
 }
+\value{
+For adjustment method "CL" or "CSL", see value of \link{RobinCar::robincar_logrank}; for adjustment method "coxscore" see value of \link{RobinCar::robincar_coxscore}.
+}
 \description{
 Perform a covariate-adjusted logrank test (`adj_method="CL"`),
 covariate-adjusted stratified logrank test (`adj_method="CSL"`),

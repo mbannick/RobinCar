@@ -35,10 +35,13 @@ robincar_linear2(
 
 \item{contrast_dh}{An optional jacobian function for the contrast (otherwise use numerical derivative)}
 }
+\value{
+See value of \link{RobinCar::robincar_linear}. This function is a wrapper for \link{RobinCar::robincar_linear}.
+}
 \description{
 Estimate treatment-group-specific response means and (optionally)
 treatment group contrasts using a linear working model for continuous outcomes.
 }
 \details{
-Note the difference between `robincar_linear` and `robincar_linear2` with regards to their `covariate_cols` argument.
+Note the difference between \link{RobinCar::robincar_linear} and \link{RobinCar::robincar_linear2} with regards to their `covariate_cols` argument.
 }

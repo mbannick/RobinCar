@@ -14,6 +14,8 @@
 #' @param contrast_h An optional function to specify a desired contrast
 #' @param contrast_dh An optional jacobian function for the contrast (otherwise use numerical derivative)
 #' @export
+#'
+#' @returns See value of \link{RobinCar::robincar_glm}. This function is a wrapper for \link{RobinCar::robincar_glm}, using an identity link for the glm.
 robincar_linear <- function(df,
                             treat_col, response_col, car_strata_cols=NULL, covariate_cols=NULL,
                             car_scheme="simple", adj_method="ANOVA",
@@ -54,7 +56,7 @@ robincar_linear <- function(df,
 #' Estimate treatment-group-specific response means and (optionally)
 #' treatment group contrasts using a linear working model for continuous outcomes.
 #'
-#' Note the difference between `robincar_linear` and `robincar_linear2` with regards to their `covariate_cols` argument.
+#' Note the difference between \link{RobinCar::robincar_linear} and \link{RobinCar::robincar_linear2} with regards to their `covariate_cols` argument.
 #'
 #' @param df A data.frame with the required columns
 #' @param treat_col Name of column in df with treatment variable
@@ -66,6 +68,8 @@ robincar_linear <- function(df,
 #' @param contrast_h An optional function to specify a desired contrast
 #' @param contrast_dh An optional jacobian function for the contrast (otherwise use numerical derivative)
 #' @export
+#'
+#' @returns See value of \link{RobinCar::robincar_linear}. This function is a wrapper for \link{RobinCar::robincar_linear}.
 robincar_linear2 <- function(df,
                              treat_col, response_col, car_strata_cols=NULL, covariate_cols=NULL,
                              car_scheme="simple", adj_method="ANOVA",

@@ -1,5 +1,7 @@
 #' Robust (potentially stratified) logrank adjustment
 #'
+#' Perform a robust covariate-adjusted logrank test ("CL") that can be stratified ("CSL") if desired.
+#'
 #' @param adj_method Adjustment method, one of "CL", "CSL"
 #' @param ... Additional arguments to `robincar_tte`
 #'
@@ -56,6 +58,13 @@
 #'                          car_scheme=c("permuted-block"),
 #'                          adj_method=c("CSL")
 #' )
+#'
+#' @returns A result object with the following attributes:
+#'
+#' \item{result}{A list: "statistic" is the adjusted logrank test statistic which can be used to obtain p-values; "U" and "se" are the numerator and denominator of the test statistic, respectively.}
+#' \item{settings}{The covariate adjustment settings used.}
+#' \item{original_df}{The dataset supplied by the user.}
+#'
 robincar_logrank <- function(adj_method, ...){
 
   .check.adj_method.logrank(adj_method)

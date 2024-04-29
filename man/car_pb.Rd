@@ -15,6 +15,9 @@ car_pb(z, trt_label, trt_alc, blocksize = 4L)
 
 \item{blocksize}{Permuted block blocksize}
 }
+\value{
+A vector of treatment assignments with labels from the `trt_label` argument, based on stratified permuted block randomization.
+}
 \description{
 Generate permuted block treatment assignments
 }
@@ -29,4 +32,5 @@ z <- dummy_cols(z) \%>\%
      mutate(across(where(is.numeric), as.factor))
 
 car_pb(z[, 2:5], c(0, 1, 2), trt_alc=c(1/4, 1/2, 1/4), blocksize=4L)
+
 }

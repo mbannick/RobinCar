@@ -21,6 +21,8 @@ car_ps(z, treat, ratio, imb_measure, p_bc = 0.8)
 \describe{
 \item{res}{treatment assignment vector}
 }
+
+A vector of treatment assignments with labels from the `treat` argument, based on Pocock-Simon's minimization.
 }
 \description{
 Generate Pocock-Simon minimization treatment assignments
@@ -40,6 +42,7 @@ A <- car_ps(
   ratio=c(1, 1, 1),
   imb_measure="Range"
 )
+
 }
 \author{
 Ting Ye Yanyao Yi

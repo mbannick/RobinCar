@@ -1,4 +1,5 @@
 
+#' @exportS3Method
 descript.GLMModelResult <- function(x, ...){
   output <- c()
   if("AIPW" %in% class(x$settings)){

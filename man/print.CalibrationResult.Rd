@@ -12,6 +12,10 @@ adjustment, use `robincar_glm` instead of `robincar_linear`.}
 
 \item{...}{Additional arguments}
 }
+\value{
+Prints the treatment mean estimates (and variances) based on a calibration on top of a
+GLM working model, along with the settings used. See \link{RobinCar::robincar_calibrate}.
+}
 \description{
 Print calibration result
 }

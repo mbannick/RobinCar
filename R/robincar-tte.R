@@ -22,6 +22,8 @@
 #' @param sparse_remove Remove sparse car_strata from calculation
 #'
 #' @export
+#'
+#' @returns For adjustment method "CL" or "CSL", see value of \link{RobinCar::robincar_logrank}; for adjustment method "coxscore" see value of \link{RobinCar::robincar_coxscore}.
 robincar_tte <- function(df,
                          treat_col, response_col, event_col,
                          adj_method,

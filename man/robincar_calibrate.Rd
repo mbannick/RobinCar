@@ -2,8 +2,7 @@
 % Please edit documentation in R/robincar-calibrate.R
 \name{robincar_calibrate}
 \alias{robincar_calibrate}
-\title{Run a linear or joint calibration on
-a GLMModelResult object.}
+\title{Perform linear or joint calibration}
 \usage{
 robincar_calibrate(result, joint = FALSE, add_x = NULL)
 }
@@ -11,15 +10,18 @@ robincar_calibrate(result, joint = FALSE, add_x = NULL)
 \item{result}{A GLMModelResult}
 
 \item{joint}{If true, then performs joint calibration
-with the mu and Z
+with the \eqn{\hat{\bm \mu}(X_i)} and strata \eqn{Z_i}
 to achieve universality and efficiency gain
-rather than just linear calibration that uses mu.}
+rather than just linear calibration that uses \eqn{\hat{\bm \mu}(X_i)}.}
 
 \item{add_x}{Additional x to use in the calibration. Must have been in
-the original dataset that robincar_glm was called on.
- standard error estimates to use.}
+the original dataset that robincar_glm was called on.}
+}
+\value{
+A result object that has the same structure as \link{RobinCar::robincar_glm}, with the argument `result` included as "original" in the list.
 }
 \description{
-Run a linear or joint calibration on
-a GLMModelResult object.
+Uses linear or joint calibration to "calibrate" the estimates from a linear or GLM-type adjustment.
+Linear calibration fits a linear model with treatment and with the predicted \eqn{\hat{\mu}_a(X_i)} as constructed covariates;
+joint calibration also includes \eqn{Z_i} the strata variables as covariates.
 }

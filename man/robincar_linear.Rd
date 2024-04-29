@@ -38,6 +38,9 @@ robincar_linear(
 
 \item{contrast_dh}{An optional jacobian function for the contrast (otherwise use numerical derivative)}
 }
+\value{
+See value of \link{RobinCar::robincar_glm}. This function is a wrapper for \link{RobinCar::robincar_glm}, using an identity link for the glm.
+}
 \description{
 Estimate treatment-group-specific response means and (optionally)
 treatment group contrasts using a linear working model for continuous outcomes.

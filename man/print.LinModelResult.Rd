@@ -11,6 +11,10 @@
 
 \item{...}{Additional arguments}
 }
+\value{
+Prints the treatment mean estimates (and variances) based on a linear working model,
+along with the settings used. See \link{RobinCar::robincar_linear}.
+}
 \description{
 Print linear model result
 }

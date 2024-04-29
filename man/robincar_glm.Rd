@@ -37,7 +37,7 @@ robincar_glm(
 
 \item{covariate_to_include_strata}{Whether to include car_strata variables in covariate adjustment. Defaults to F for homogeneous; defaults to T for heterogeneous. User may override by passing in this argument.}
 
-\item{g_family}{Family that would be supplied to glm(...), e.g., binomial. If no link specified, will use default link, like behavior in glm.
+\item{g_family}{Family that would be supplied to \link{stats::glm}, e.g., binomial. If no link specified, will use default link, like behavior in glm.
 If you wish to use a negative binomial working model with an unknown dispersion parameter, then use `g_family="nb"`.}
 
 \item{g_accuracy}{Level of accuracy to check prediction un-biasedness.}
@@ -48,6 +48,33 @@ If you wish to use a negative binomial working model with an unknown dispersion 
 
 \item{contrast_dh}{An optional jacobian function for the contrast (otherwise use numerical derivative)}
 }
+\value{
+If `contrast_h` argument is used, outputs a `main` and a `contrast` object. The `main` object has the following structure:
+
+ \item{result}{A \link{dplyr::tibble} with the treatment label, treatment mean estimate using AIPW, estimated SE, and p-value based on a z-test with estimate and SE.}
+ \item{varcov}{The variance-covariance matrix for the treatment mean estimates.}
+ \item{settings}{List of model settings used in covariate adjustment.}
+ \item{original_df}{The original dataset provided by the user.}
+ \item{mod}{The fit from the \link{stats::glm} working model used for covariate adjustment.}
+ \item{mu_a}{Predicted potential outcomes for each treatment category (columns) and individual (rows). These are the \eqn{\hat{\mu}_a}}.
+ \item{g.estimate}{The G-computation estimate based only on \eqn{\frac{1}{n} \sum_{i=1}^{n} \hat{\mu}_a(X_i)}. This is equivalent to the AIPW estimate when a canonical link function is used.}
+ \item{data}{Attributes about the dataset.}
+
+ The `contrast` object has a structure that is documented in \link{RobinCar::robincar_contrast}.
+}
 \description{
-Covariate adjustment using generalized linear working model
+Estimate treatment-group-specific response means and (optionally)
+treatment group contrasts using a generalized linear working model.
+}
+\details{
+The output is the AIPW estimator given by (for each treatment group \eqn{a}):
+
+\deqn{\frac{1}{n} \sum_{i=1}^{n} \hat{\mu}_a(X_i) + \frac{1}{n_a} \sum_{i:A_i=a} \{Y_i - \hat{\mu}(X_i)\}}
+
+where \eqn{Y_i} is the outcome, \eqn{A_i} is the treatment assignment, \eqn{X_i} are the covariates, \eqn{n_a = \sum_{i=1}^{n} A_i=a},
+and \eqn{\hat{\mu}_a} is the estimated conditional mean function based on the GLM working model.
+This working model has treatment \eqn{a}-specific coefficients if `adj_method` is "heterogeneous". Otherwise, they are shared across the treatment arms.
+Alternatively, if `formula` is used, the working model can be specified according to the user.
+
+Importantly, the estimated variance accounts for misspecification of the working model, and for covariate-adaptive randomization.
 }

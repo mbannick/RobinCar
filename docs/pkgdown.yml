@@ -1,9 +1,9 @@
 pandoc: 2.19.2
-pkgdown: 2.0.4
+pkgdown: 2.0.8
 pkgdown_sha: ~
 articles:
-  calibration: calibration.html
-  use-linear-glm: use-linear-glm.html
-  use-survival: use-survival.html
-last_built: 2024-04-02T17:58Z
+  Calibration-for-GLM-Models: Calibration-for-GLM-Models.html
+  Continuous-and-GLM-Type-Outcomes: Continuous-and-GLM-Type-Outcomes.html
+  Robust-Testing-for-Time-to-Event-Data: Robust-Testing-for-Time-to-Event-Data.html
+last_built: 2024-04-12T21:34Z
 
