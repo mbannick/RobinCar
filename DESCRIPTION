@@ -2,13 +2,24 @@ Package: RobinCar
 Type: Package
 Title: Robust Estimation and Inference in Covariate-Adaptive Randomization
 Version: 0.2.0
-Author: Ting Ye, Yanyao Yi, Marlena Bannick, Faith Bian
-Maintainer: Marlena Bannick <mnorwood@uw.edu>
+Authors@R: c(
+    person("Marlena", "Bannick", 
+        email="mnorwood@uw.edu", 
+        role=c("cre", "aut"),
+        comment=c(ORCID="0000-0001-6279-5978")),
+    person("Ting", "Ye", role="aut"),
+    person("Yanyao", "Yi", role="aut"),
+    person("Faith", "Bian", role="aut")
+)
 Description: Performs robust estimation and inference when using covariate adjustment and/or covariate-adaptive randomization in randomized controlled trials.
+    Ting Ye, Jun Shao, Yanyao Yi, Qinyuan Zhao (2023) <doi:10.1080/01621459.2022.2049278>
+    Ting Ye, Marlena Bannick, Yanyao Yi, Jun Shao (2023) <doi:10.1080/24754269.2023.2205802>
+    Ting Ye, Jun Shao, Yanyao Yi (2023) <doi:10.1093/biomet/asad045>
+    Marlena Bannick, Jun Shao, Jingyi Liu, Yu Du, Yanyao Yi, Ting Ye (2024) <arXiv:2306.10213>
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.2
+RoxygenNote: 7.3.1
 Imports: 
     dplyr,
     magrittr,
@@ -33,5 +44,4 @@ Suggests:
     ranger,
     forcats,
     testthat (>= 3.0.0)
-VignetteBuilder: knitr
 Config/testthat/edition: 3
