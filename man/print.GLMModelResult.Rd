@@ -13,7 +13,7 @@
 }
 \value{
 Prints the treatment mean estimates (and variances) based on a GLM working model,
-along with the settings used. See \link{RobinCar::robincar_glm}.
+along with the settings used. See \link[RobinCar:robincar_glm]{RobinCar::robincar_glm()}.
 }
 \description{
 Print glm model result

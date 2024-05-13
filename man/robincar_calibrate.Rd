@@ -18,10 +18,10 @@ rather than just linear calibration that uses \eqn{\hat{\bm \mu}(X_i)}.}
 the original dataset that robincar_glm was called on.}
 }
 \value{
-A result object that has the same structure as \link{RobinCar::robincar_glm}, with the argument `result` included as "original" in the list.
+A result object that has the same structure as \link[RobinCar:robincar_glm]{RobinCar::robincar_glm()}, with the argument `result` included as "original" in the list.
 }
 \description{
 Uses linear or joint calibration to "calibrate" the estimates from a linear or GLM-type adjustment.
-Linear calibration fits a linear model with treatment and with the predicted \eqn{\hat{\mu}_a(X_i)} as constructed covariates;
+Linear calibration fits a linear model with treatment (and treatment-by-covariate interactions) and with the predicted \eqn{\hat{\bm \mu}(X_i) = (\hat{\mu}_1(X_i), \dots, \hat{\mu}_K(X_i))} as constructed covariates where \eqn{K} is the number of treatment groups;
 joint calibration also includes \eqn{Z_i} the strata variables as covariates.
 }

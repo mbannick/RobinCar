@@ -5,7 +5,7 @@
 #' @export
 #'
 #' @returns Prints the treatment mean estimates (and variances) based on a linear working model,
-#' along with the settings used. See \link{RobinCar::robincar_linear}.
+#' along with the settings used. See \link[RobinCar:robincar_linear]{RobinCar::robincar_linear()}.
 print.LinModelResult <- function(x, ...){
   descript(x)
   cat("\n\n")
@@ -22,7 +22,7 @@ print.LinModelResult <- function(x, ...){
 #' @export
 #'
 #' @returns Prints the treatment mean estimates (and variances) based on a GLM working model,
-#' along with the settings used. See \link{RobinCar::robincar_glm}.
+#' along with the settings used. See \link[RobinCar:robincar_glm]{RobinCar::robincar_glm()}.
 print.GLMModelResult <- function(x, ...){
   descript(x)
   cat("\n\n")
@@ -39,7 +39,7 @@ print.GLMModelResult <- function(x, ...){
 #' @export
 #'
 #' @returns Prints estimates (and variances) of treatment contrasts based on a linear or GLM working model,
-#' along with the settings used. See \link{RobinCar::robincar_contrast}
+#' along with the settings used. See \link[RobinCar:robincar_contrast]{RobinCar::robincar_contrast()}
 print.ContrastResult <- function(x, ...){
   if("DIFF" %in% class(x$settings)){
     c_type <- "linear contrast"
@@ -68,7 +68,7 @@ print.ContrastResult <- function(x, ...){
 #'
 #' @returns Prints results of time-to-event covariate adjusted analyses including covariate-adjusted (stratified) logrank,
 #' robust Cox score, and covariate-adjusted hazard ratio. Prints summary statistics about number of observations and events, possibly by strata,
-#' and the test statistics and/or estimates, and p-values. See \link{RobinCar::robincar_tte} and \link{RobinCar::robincar_covhr}.
+#' and the test statistics and/or estimates, and p-values. See \link[RobinCar:robincar_tte]{RobinCar::robincar_tte()} and \link[RobinCar:robincar_covhr]{RobinCar::robincar_covhr()}.
 print.TTEResult <- function(x, ...){
 
   if(!is.null(x$data$covariate)){
@@ -193,7 +193,7 @@ print.TTEResult <- function(x, ...){
 #' @export
 #'
 #' @returns Prints the treatment mean estimates (and variances) based on a calibration on top of a
-#' GLM working model, along with the settings used. See \link{RobinCar::robincar_calibrate}.
+#' GLM working model, along with the settings used. See \link[RobinCar:robincar_calibrate]{RobinCar::robincar_calibrate()}.
 print.CalibrationResult <- function(x, ...){
   if(x$joint){
     type <- "Joint calibration"

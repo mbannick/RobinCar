@@ -25,7 +25,7 @@
 #' @param covariate_to_include_strata Whether to include car_strata variables in covariate adjustment. Defaults to F for homogeneous; defaults to T for heterogeneous. User may override by passing in this argument.
 #' @param contrast_h An optional function to specify a desired contrast
 #' @param contrast_dh An optional jacobian function for the contrast (otherwise use numerical derivative)
-#' @param g_family Family that would be supplied to \link{stats::glm}, e.g., binomial. If no link specified, will use default link, like behavior in glm.
+#' @param g_family Family that would be supplied to \link[stats:glm]{glm()}, e.g., binomial. If no link specified, will use default link, like behavior in glm.
 #'                 If you wish to use a negative binomial working model with an unknown dispersion parameter, then use `g_family="nb"`.
 #' @param g_accuracy Level of accuracy to check prediction un-biasedness.
 #' @param formula An optional formula to use for adjustment specified using as.formula("..."). This overrides car_strata_cols and covariate_cols.
@@ -34,16 +34,16 @@
 #'
 #' @returns If `contrast_h` argument is used, outputs a `main` and a `contrast` object. The `main` object has the following structure:
 #'
-#'  \item{result}{A \link{dplyr::tibble} with the treatment label, treatment mean estimate using AIPW, estimated SE, and p-value based on a z-test with estimate and SE.}
+#'  \item{result}{A \link[dplyr:tibble]{dplyr::tibble()} with the treatment label, treatment mean estimate using AIPW, estimated SE, and p-value based on a z-test with estimate and SE.}
 #'  \item{varcov}{The variance-covariance matrix for the treatment mean estimates.}
 #'  \item{settings}{List of model settings used in covariate adjustment.}
 #'  \item{original_df}{The original dataset provided by the user.}
-#'  \item{mod}{The fit from the \link{stats::glm} working model used for covariate adjustment.}
+#'  \item{mod}{The fit from the \link[stats:glm]{glm()} working model used for covariate adjustment.}
 #'  \item{mu_a}{Predicted potential outcomes for each treatment category (columns) and individual (rows). These are the \eqn{\hat{\mu}_a}}.
 #'  \item{g.estimate}{The G-computation estimate based only on \eqn{\frac{1}{n} \sum_{i=1}^{n} \hat{\mu}_a(X_i)}. This is equivalent to the AIPW estimate when a canonical link function is used.}
 #'  \item{data}{Attributes about the dataset.}
 #'
-#'  The `contrast` object has a structure that is documented in \link{RobinCar::robincar_contrast}.
+#'  The `contrast` object has a structure that is documented in \link[RobinCar:robincar_contrast]{RobinCar::robincar_contrast()}.
 robincar_glm <- function(df,
                          treat_col, response_col, car_strata_cols=NULL, covariate_cols=NULL,
                          car_scheme="simple", adj_method="heterogeneous", # vcovHC="HC0",
@@ -112,7 +112,7 @@ robincar_glm <- function(df,
 #' @param g_accuracy Level of accuracy to check prediction un-biasedness.
 #' @export
 #'
-#' @returns See value of \link{RobinCar::robincar_glm}. This function is a wrapper for \link{RobinCar::robincar_glm}.
+#' @returns See value of \link[RobinCar:robincar_glm]{RobinCar::robincar_glm()}. This function is a wrapper for \link[RobinCar:robincar_glm]{RobinCar::robincar_glm()}.
 robincar_glm2 <- function(df,
                           treat_col, response_col,
                           formula=NULL, car_strata_cols=NULL,

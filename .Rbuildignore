@@ -1,6 +1,5 @@
 ^.*\.Rproj$
 RobinCar.Rproj
-*.tar.gz*
 docs/
 doc/
 ^\.Rproj\.user$
@@ -8,7 +7,10 @@ doc/
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
-^doc$
 ^Meta$
 ^\.github$
 ^CITATION.cff
+^doc$
+^vignettes/articles$
+^CRAN-SUBMISSION$
+^cran-comments\.md$

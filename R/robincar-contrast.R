@@ -97,7 +97,7 @@ contrast <- function(settings, treat, est, varcov){
 
 #' Estimate a treatment contrast
 #'
-#' Estimate a treatment contrast using the result of \link{RobinCar::robincar_linear}, \link{RobinCar::robincar_glm}, or \link{RobinCar::robincar_SL} using
+#' Estimate a treatment contrast using the result of \link[RobinCar:robincar_linear]{RobinCar::robincar_linear()}, \link[RobinCar:robincar_glm]{RobinCar::robincar_glm()}, or \link[RobinCar:robincar_SL]{RobinCar::robincar_SL()} using
 #' the delta method.
 #'
 #' @param result A LinModelResult or GLMModelResult
@@ -108,7 +108,7 @@ contrast <- function(settings, treat, est, varcov){
 #'
 #' @returns A contrast object which has the following attributes:
 #'
-#'  \item{result}{A \link{dplyr::tibble} with the label of the treatment contrast (e.g., 1 vs. 0), the estimate of the treatment contrast, estimated SE, and p-value based on a z-test with estimate and SE.}
+#'  \item{result}{A \link[dplyr:tibble]{dplyr::tibble()} with the label of the treatment contrast (e.g., 1 vs. 0), the estimate of the treatment contrast, estimated SE, and p-value based on a z-test with estimate and SE.}
 #'  \item{varcov}{The variance-covariance matrix for the treatment contrast estimates.}
 #'  \item{settings}{List of model settings used for the contrast.}
 #'

@@ -13,7 +13,7 @@
 }
 \value{
 Prints estimates (and variances) of treatment contrasts based on a linear or GLM working model,
-along with the settings used. See \link{RobinCar::robincar_contrast}
+along with the settings used. See \link[RobinCar:robincar_contrast]{RobinCar::robincar_contrast()}
 }
 \description{
 Print contrast result
