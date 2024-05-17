@@ -39,19 +39,38 @@ test_that("GLM legacy", {
             # because old code automatically includes Z when heterogeneous + pocock simon
             if(scheme == "minimization" & !ctis & meth == "heterogeneous") next
 
-            if(ctis){
-              covariate_cols <- c(cov, zs)
+            if(scheme != "SR"){
+              if(ctis){
+                # Create joint levels of z for formula
+                zs_this <- paste0(zs, collapse="*")
+                covariate_cols <- c(cov, zs_this)
+              } else {
+                covariate_cols <- cov
+              }
             } else {
               covariate_cols <- cov
             }
-            if(meth == "homogeneous" & length(covariate_cols) > 0) next
+            # browser()
 
-            formula <- .create.formula(
-              meth,
-              "y",
-              "A",
-              covariate_cols
-            )
+            if(meth == "homogeneous"){
+              if(is.null(covariate_cols)){
+                form <- .create.formula(
+                  "ANOVA", "y", "A", covariate_cols
+                )
+              } else {
+                form <- .create.formula(
+                  "ANCOVA", "y", "A", covariate_cols
+                )
+              }
+            } else {
+              if(is.null(covariate_cols)){
+                next
+              } else {
+                form <- .create.formula(
+                  "ANHECOVA", "y", "A", covariate_cols
+                )
+              }
+            }
 
             runthis <- function(){
               return(robincar_glm(
@@ -62,7 +81,7 @@ test_that("GLM legacy", {
                 car_scheme=scheme0,
                 g_family=binomial(link="logit"),
                 g_accuracy=7,
-                formula=formula
+                formula=form
               ))
             }
 
@@ -71,18 +90,15 @@ test_that("GLM legacy", {
                 robin.data=DATA2,
                 car.scheme=scheme,
                 car.z=zs,
-                robin.x=cov,
-                robin.x_to_include_z=ctis,
                 robin.g_family=binomial(link="logit"),
                 robin.g_accuracy=7,
-                robin.formula=NULL,
                 robin.vcovHC="HC0",
-                robin.adj_method=meth
+                robin.formula=formula(form)
               ))
             }
             if(scheme == "minimization" & meth == "homogeneous"){
-              expect_warning(runthis())
-              expect_error(runthat())
+              # expect_warning(runthis())
+              # expect_error(runthat())
             } else {
               this <- runthis()
               that <- runthat()

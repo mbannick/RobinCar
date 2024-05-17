@@ -121,7 +121,7 @@ validate.RoboDataTTE <- function(data, ref_arm, ...){
 .create.formula <- function(adj_method, response_col, treat_col, covariate_cols){
 
   if(adj_method == "ANOVA"){
-    formula <- paste0(response_col, " ~ ", treat_col)
+    form <- paste0(response_col, " ~ ", treat_col)
   } else {
 
     if(is.null(covariate_cols)) stop("Must provide covariates if
@@ -129,13 +129,15 @@ validate.RoboDataTTE <- function(data, ref_arm, ...){
     covariates <- paste(covariate_cols, collapse=" + ")
 
     if(adj_method == "ANCOVA"){
-      formula <- paste0(response_col, " ~ ", treat_col, " + ", covariates)
+      form <- paste0(response_col, " ~ ", treat_col, " + ", covariates)
     } else if(adj_method == "ANHECOVA"){
-      formula <- paste0(response_col, " ~ ", treat_col, " * (", covariates, ")")
+      form <- paste0(response_col, " ~ ", treat_col, " * (", covariates, ")")
+    } else {
+      stop("Unrecognized adjustment method.")
     }
 
   }
-  return(formula)
+  return(form)
 }
 
 .df.toclass <- function(df, classname, ...){

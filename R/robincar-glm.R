@@ -84,6 +84,4 @@ robincar_glm <- function(df,
   }
 
   return(result)
-
-  return(obj)
 }

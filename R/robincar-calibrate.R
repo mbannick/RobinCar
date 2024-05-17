@@ -51,7 +51,10 @@ robincar_calibrate <- function(result, joint=FALSE,
   # Run robincar_glm using the heterogeneous
   # working model and identity link
   if(joint){
-    covariate_cols <- c(mu_names, add_x, colnames(result$data$car_strata))
+    # Use JOINT strata levels with formula notation
+    strata <- colnames(result$data$car_strata)
+    strata <- paste0(strata, collapse="*")
+    covariate_cols <- c(mu_names, add_x, strata)
   } else {
     covariate_cols <- c(mu_names, add_x)
   }
@@ -60,6 +63,7 @@ robincar_calibrate <- function(result, joint=FALSE,
     response_col="response",
     treat_col="treat",
     covariate_cols=covariate_cols,
+    car_strata_cols=colnames(result$data$car_strata),
     car_scheme=result$settings$car_scheme,
     adj_method="ANHECOVA"
   )
