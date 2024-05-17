@@ -39,18 +39,30 @@ test_that("GLM legacy", {
             # because old code automatically includes Z when heterogeneous + pocock simon
             if(scheme == "minimization" & !ctis & meth == "heterogeneous") next
 
+            if(ctis){
+              covariate_cols <- c(cov, zs)
+            } else {
+              covariate_cols <- cov
+            }
+            if(meth == "homogeneous" & length(covariate_cols) > 0) next
+
+            formula <- .create.formula(
+              meth,
+              "y",
+              "A",
+              covariate_cols
+            )
+
             runthis <- function(){
               return(robincar_glm(
                 df=DATA2,
                 response_col="y",
                 treat_col="A",
                 car_strata_cols=zs,
-                covariate_cols=cov,
-                covariate_to_include_strata=ctis,
                 car_scheme=scheme0,
                 g_family=binomial(link="logit"),
                 g_accuracy=7,
-                adj_method=meth
+                formula=formula
               ))
             }
 

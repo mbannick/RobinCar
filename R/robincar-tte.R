@@ -31,7 +31,7 @@ robincar_tte <- function(df,
                          p_trt=0.5, ref_arm=NULL, sparse_remove=TRUE,
                          car_scheme="simple"){
 
-  .check.car_scheme(car_scheme)
+  .check.car_scheme(car_scheme, car_strata_cols)
 
   data <- .make.data(
     df=df,

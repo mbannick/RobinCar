@@ -8,14 +8,11 @@ robincar_glm(
   df,
   treat_col,
   response_col,
+  formula = NULL,
   car_strata_cols = NULL,
-  covariate_cols = NULL,
   car_scheme = "simple",
-  adj_method = "heterogeneous",
-  covariate_to_include_strata = NULL,
   g_family = stats::gaussian,
   g_accuracy = 7,
-  formula = NULL,
   contrast_h = NULL,
   contrast_dh = NULL
 )
@@ -27,22 +24,16 @@ robincar_glm(
 
 \item{response_col}{Name of the column in df with response variable}
 
-\item{car_strata_cols}{Names of columns in df with car_strata variables}
+\item{formula}{The formula to use for adjustment specified using as.formula("..."). This overrides car_strata_cols and covariate_cols.}
 
-\item{covariate_cols}{Names of columns in df with covariate variables}
+\item{car_strata_cols}{Names of columns in df with car_strata variables}
 
 \item{car_scheme}{Name of the type of covariate-adaptive randomization scheme. One of: "simple", "pocock-simon", "biased-coin", "permuted-block".}
 
-\item{adj_method}{Name of adjustment method to use, one of "heterogeneous" (interaction model) or "homogeneous"}
-
-\item{covariate_to_include_strata}{Whether to include car_strata variables in covariate adjustment. Defaults to F for homogeneous; defaults to T for heterogeneous. User may override by passing in this argument.}
-
-\item{g_family}{Family that would be supplied to \link[stats:glm]{glm()}, e.g., binomial. If no link specified, will use default link, like behavior in glm.
+\item{g_family}{Family that would be supplied to glm(...), e.g., binomial. If no link specified, will use default link, like behavior in glm.
 If you wish to use a negative binomial working model with an unknown dispersion parameter, then use `g_family="nb"`.}
 
 \item{g_accuracy}{Level of accuracy to check prediction un-biasedness.}
-
-\item{formula}{An optional formula to use for adjustment specified using as.formula("..."). This overrides car_strata_cols and covariate_cols.}
 
 \item{contrast_h}{An optional function to specify a desired contrast}
 

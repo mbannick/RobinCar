@@ -41,12 +41,10 @@ result <- robincar_glm(
   response_col="y_bin",
   treat_col="A",
   car_strata_cols=c("z1"),
-  covariate_cols=c("x3"),
   car_scheme="biased-coin",
   g_family=binomial(link="logit"),
-  covariate_to_include_strata=TRUE,
   g_accuracy=7,
-  adj_method="homogeneous"
+  formula="y ~ A + x3 + z1"
 )
 print(result)
 ```

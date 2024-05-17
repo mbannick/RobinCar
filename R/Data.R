@@ -116,6 +116,28 @@ validate.RoboDataTTE <- function(data, ref_arm, ...){
   return(list(newform, vars))
 }
 
+# Creates formula for robincar_linear
+# based on adj_method=c("ANOVA", "ANCOVA", "ANHECOVA").
+.create.formula <- function(adj_method, response_col, treat_col, covariate_cols){
+
+  if(adj_method == "ANOVA"){
+    formula <- paste0(response_col, " ~ ", treat_col)
+  } else {
+
+    if(is.null(covariate_cols)) stop("Must provide covariates if
+                                     adjustment method is ANCOVA or ANHECOVA.")
+    covariates <- paste(covariate_cols, collapse=" + ")
+
+    if(adj_method == "ANCOVA"){
+      formula <- paste0(response_col, " ~ ", treat_col, " + ", covariates)
+    } else if(adj_method == "ANHECOVA"){
+      formula <- paste0(response_col, " ~ ", treat_col, " * (", covariates, ")")
+    }
+
+  }
+  return(formula)
+}
+
 .df.toclass <- function(df, classname, ...){
 
   data <- list()
@@ -197,9 +219,12 @@ validate.RoboDataTTE <- function(data, ref_arm, ...){
       data$car_strata[col] <- as.factor(data$car_strata[[col]])
     }
   }
-  if(ncol(data$covariate) == 0){
-    data$covariate <- NULL
+  if(!is.null(data$covariate)){
+    if(ncol(data$covariate) == 0){
+      data$covariate <- NULL
+    }
   }
+
 
   # Add additional data attributes
   data$n <- nrow(df)

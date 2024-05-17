@@ -80,7 +80,7 @@ robincar_SL <- function(df,
                         g_accuracy=7,
                         contrast_h=NULL, contrast_dh=NULL){
 
-  .check.car_scheme(car_scheme)
+  .check.car_scheme(car_scheme, car_strata_cols)
   # .check.sl.libraries(SL_libraries)
 
   if(length(SL_libraries) + length(SL_learners) == 0){

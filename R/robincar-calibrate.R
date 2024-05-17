@@ -50,18 +50,18 @@ robincar_calibrate <- function(result, joint=FALSE,
 
   # Run robincar_glm using the heterogeneous
   # working model and identity link
-  cal_result <- robincar_glm(
+  if(joint){
+    covariate_cols <- c(mu_names, add_x, colnames(result$data$car_strata))
+  } else {
+    covariate_cols <- c(mu_names, add_x)
+  }
+  cal_result <- robincar_linear(
     df=newdat,
     response_col="response",
     treat_col="treat",
-    covariate_cols=c(mu_names, add_x),
-    car_strata_cols=colnames(result$data$car_strata),
-    covariate_to_include_strata=joint,
+    covariate_cols=covariate_cols,
     car_scheme=result$settings$car_scheme,
-    adj_method="heterogeneous",
-    g_family=gaussian(link="identity"),
-    g_accuracy=result$settings$g_accuracy
-    # vcovHC=vcovHC
+    adj_method="ANHECOVA"
   )
   # Designate as calibration result
   # for the print statement to work
