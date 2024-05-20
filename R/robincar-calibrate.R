@@ -23,28 +23,14 @@ robincar_calibrate <- function(result, joint=FALSE,
   colnames(mu_a) <- mu_names
 
   # Get new dataset to pass to new robincar_glm func
-  newdat <- data.frame(
-    response=result$data$response,
-    treat=result$data$treat,
-    mu_a
-  )
+  newdat <- cbind(result$original_df, mu_a)
 
-  # Add on covariates and car_strata from the original
-  # robincar_glm function call
-  if(!is.null(result$data$covariate)){
-    newdat <- cbind(newdat, result$data$covariate)
-  }
+  # Add on more covariates
   if(!is.null(add_x)){
     for(cname in c(add_x)){
       if(cname %in% colnames(newdat)) next
       if(!cname %in% colnames(result$original_df)) .miss.covariate.calibrate()
       newdat <- cbind(newdat, result$original_df[cname])
-    }
-  }
-  if(!is.null(result$data$car_strata)){
-    for(cname in colnames(result$data$car_strata)){
-      if(cname %in% colnames(newdat)) next
-      newdat <- cbind(newdat, result$data$car_strata[cname])
     }
   }
 
@@ -58,10 +44,11 @@ robincar_calibrate <- function(result, joint=FALSE,
   } else {
     covariate_cols <- c(mu_names, add_x)
   }
+
   cal_result <- robincar_linear(
     df=newdat,
-    response_col="response",
-    treat_col="treat",
+    response_col=result$data$response_col,
+    treat_col=result$data$treat_col,
     covariate_cols=covariate_cols,
     car_strata_cols=colnames(result$data$car_strata),
     car_scheme=result$settings$car_scheme,

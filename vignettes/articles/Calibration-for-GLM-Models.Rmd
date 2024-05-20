@@ -44,7 +44,7 @@ result <- robincar_glm(
   car_scheme="biased-coin",
   g_family=binomial(link="logit"),
   g_accuracy=7,
-  formula="y ~ A + x3 + z1"
+  formula="y_bin ~ A + x3 + z1"
 )
 print(result)
 ```
