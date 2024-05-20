@@ -12,10 +12,8 @@ test_that("GLM full function -- linear (ANOVA)", {
     df=DATA,
     response_col="y",
     treat_col="A",
-    covariate_cols=c("x1"),
     car_scheme="simple",
-    adj_method="ANOVA",
-    covariate_to_include_strata=FALSE)
+    adj_method="ANOVA")
   non <- robincar_glm(
     df=DATA,
     response_col="y",
@@ -23,8 +21,7 @@ test_that("GLM full function -- linear (ANOVA)", {
     car_scheme="simple",
     g_family=gaussian(link="identity"),
     g_accuracy=7,
-    adj_method="homogeneous",
-    covariate_to_include_strata=FALSE)
+    formula="y ~ A")
   expect_equal(class(non), "GLMModelResult")
 
   # Check that the result from the linear and glm function is the same
@@ -50,18 +47,15 @@ test_that("GLM full function -- linear (ANCOVA)", {
     treat_col="A",
     covariate_cols=c("x1"),
     car_scheme="simple",
-    adj_method="ANCOVA",
-    covariate_to_include_strata=FALSE)
+    adj_method="ANCOVA")
   non <- robincar_glm(
     df=DATA,
     response_col="y",
     treat_col="A",
-    covariate_cols=c("x1"),
     car_scheme="simple",
     g_family=gaussian(link="identity"),
     g_accuracy=7,
-    adj_method="homogeneous",
-    covariate_to_include_strata=FALSE)
+    formula="y ~ A + x1")
   expect_equal(class(non), "GLMModelResult")
 
   # Check that the result from the linear and glm function is the same
@@ -87,18 +81,15 @@ test_that("GLM full function -- linear (ANHECOVA)", {
     treat_col="A",
     covariate_cols=c("x1"),
     car_scheme="simple",
-    adj_method="ANHECOVA",
-    covariate_to_include_strata=FALSE)
+    adj_method="ANHECOVA")
   non <- robincar_glm(
     df=DATA,
     response_col="y",
     treat_col="A",
-    covariate_cols=c("x1"),
     car_scheme="simple",
     g_family=gaussian(link="identity"),
     g_accuracy=7,
-    adj_method="heterogeneous",
-    covariate_to_include_strata=FALSE)
+    formula="y ~ A * x1")
   expect_equal(class(non), "GLMModelResult")
 
   # Check that the result from the linear and glm function is the same
@@ -119,28 +110,24 @@ test_that("GLM full function -- linear (ANHECOVA)", {
 
 # LINEAR V. GLM WITH Z ----------------------------------- #
 
-test_that("GLM full function -- linear (ANCOVA) with Z", {
-  lin <- robincar_linear(
+test_that("GLM full function -- linear (ANCOVA) with Z and simple randomization", {
+  lin <- expect_warning(robincar_linear(
     df=DATA,
     response_col="y",
     treat_col="A",
     covariate_cols=c("x1"),
     car_strata_cols=c("z1"),
     car_scheme="simple",
-    adj_method="ANCOVA",
-    covariate_to_include_strata=FALSE)
-  non <- robincar_glm(
+    adj_method="ANCOVA"))
+  non <- expect_warning(robincar_glm(
     df=DATA,
     response_col="y",
     treat_col="A",
     car_scheme="simple",
-    covariate_cols=c("x1"),
     car_strata_cols=c("z1"),
     g_family=gaussian(link="identity"),
     g_accuracy=7,
-    adj_method="homogeneous",
-    covariate_to_include_strata=FALSE)
-  expect_equal(class(non), "GLMModelResult")
+    formula="y ~ A + x1"))
 
   # Check that the result from the linear and glm function is the same
   # when using the identity link.
@@ -166,19 +153,52 @@ test_that("GLM full function -- linear (ANCOVA) with Z", {
     covariate_cols=c("x1"),
     car_strata_cols=c("z1"),
     car_scheme="permuted-block",
-    adj_method="ANCOVA",
-    covariate_to_include_strata=FALSE)
+    adj_method="ANCOVA")
   non <- robincar_glm(
     df=DATA,
     response_col="y",
     treat_col="A",
     car_scheme="permuted-block",
-    covariate_cols=c("x1"),
     car_strata_cols=c("z1"),
     g_family=gaussian(link="identity"),
     g_accuracy=7,
-    adj_method="homogeneous",
-    covariate_to_include_strata=FALSE)
+    formula="y ~ A + x1")
+  expect_equal(class(non), "GLMModelResult")
+
+  # Check that the result from the linear and glm function is the same
+  # when using the identity link.
+  est_lin <- lin$result$estimate
+  names(est_lin) <- NULL
+  est_non <- non$result$estimate
+  names(est_non) <- NULL
+  expect_equal(est_lin, est_non, tolerance=1e-10)
+
+  # These won't be exactly equivalent, only asymptotically (?)
+  var_lin <- lin$result$se
+  names(var_lin) <- NULL
+  var_non <- non$result$se
+  names(var_non) <- NULL
+  expect_equal(var_lin, var_non, tolerance=1e-2)
+})
+
+test_that("GLM full function -- linear (ANHECOVA) with Z", {
+  lin <- robincar_linear(
+    df=DATA,
+    response_col="y",
+    treat_col="A",
+    covariate_cols=c("x1", "z1"),
+    car_strata_cols=c("z1"),
+    car_scheme="permuted-block",
+    adj_method="ANHECOVA")
+  non <- robincar_glm(
+    df=DATA,
+    response_col="y",
+    treat_col="A",
+    car_scheme="permuted-block",
+    car_strata_cols=c("z1"),
+    g_family=gaussian(link="identity"),
+    g_accuracy=7,
+    formula="y ~ A * (x1 + z1)")
   expect_equal(class(non), "GLMModelResult")
 
   # Check that the result from the linear and glm function is the same
@@ -219,12 +239,10 @@ test_that("GLM full function -- NEGATIVE binomial, permuted block", {
     response_col="y",
     treat_col="A",
     car_strata_cols=c("z1"),
-    covariate_cols=c("x1"),
     car_scheme="permuted-block",
     g_family=negative.binomial(1),
     g_accuracy=7,
-    adj_method="heterogeneous",
-    covariate_to_include_strata=TRUE)
+    formula="y ~ A * (x1 + z1)")
   expect_equal(class(non), "GLMModelResult")
 
   # Known dispersion parameter
@@ -233,18 +251,16 @@ test_that("GLM full function -- NEGATIVE binomial, permuted block", {
     response_col="y",
     treat_col="A",
     car_strata_cols=c("z1"),
-    covariate_cols=c("x1"),
     car_scheme="permuted-block",
     g_family="nb",
     g_accuracy=7,
-    adj_method="heterogeneous",
-    covariate_to_include_strata=TRUE)
+    formula="y ~ A * (x1 + z1)")
   expect_equal(class(non), "GLMModelResult")
 
   non
 
   # Test with formula
-  non <- robincar_glm2(
+  non <- robincar_glm(
     df=DATA2,
     response_col="y",
     treat_col="A",
@@ -263,30 +279,22 @@ test_that("GLM Settings", {
     df=DATA2,
     response_col="y",
     treat_col="A",
-    covariate_cols=c("x1"),
     car_scheme="simple",
     g_family=gaussian(link="identity"),
     g_accuracy=7,
-    adj_method="heterogeneous",
-    covariate_to_include_strata=FALSE)
-  expect_equal(non$settings$adj_vars, "x")
+    formula="y ~ A * x1")
   expect_equal(non$settings$pu_joint_z, FALSE)
-  expect_equal(non$settings$adj_se_z, FALSE)
 
   non <- robincar_glm(
     df=DATA2,
     response_col="y",
     treat_col="A",
-    covariate_cols=c("x1"),
     car_strata_cols=c("z1"),
     car_scheme="biased-coin",
     g_family=gaussian(link="identity"),
     g_accuracy=7,
-    adj_method="heterogeneous",
-    covariate_to_include_strata=TRUE)
-  expect_equal(non$settings$adj_vars, "joint_z_x")
+    formula="y ~ A * (x1 + z1)")
   expect_equal(non$settings$pu_joint_z, FALSE)
-  expect_equal(non$settings$adj_se_z, TRUE)
 })
 
 test_that("GLM full function -- binomial, permuted block", {
@@ -295,12 +303,10 @@ test_that("GLM full function -- binomial, permuted block", {
     response_col="y",
     treat_col="A",
     car_strata_cols=c("z1"),
-    covariate_cols=c("x1"),
     car_scheme="permuted-block",
     g_family=binomial(link="logit"),
     g_accuracy=7,
-    adj_method="heterogeneous",
-    covariate_to_include_strata=TRUE)
+    formula="y ~ A * (x1 + z1)")
   expect_equal(class(non), "GLMModelResult")
   expect_equal(non$result$estimate,
                c(X1=0.20774694, X2=0.15547416), tolerance=1e-5)
@@ -313,13 +319,12 @@ test_that("GLM full function -- binomial, pocock simon", {
     response_col="y",
     treat_col="A",
     car_strata_cols=c("z1"),
-    covariate_cols=c("x1"),
     car_scheme="pocock-simon",
     g_family=binomial(link="logit"),
     g_accuracy=7,
-    adj_method="heterogeneous",
-    covariate_to_include_strata=TRUE)
+    formula="y ~ A * (x1 + z1)")
   expect_equal(class(non), "GLMModelResult")
+  expect_equal(non$settings$pu_joint_z, TRUE)
   expect_equal(non$result$estimate,
                c(0.20774694, 0.15547416), tolerance=1e-5)
 })
@@ -330,11 +335,10 @@ test_that("GLM -- no covariates", {
     response_col="y",
     treat_col="A",
     car_strata_cols=c("z1"),
-    covariate_to_include_strata=FALSE,
     car_scheme="biased-coin",
     g_family=binomial(link="logit"),
     g_accuracy=7,
-    adj_method="homogeneous")
+    formula="y ~ A")
   expect_equal(class(non), "GLMModelResult")
   expect_equal(length(non$mod$coefficients), 2)
 })
@@ -347,10 +351,9 @@ test_that("GLM -- no covariates except car_strata", {
     treat_col="A",
     car_scheme="biased-coin",
     car_strata_cols=c("z1"),
-    covariate_to_include_strata=TRUE,
     g_family=binomial(link="logit"),
     g_accuracy=7,
-    adj_method="heterogeneous")
+    formula="y ~ A * z1")
   expect_equal(length(non$mod$coefficients), 4)
 })
 
@@ -369,33 +372,27 @@ test_that("GLM -- test g_family types in print function", {
     response_col="y",
     treat_col="TRT01P",
     car_scheme="simple",
-    covariate_cols=c("BWTGR1"),
     g_family="binomial",
-    adj_method="homogeneous"
+    formula="y ~ TRT01P + BWTGR1"
   )
-  print(res1)
   # Test with function
   res2 <- robincar_glm(
     df=DATA4,
     response_col="y",
     treat_col="TRT01P",
     car_scheme="simple",
-    covariate_cols=c("BWTGR1"),
     g_family=binomial,
-    adj_method="homogeneous"
+    formula="y ~ TRT01P + BWTGR1"
   )
-  print(res2)
   # Test with object
   res3 <- robincar_glm(
     df=DATA4,
     response_col="y",
     treat_col="TRT01P",
     car_scheme="simple",
-    covariate_cols=c("BWTGR1"),
     g_family=binomial(link="logit"),
-    adj_method="homogeneous"
+    formula="y ~ TRT01P + BWTGR1"
   )
-  print(res3)
   expect_equal(res1$result, res2$result)
   expect_equal(res1$result, res3$result)
 })
@@ -413,9 +410,8 @@ test_that("GLM -- test that it does not matter if treatment levels
     response_col="y",
     treat_col="TRT01P",
     car_scheme="simple",
-    covariate_cols=c("BWTGR1"),
     g_family=binomial(link="logit"),
-    adj_method="homogeneous"
+    formula="y ~ TRT01P + BWTGR1"
   )
   # Labeled treatment groups
   res2 <- robincar_glm(
@@ -423,9 +419,8 @@ test_that("GLM -- test that it does not matter if treatment levels
     response_col="y",
     treat_col="TRT01P",
     car_scheme="simple",
-    covariate_cols=c("BWTGR1"),
     g_family=binomial(link="logit"),
-    adj_method="homogeneous"
+    formula="y ~ TRT01P + BWTGR1"
   )
   expect_equal(res1$result$estimate, res2$result$estimate)
   expect_equal(res1$result$se, res2$result$se)

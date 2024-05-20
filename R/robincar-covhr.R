@@ -37,7 +37,7 @@ robincar_covhr <- function(df,
                            adj_method="CL",
                            interval=c(-10, 10)){
 
-  .check.car_scheme(car_scheme)
+  .check.car_scheme(car_scheme, car_strata_cols)
 
   data <- .make.data(
     df=df,

@@ -22,95 +22,6 @@ vcov_sr_diag <- function(data, mod, residual=NULL){
   return(diag(c(result$se)**2))
 }
 
-# Gets the B matrix for ANCOVA models
-# in the asymptotic variance formula.
-vcov_sr_B <- function(data, mod){
-
-  xbeta <- stats::coef(mod)[-c(1:data$k)]
-  # if(length(xbeta) > data$k) stop("You don't need to calculate B for ANHECOVA model.")
-  coefmat <- rep(xbeta, data$k) %>% matrix(byrow=FALSE, ncol=data$k)
-
-  return(coefmat)
-}
-
-# Gets the Script B matrix for AN(HE)COVA models
-# in the asymptotic variance formula.
-vcov_sr_scriptB <- function(data, model){
-  # Create an ANHECOVA model to get coefficients for the variance
-  # calculation, that adjusts for whatever the adjustment variables were.
-  anhecova <- structure(list(adj_vars=model$adj_vars),
-                        class=c("LinModel", "ANHECOVA")
-  )
-  mod.anhecova <- linmod(anhecova, data)
-
-  xbeta <- stats::coef(mod.anhecova)[-c(1:data$k)]
-  coefmat <- matrix(xbeta, byrow=TRUE, ncol=data$k)
-
-  return(coefmat)
-}
-
-# Generic function for getting the asymptotic variance-covariance
-# matrix under simple randomization.
-vcov_sr <- function(model, data, mod){
-  UseMethod("vcov_sr", model)
-}
-
-# Gets ANOVA asymptotic variance under simple randomization
-#' @exportS3Method
-vcov_sr.ANOVA <- function(model, data, mod){
-  varcov <- vcov_sr_diag(data, mod)
-  return(varcov)
-}
-
-# Gets ANCOVA asymptotic variance under simple randomization
-#' @exportS3Method
-vcov_sr.ANCOVA <- function(model, data, mod){
-  diagmat <- vcov_sr_diag(data, mod)
-  dmat <- get.dmat(data, model$adj_vars) %>% .center.dmat
-  covX <- stats::cov(dmat)
-
-  B <- vcov_sr_B(data, mod)
-  ScriptB <- vcov_sr_scriptB(data, model)
-
-  # Get rid of variables that were collinear
-  # in the regression
-  C <- apply(is.na(ScriptB), FUN=any, MARGIN=1)
-
-  if(length(C) > 1){
-    ScriptB <- ScriptB[!C,]
-    B <- B[!C,]
-    covX <- covX[!C,!C]
-  }
-  varcov <- diagmat +
-    t(ScriptB) %*% covX %*% B +
-    t(B) %*% covX %*% ScriptB -
-    t(B) %*% covX %*% B
-
-  return(varcov)
-}
-
-# Gets ANHECOVA asymptotic variance under simple randomization
-#' @exportS3Method
-vcov_sr.ANHECOVA <- function(model, data, mod){
-
-  diagmat <- vcov_sr_diag(data, mod)
-  dmat <- get.dmat(data, model$adj_vars) %>% .center.dmat
-  covX <- stats::cov(dmat)
-
-  ScriptB <- vcov_sr_scriptB(data, model)
-  C <- apply(is.na(ScriptB), FUN=any, MARGIN=1)
-
-  if(length(C) > 1){
-    ScriptB <- ScriptB[!C,]
-    covX <- covX[!C,!C]
-  }
-
-  varcov <- diagmat +
-    t(ScriptB) %*% covX %*% ScriptB
-
-  return(varcov)
-}
-
 #' @importFrom rlang .data
 #' @importFrom dplyr filter
 get.erb <- function(model, data, mod, mu_hat=NULL){
@@ -168,23 +79,8 @@ get.erb <- function(model, data, mod, mu_hat=NULL){
   return(ERB)
 }
 
-vcov_car <- function(model, data, mod, ...){
-  UseMethod("vcov_car", model)
-}
-
-#' @exportS3Method
-vcov_car.LinModel <- function(model, data, mod, ...){
-  # Get the variance under simple randomization
-  v <- vcov_sr(model, data, mod)
-  # Adjust for Z if needed
-  if(!is.null(model$omegaz_func)) v <- v - get.erb(model, data, mod)
-
-  return(v)
-}
-
 # Gets AIPW asymptotic variance under simple randomization
-#' @exportS3Method
-vcov_car.GLMModel <- function(model, data, mod, mutilde, ...){
+vcov_car <- function(model, data, mod, mutilde){
 
   # Get predictions for observed treatment group
   preds <- matrix(nrow=data$n, ncol=1)
@@ -226,11 +122,5 @@ vcov_car.GLMModel <- function(model, data, mod, mutilde, ...){
   # Adjust for Z if necessary
   if(!is.null(model$omegaz_func)) v <- v - get.erb(model, data, mod, mu_hat=preds)
 
-  return(v)
-}
-
-#' @exportS3Method
-vcov_car.SLModel <- function(model, data, mod, mutilde, ...){
-  v <- vcov_car.GLMModel(model, data, mod, mutilde)
   return(v)
 }

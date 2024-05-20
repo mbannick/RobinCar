@@ -12,7 +12,6 @@ robincar_linear(
   covariate_cols = NULL,
   car_scheme = "simple",
   adj_method = "ANOVA",
-  covariate_to_include_strata = NULL,
   contrast_h = NULL,
   contrast_dh = NULL
 )
@@ -26,22 +25,29 @@ robincar_linear(
 
 \item{car_strata_cols}{Names of columns in df with car_strata variables}
 
-\item{covariate_cols}{Names of columns in df with covariate variables}
+\item{covariate_cols}{Names of columns in df with covariate variables. **If you want to include the strata variables as covariates also, add them here.**}
 
 \item{car_scheme}{Name of the type of covariate-adaptive randomization scheme. One of: "simple", "pocock-simon", "biased-coin", "permuted-block".}
 
 \item{adj_method}{Name of linear adjustment method to use. One of: "ANOVA", "ANCOVA", "ANHECOVA".}
-
-\item{covariate_to_include_strata}{Whether to include car_strata variables in covariate adjustment. Defaults to F for ANOVA and ANCOVA; defaults to T for ANHECOVA. User may override by passing in this argument.}
 
 \item{contrast_h}{An optional function to specify a desired contrast}
 
 \item{contrast_dh}{An optional jacobian function for the contrast (otherwise use numerical derivative)}
 }
 \value{
-See value of \link[RobinCar:robincar_glm]{RobinCar::robincar_glm()}, this function is a wrapper using an identity link for the glm.
+See value of \link[RobinCar:robincar_glm]{RobinCar::robincar_glm()}, this function is a wrapper
+using a linear link function.
 }
 \description{
 Estimate treatment-group-specific response means and (optionally)
 treatment group contrasts using a linear working model for continuous outcomes.
+}
+\details{
+* Adjustment method "ANOVA" fits a linear model with formula `Y ~ A` where
+`A` is the treatment group indicator and `Y` is the response.
+* "ANCOVA" fits a linear model with `Y ~ A + X` where `X` are the variables
+specified in the `covariate_cols` argument.
+* "ANHECOVA" fits a linear model with `Y ~ A*X`, the main effects and treatment-by-covariate
+interactions.
 }

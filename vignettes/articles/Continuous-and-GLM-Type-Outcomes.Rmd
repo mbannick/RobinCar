@@ -57,12 +57,14 @@ fit.ancova <- robincar_linear2(df = data,
 
 ### ANHECOVA model with Pocock-Simon randomization and linear contrast
 
+Include strata variables in the covariates.
+
 ```{r}
 fit.anhecova <- robincar_linear2(df = data, 
                                  response_col="y",
                                  treat_col="A",
                                  car_strata_cols=c("z1", "z2"),
-                                 covariate_cols=c("x1", "x3"),
+                                 covariate_cols=c("x1", "x3", "z1", "z2"),
                                  car_scheme="pocock-simon",
                                  adj_method="ANHECOVA",
                                  contrast_h="diff")

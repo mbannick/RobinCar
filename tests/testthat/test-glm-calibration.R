@@ -8,12 +8,10 @@ test_that("test calibration", {
     response_col="y",
     treat_col="A",
     car_strata_cols=c("z1"),
-    covariate_cols=c("x3"),
-    covariate_to_include_strata=FALSE,
     car_scheme="biased-coin",
     g_family=binomial(link="logit"),
     g_accuracy=7,
-    adj_method="homogeneous"))
+    formula="y ~ A + x3"))
 
   that <- Robin_g(
     robin.data=DATA,

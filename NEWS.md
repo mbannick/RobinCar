@@ -1,3 +1,15 @@
+# RobinCar 0.3.0
+
+## Features
+
+* Changed the name description of RobinCar.
+
+## Breaking Changes
+
+* Simplified user experience for `robincar_glm`: removed `robincar_glm`,
+and renamed `robincar_glm2` to `robincar_glm`. Same with `robincar_linear` and `robincar_linear2`. In effect,
+the older versions of `robincar_linear` and `robincar_glm` have been deprecated.
+
 # RobinCar 0.2.0
 
 ## Features
