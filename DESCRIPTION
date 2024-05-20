@@ -1,7 +1,7 @@
 Package: RobinCar
 Type: Package
 Title: Robust Estimation and Inference in Covariate-Adaptive Randomization
-Version: 0.3.0
+Version: 0.3.1
 Authors@R: c(
     person("Marlena", "Bannick", 
         email="mnorwood@uw.edu", 
