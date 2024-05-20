@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RobinCar</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0</span>
       </span>
     </div>
 
@@ -115,17 +115,15 @@ then perform linear and joint calibration.</p>
 <span>  response_col<span class="op">=</span><span class="st">"y_bin"</span>,</span>
 <span>  treat_col<span class="op">=</span><span class="st">"A"</span>,</span>
 <span>  car_strata_cols<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"z1"</span><span class="op">)</span>,</span>
-<span>  covariate_cols<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x3"</span><span class="op">)</span>,</span>
 <span>  car_scheme<span class="op">=</span><span class="st">"biased-coin"</span>,</span>
 <span>  g_family<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">binomial</a></span><span class="op">(</span>link<span class="op">=</span><span class="st">"logit"</span><span class="op">)</span>,</span>
-<span>  covariate_to_include_strata<span class="op">=</span><span class="cn">TRUE</span>,</span>
 <span>  g_accuracy<span class="op">=</span><span class="fl">7</span>,</span>
-<span>  adj_method<span class="op">=</span><span class="st">"homogeneous"</span></span>
+<span>  formula<span class="op">=</span><span class="st">"y_bin ~ A + x3 + z1"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Treatment group mean estimates using a aipw-type estimator</span></span>
-<span><span class="co">#&gt; from a GLM working model of family binomial and link logit</span></span>
-<span><span class="co">#&gt; using adjustment variables: x3, joint levels of z1.</span></span>
+<span><span class="co">#&gt; Treatment group mean estimates from a GLM working model of family binomial and link logit using formula: </span></span>
+<span><span class="co">#&gt; response ~ treat + x3 + z1</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Used HC0-type of heteroskedasticity-consistent variance estimates </span></span>
 <span><span class="co">#&gt; and adjusted variance-covariance matrix for randomization car_strata z1 </span></span>
@@ -156,9 +154,9 @@ fits a model with the predicted potential outcomes as covariates.</p>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Linear calibration on the following model result:</span></span>
 <span><span class="co">#&gt; --------------------------------------------</span></span>
-<span><span class="co">#&gt; Treatment group mean estimates using a aipw-type estimator</span></span>
-<span><span class="co">#&gt; from a GLM working model of family binomial and link logit</span></span>
-<span><span class="co">#&gt; using adjustment variables: x3, joint levels of z1.</span></span>
+<span><span class="co">#&gt; Treatment group mean estimates from a GLM working model of family binomial and link logit using formula: </span></span>
+<span><span class="co">#&gt; response ~ treat + x3 + z1</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Used HC0-type of heteroskedasticity-consistent variance estimates </span></span>
 <span><span class="co">#&gt; and adjusted variance-covariance matrix for randomization car_strata z1 </span></span>
@@ -187,9 +185,9 @@ joint strata variables.</p>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Joint calibration on the following model result:</span></span>
 <span><span class="co">#&gt; --------------------------------------------</span></span>
-<span><span class="co">#&gt; Treatment group mean estimates using a aipw-type estimator</span></span>
-<span><span class="co">#&gt; from a GLM working model of family binomial and link logit</span></span>
-<span><span class="co">#&gt; using adjustment variables: x3, joint levels of z1.</span></span>
+<span><span class="co">#&gt; Treatment group mean estimates from a GLM working model of family binomial and link logit using formula: </span></span>
+<span><span class="co">#&gt; response ~ treat + x3 + z1</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Used HC0-type of heteroskedasticity-consistent variance estimates </span></span>
 <span><span class="co">#&gt; and adjusted variance-covariance matrix for randomization car_strata z1 </span></span>
@@ -220,9 +218,9 @@ specified additional covariates (and the joint strata if
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Joint calibration, additionally adjusting for covariatesextra_cov, , on the following model result:</span></span>
 <span><span class="co">#&gt; --------------------------------------------</span></span>
-<span><span class="co">#&gt; Treatment group mean estimates using a aipw-type estimator</span></span>
-<span><span class="co">#&gt; from a GLM working model of family binomial and link logit</span></span>
-<span><span class="co">#&gt; using adjustment variables: x3, joint levels of z1.</span></span>
+<span><span class="co">#&gt; Treatment group mean estimates from a GLM working model of family binomial and link logit using formula: </span></span>
+<span><span class="co">#&gt; response ~ treat + x3 + z1</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Used HC0-type of heteroskedasticity-consistent variance estimates </span></span>
 <span><span class="co">#&gt; and adjusted variance-covariance matrix for randomization car_strata z1 </span></span>
@@ -257,7 +255,7 @@ specified additional covariates (and the joint strata if
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by Marlena Bannick.</p>
+<p>Developed by Marlena Bannick, Ting Ye, Yanyao Yi, Faith Bian.</p>
 </div>
 
 <div class="pkgdown">

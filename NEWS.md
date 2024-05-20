@@ -1,3 +1,9 @@
+# RobinCar 0.3.1
+
+## Bugfixes
+
+* Updated vignettes so that they reflect `robincar_glm` and `robincar_linear` changes made in RobinCar 0.3.0.
+
 # RobinCar 0.3.0
 
 ## Features

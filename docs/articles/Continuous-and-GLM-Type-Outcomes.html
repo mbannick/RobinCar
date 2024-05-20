@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RobinCar</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0</span>
       </span>
     </div>
 
@@ -116,7 +116,7 @@ Covariate Adjustment in Randomized Clinical Trials</a>.</p>
 <h3 id="anova-model">ANOVA Model<a class="anchor" aria-label="anchor" href="#anova-model"></a>
 </h3>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fit.anova</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/robincar_linear2.html">robincar_linear2</a></span><span class="op">(</span>df <span class="op">=</span> <span class="va">data</span>, </span>
+<code class="sourceCode R"><span><span class="va">fit.anova</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/robincar_linear.html">robincar_linear</a></span><span class="op">(</span>df <span class="op">=</span> <span class="va">data</span>, </span>
 <span>                              response_col<span class="op">=</span><span class="st">"y"</span>,</span>
 <span>                              treat_col<span class="op">=</span><span class="st">"A"</span>,</span>
 <span>                              covariate_cols<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x1"</span>, <span class="st">"x3"</span><span class="op">)</span>,</span>
@@ -127,7 +127,7 @@ Covariate Adjustment in Randomized Clinical Trials</a>.</p>
 <h3 id="ancova-model-with-biased-coin-randomization">ANCOVA model with biased coin randomization<a class="anchor" aria-label="anchor" href="#ancova-model-with-biased-coin-randomization"></a>
 </h3>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fit.ancova</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/robincar_linear2.html">robincar_linear2</a></span><span class="op">(</span>df <span class="op">=</span> <span class="va">data</span>, </span>
+<code class="sourceCode R"><span><span class="va">fit.ancova</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/robincar_linear.html">robincar_linear</a></span><span class="op">(</span>df <span class="op">=</span> <span class="va">data</span>, </span>
 <span>                               response_col<span class="op">=</span><span class="st">"y"</span>,</span>
 <span>                               treat_col<span class="op">=</span><span class="st">"A"</span>,</span>
 <span>                               car_strata_cols<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"z1"</span>, <span class="st">"z2"</span><span class="op">)</span>,</span>
@@ -139,15 +139,17 @@ Covariate Adjustment in Randomized Clinical Trials</a>.</p>
 <h3 id="anhecova-model-with-pocock-simon-randomization-and-linear-contrast">ANHECOVA model with Pocock-Simon randomization and linear
 contrast<a class="anchor" aria-label="anchor" href="#anhecova-model-with-pocock-simon-randomization-and-linear-contrast"></a>
 </h3>
+<p>Include strata variables in the covariates.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fit.anhecova</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/robincar_linear2.html">robincar_linear2</a></span><span class="op">(</span>df <span class="op">=</span> <span class="va">data</span>, </span>
+<code class="sourceCode R"><span><span class="va">fit.anhecova</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/robincar_linear.html">robincar_linear</a></span><span class="op">(</span>df <span class="op">=</span> <span class="va">data</span>, </span>
 <span>                                 response_col<span class="op">=</span><span class="st">"y"</span>,</span>
 <span>                                 treat_col<span class="op">=</span><span class="st">"A"</span>,</span>
 <span>                                 car_strata_cols<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"z1"</span>, <span class="st">"z2"</span><span class="op">)</span>,</span>
-<span>                                 covariate_cols<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x1"</span>, <span class="st">"x3"</span><span class="op">)</span>,</span>
+<span>                                 covariate_cols<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x1"</span>, <span class="st">"x3"</span>, <span class="st">"z1"</span>, <span class="st">"z2"</span><span class="op">)</span>,</span>
 <span>                                 car_scheme<span class="op">=</span><span class="st">"pocock-simon"</span>,</span>
 <span>                                 adj_method<span class="op">=</span><span class="st">"ANHECOVA"</span>,</span>
 <span>                                 contrast_h<span class="op">=</span><span class="st">"diff"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in func(): We suggest you try out robin_calibrate.</span></span>
 <span><span class="co">#&gt; Warning in func(): Prediction unbiasedness does not hold in all joint levels of</span></span>
 <span><span class="co">#&gt; Z.</span></span></code></pre></div>
 </div>
@@ -166,13 +168,16 @@ contrast<a class="anchor" aria-label="anchor" href="#anhecova-model-with-pocock-
 <span>                               response_col<span class="op">=</span><span class="st">"y_bin"</span>,</span>
 <span>                               treat_col<span class="op">=</span><span class="st">"A"</span>,</span>
 <span>                               car_strata_cols<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"z1"</span><span class="op">)</span>,</span>
-<span>                               formula<span class="op">=</span><span class="st">"y_bin ~ A*z1"</span>,</span>
+<span>                               formula<span class="op">=</span><span class="st">"y_bin ~ A"</span>,</span>
 <span>                               car_scheme<span class="op">=</span><span class="st">"pocock-simon"</span>,</span>
 <span>                               g_family<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">binomial</a></span><span class="op">(</span>link<span class="op">=</span><span class="st">"logit"</span><span class="op">)</span>,</span>
 <span>                               g_accuracy<span class="op">=</span><span class="fl">7</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in func(): We suggest you try out robin_calibrate.</span></span>
+<span><span class="co">#&gt; Warning in func(): Prediction unbiasedness does not hold in all joint levels of</span></span>
+<span><span class="co">#&gt; Z.</span></span>
 <span><span class="va">glm.homogeneous</span></span>
 <span><span class="co">#&gt; Treatment group mean estimates from a GLM working model of family binomial and link logit using formula: </span></span>
-<span><span class="co">#&gt; response ~ treat * z1</span></span>
+<span><span class="co">#&gt; response ~ treat</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Used HC0-type of heteroskedasticity-consistent variance estimates </span></span>
@@ -199,15 +204,14 @@ contrast<a class="anchor" aria-label="anchor" href="#anhecova-model-with-pocock-
 <span>                               response_col<span class="op">=</span><span class="st">"y_bin"</span>,</span>
 <span>                               treat_col<span class="op">=</span><span class="st">"A"</span>,</span>
 <span>                               car_strata_cols<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"z2"</span><span class="op">)</span>,</span>
-<span>                               formula<span class="op">=</span><span class="st">"y_bin ~ A:(x1+z2)"</span>,</span>
+<span>                               formula<span class="op">=</span><span class="st">"y_bin ~ A*(x1+z2)"</span>,</span>
 <span>                               car_scheme<span class="op">=</span><span class="st">"biased-coin"</span>,</span>
 <span>                               g_family<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">binomial</a></span><span class="op">(</span>link<span class="op">=</span><span class="st">"logit"</span><span class="op">)</span>,</span>
 <span>                               g_accuracy<span class="op">=</span><span class="fl">7</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in func(): Prediction unbiasedness does not hold.</span></span>
 <span></span>
 <span><span class="va">glm.heterogeneous</span></span>
 <span><span class="co">#&gt; Treatment group mean estimates from a GLM working model of family binomial and link logit using formula: </span></span>
-<span><span class="co">#&gt; response ~ treat:(x1 + z2)</span></span>
+<span><span class="co">#&gt; response ~ treat * (x1 + z2)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Used HC0-type of heteroskedasticity-consistent variance estimates </span></span>
@@ -218,32 +222,32 @@ contrast<a class="anchor" aria-label="anchor" href="#anhecova-model-with-pocock-
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 4</span></span></span>
 <span><span class="co">#&gt;   treat estimate     se `pval (2-sided)`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 0        0.544 0.034<span style="text-decoration: underline;">9</span>        7.28<span style="color: #949494;">e</span><span style="color: #BB0000;">- 55</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 1        0.769 0.027<span style="text-decoration: underline;">4</span>        4.26<span style="color: #949494;">e</span><span style="color: #BB0000;">-173</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 2        0.712 0.030<span style="text-decoration: underline;">8</span>        9.24<span style="color: #949494;">e</span><span style="color: #BB0000;">-118</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 0        0.559 0.029<span style="text-decoration: underline;">7</span>        3.27<span style="color: #949494;">e</span><span style="color: #BB0000;">- 79</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 1        0.771 0.027<span style="text-decoration: underline;">3</span>        3.37<span style="color: #949494;">e</span><span style="color: #BB0000;">-176</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 2        0.711 0.030<span style="text-decoration: underline;">8</span>        5.25<span style="color: #949494;">e</span><span style="color: #BB0000;">-118</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variance-Covariance Matrix:</span></span>
 <span><span class="co">#&gt;           [,1]         [,2]         [,3]</span></span>
-<span><span class="co">#&gt; 0 1.215742e-03 9.686267e-05 2.962904e-05</span></span>
-<span><span class="co">#&gt; 1 9.686267e-05 7.512668e-04 7.534383e-05</span></span>
-<span><span class="co">#&gt; 2 2.962904e-05 7.534383e-05 9.514862e-04</span></span></code></pre></div>
+<span><span class="co">#&gt; 0 8.810939e-04 7.535047e-05 1.730168e-05</span></span>
+<span><span class="co">#&gt; 1 7.535047e-05 7.431284e-04 7.862983e-05</span></span>
+<span><span class="co">#&gt; 2 1.730168e-05 7.862983e-05 9.482230e-04</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="working-model-specified-using-a-formula-with-biased-coin-randomization">Working model specified using a formula, with biased-coin
 randomization<a class="anchor" aria-label="anchor" href="#working-model-specified-using-a-formula-with-biased-coin-randomization"></a>
 </h3>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">glm.formula</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/robincar_glm2.html">robincar_glm2</a></span><span class="op">(</span>df <span class="op">=</span> <span class="va">data</span>,</span>
+<code class="sourceCode R"><span><span class="va">glm.formula</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/robincar_glm.html">robincar_glm</a></span><span class="op">(</span>df <span class="op">=</span> <span class="va">data</span>,</span>
 <span>                             response_col<span class="op">=</span><span class="st">"y_bin"</span>,</span>
 <span>                             treat_col<span class="op">=</span><span class="st">"A"</span>,</span>
-<span>                             formula<span class="op">=</span><span class="st">"y_bin ~ A + z2:x1"</span>,</span>
+<span>                             formula<span class="op">=</span><span class="st">"y_bin ~ A + z2*x1"</span>,</span>
 <span>                             car_strata_cols<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"z2"</span><span class="op">)</span>,</span>
 <span>                             car_scheme<span class="op">=</span><span class="st">"biased-coin"</span>,</span>
 <span>                             g_family<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">binomial</a></span><span class="op">(</span>link<span class="op">=</span><span class="st">"logit"</span><span class="op">)</span>,</span>
 <span>                             g_accuracy<span class="op">=</span><span class="fl">7</span><span class="op">)</span></span>
 <span><span class="va">glm.formula</span></span>
 <span><span class="co">#&gt; Treatment group mean estimates from a GLM working model of family binomial and link logit using formula: </span></span>
-<span><span class="co">#&gt; response ~ treat + z2:x1</span></span>
+<span><span class="co">#&gt; response ~ treat + z2 * x1</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Used HC0-type of heteroskedasticity-consistent variance estimates </span></span>
@@ -254,22 +258,22 @@ randomization<a class="anchor" aria-label="anchor" href="#working-model-specifie
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 4</span></span></span>
 <span><span class="co">#&gt;   treat estimate     se `pval (2-sided)`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 0        0.560 0.033<span style="text-decoration: underline;">6</span>        2.74<span style="color: #949494;">e</span><span style="color: #BB0000;">- 62</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 1        0.761 0.028<span style="text-decoration: underline;">2</span>        4.73<span style="color: #949494;">e</span><span style="color: #BB0000;">-160</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 2        0.713 0.031<span style="text-decoration: underline;">1</span>        2.18<span style="color: #949494;">e</span><span style="color: #BB0000;">-116</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 0        0.552 0.033<span style="text-decoration: underline;">6</span>        8.21<span style="color: #949494;">e</span><span style="color: #BB0000;">- 61</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 1        0.768 0.027<span style="text-decoration: underline;">4</span>        5.97<span style="color: #949494;">e</span><span style="color: #BB0000;">-173</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 2        0.711 0.031<span style="text-decoration: underline;">1</span>        8.30<span style="color: #949494;">e</span><span style="color: #BB0000;">-116</span></span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variance-Covariance Matrix:</span></span>
 <span><span class="co">#&gt;           [,1]         [,2]         [,3]</span></span>
-<span><span class="co">#&gt; 0 1.129367e-03 6.708274e-05 3.596939e-05</span></span>
-<span><span class="co">#&gt; 1 6.708274e-05 7.976068e-04 6.376515e-05</span></span>
-<span><span class="co">#&gt; 2 3.596939e-05 6.376515e-05 9.678578e-04</span></span></code></pre></div>
+<span><span class="co">#&gt; 0 1.127826e-03 8.393991e-05 4.029865e-05</span></span>
+<span><span class="co">#&gt; 1 8.393991e-05 7.506673e-04 8.000648e-05</span></span>
+<span><span class="co">#&gt; 2 4.029865e-05 8.000648e-05 9.672620e-04</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="heterogeneous-working-model-with-biased-coin-randomization-differences-contrast">Heterogeneous working model with biased-coin randomization,
 differences contrast<a class="anchor" aria-label="anchor" href="#heterogeneous-working-model-with-biased-coin-randomization-differences-contrast"></a>
 </h3>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">glm.heterogeneous</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/robincar_glm2.html">robincar_glm2</a></span><span class="op">(</span>df <span class="op">=</span> <span class="va">data</span>,</span>
+<code class="sourceCode R"><span><span class="va">glm.heterogeneous</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/robincar_glm.html">robincar_glm</a></span><span class="op">(</span>df <span class="op">=</span> <span class="va">data</span>,</span>
 <span>                                   response_col<span class="op">=</span><span class="st">"y_bin"</span>,</span>
 <span>                                   treat_col<span class="op">=</span><span class="st">"A"</span>,</span>
 <span>                                   car_strata_cols<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"z2"</span><span class="op">)</span>,</span>
@@ -332,7 +336,7 @@ differences contrast<a class="anchor" aria-label="anchor" href="#heterogeneous-w
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by Marlena Bannick.</p>
+<p>Developed by Marlena Bannick, Ting Ye, Yanyao Yi, Faith Bian.</p>
 </div>
 
 <div class="pkgdown">
