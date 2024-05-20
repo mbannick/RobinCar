@@ -10,6 +10,11 @@
 and renamed `robincar_glm2` to `robincar_glm`. Same with `robincar_linear` and `robincar_linear2`. In effect,
 the older versions of `robincar_linear` and `robincar_glm` have been deprecated.
 
+## Bugfixes
+
+* Previously, the factor level order passed by the user for the treatment variable was ignored. We have fixed this,
+so all estimates will be presented in the order of treatment levels specified by user.
+
 # RobinCar 0.2.0
 
 ## Features
