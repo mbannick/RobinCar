@@ -24,6 +24,7 @@ fitmod <- function(family, ...){
 # of the model. Will perform adjustment based on the linear
 # model type of `model` and also do G-computation or AIPW
 # based on the second model type of `model`.
+#' @importFrom stats setNames
 #' @exportS3Method
 adjust.GLMModel <- function(model, data, ...){
 
