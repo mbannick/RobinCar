@@ -73,7 +73,6 @@ treatment group contrasts using a linear working model for continuous outcomes.<
 <span>  covariate_cols <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  car_scheme <span class="op">=</span> <span class="st">"simple"</span>,</span>
 <span>  adj_method <span class="op">=</span> <span class="st">"ANOVA"</span>,</span>
-<span>  covariate_to_include_strata <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  contrast_h <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  contrast_dh <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -98,7 +97,7 @@ treatment group contrasts using a linear working model for continuous outcomes.<
 
 
 <dt>covariate_cols</dt>
-<dd><p>Names of columns in df with covariate variables</p></dd>
+<dd><p>Names of columns in df with covariate variables. **If you want to include the strata variables as covariates also, add them here.**</p></dd>
 
 
 <dt>car_scheme</dt>
@@ -109,10 +108,6 @@ treatment group contrasts using a linear working model for continuous outcomes.<
 <dd><p>Name of linear adjustment method to use. One of: "ANOVA", "ANCOVA", "ANHECOVA".</p></dd>
 
 
-<dt>covariate_to_include_strata</dt>
-<dd><p>Whether to include car_strata variables in covariate adjustment. Defaults to F for ANOVA and ANCOVA; defaults to T for ANHECOVA. User may override by passing in this argument.</p></dd>
-
-
 <dt>contrast_h</dt>
 <dd><p>An optional function to specify a desired contrast</p></dd>
 
@@ -121,6 +116,22 @@ treatment group contrasts using a linear working model for continuous outcomes.<
 <dd><p>An optional jacobian function for the contrast (otherwise use numerical derivative)</p></dd>
 
 </dl></div>
+    <div id="value">
+    <h2>Value</h2>
+    
+
+<p>See value of <a href="robincar_glm.html">RobinCar::robincar_glm()</a>, this function is a wrapper
+using a linear link function.</p>
+    </div>
+    <div id="details">
+    <h2>Details</h2>
+    <p>* Adjustment method "ANOVA" fits a linear model with formula `Y ~ A` where
+`A` is the treatment group indicator and `Y` is the response.
+* "ANCOVA" fits a linear model with `Y ~ A + X` where `X` are the variables
+specified in the `covariate_cols` argument.
+* "ANHECOVA" fits a linear model with `Y ~ A*X`, the main effects and treatment-by-covariate
+interactions.</p>
+    </div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -130,7 +141,7 @@ treatment group contrasts using a linear working model for continuous outcomes.<
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Marlena Bannick.</p>
+  <p></p><p>Developed by Marlena Bannick, Ting Ye, Yanyao Yi, Faith Bian.</p>
 </div>
 
 <div class="pkgdown">
