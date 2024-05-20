@@ -17,19 +17,14 @@
 #' @param df A data.frame with the required columns
 #' @param treat_col Name of column in df with treatment variable
 #' @param response_col Name of the column in df with response variable
+#' @param formula The formula to use for adjustment specified using as.formula("..."). This overrides car_strata_cols and covariate_cols.
 #' @param car_strata_cols Names of columns in df with car_strata variables
-#' @param covariate_cols Names of columns in df with covariate variables
 #' @param car_scheme Name of the type of covariate-adaptive randomization scheme. One of: "simple", "pocock-simon", "biased-coin", "permuted-block".
-#' @param adj_method Name of adjustment method to use, one of "heterogeneous" (interaction model) or "homogeneous"
-# @param vcovHC Type of heteroskedasticity-consistent variance estimates. One of: "HC0", "HC1", "HC3".
-#' @param covariate_to_include_strata Whether to include car_strata variables in covariate adjustment. Defaults to F for homogeneous; defaults to T for heterogeneous. User may override by passing in this argument.
 #' @param contrast_h An optional function to specify a desired contrast
 #' @param contrast_dh An optional jacobian function for the contrast (otherwise use numerical derivative)
-#' @param g_family Family that would be supplied to \link[stats:glm]{glm()}, e.g., binomial. If no link specified, will use default link, like behavior in glm.
+#' @param g_family Family that would be supplied to glm(...), e.g., binomial. If no link specified, will use default link, like behavior in glm.
 #'                 If you wish to use a negative binomial working model with an unknown dispersion parameter, then use `g_family="nb"`.
 #' @param g_accuracy Level of accuracy to check prediction un-biasedness.
-#' @param formula An optional formula to use for adjustment specified using as.formula("..."). This overrides car_strata_cols and covariate_cols.
-#'
 #' @export
 #'
 #' @returns If `contrast_h` argument is used, outputs a `main` and a `contrast` object. The `main` object has the following structure:
@@ -45,17 +40,14 @@
 #'
 #'  The `contrast` object has a structure that is documented in \link[RobinCar:robincar_contrast]{RobinCar::robincar_contrast()}.
 robincar_glm <- function(df,
-                         treat_col, response_col, car_strata_cols=NULL, covariate_cols=NULL,
-                         car_scheme="simple", adj_method="heterogeneous", # vcovHC="HC0",
-                         covariate_to_include_strata=NULL,
-                         g_family=stats::gaussian, g_accuracy=7, formula=NULL,
+                         treat_col, response_col,
+                         formula=NULL, car_strata_cols=NULL,
+                         car_scheme="simple",
+                         g_family=stats::gaussian, g_accuracy=7,
                          contrast_h=NULL, contrast_dh=NULL){
 
-  .check.car_scheme(car_scheme)
-  .check.adj_method.glm(adj_method)
-  # .check.vcovHC(vcovHC)
-  # for now, until we implement a better degrees of freedom correction
-  # only allowing HC0.
+  .check.car_scheme(car_scheme, car_strata_cols)
+
   vcovHC <- "HC0"
 
   data <- .make.data(
@@ -63,7 +55,6 @@ robincar_glm <- function(df,
     treat_col=treat_col,
     response_col=response_col,
     car_strata_cols=car_strata_cols,
-    covariate_cols=covariate_cols,
     formula=formula
   )
   validate(data)
@@ -71,10 +62,8 @@ robincar_glm <- function(df,
   # Create model object
   model <- .make.model(
     data=data,
-    adj_method=adj_method,
     car_scheme=car_scheme,
     vcovHC=vcovHC,
-    covariate_to_include_strata=covariate_to_include_strata,
     g_family=g_family,
     g_accuracy=g_accuracy
   )
@@ -95,43 +84,4 @@ robincar_glm <- function(df,
   }
 
   return(result)
-}
-
-#' Covariate adjustment using generalized linear working model, with simplified interface.
-#'
-#' @param df A data.frame with the required columns
-#' @param treat_col Name of column in df with treatment variable
-#' @param response_col Name of the column in df with response variable
-#' @param formula The formula to use for adjustment specified using as.formula("..."). This overrides car_strata_cols and covariate_cols.
-#' @param car_strata_cols Names of columns in df with car_strata variables
-#' @param car_scheme Name of the type of covariate-adaptive randomization scheme. One of: "simple", "pocock-simon", "biased-coin", "permuted-block".
-#' @param contrast_h An optional function to specify a desired contrast
-#' @param contrast_dh An optional jacobian function for the contrast (otherwise use numerical derivative)
-#' @param g_family Family that would be supplied to glm(...), e.g., binomial. If no link specified, will use default link, like behavior in glm.
-#'                 If you wish to use a negative binomial working model with an unknown dispersion parameter, then use `g_family="nb"`.
-#' @param g_accuracy Level of accuracy to check prediction un-biasedness.
-#' @export
-#'
-#' @returns See value of \link[RobinCar:robincar_glm]{RobinCar::robincar_glm()}. This function is a wrapper for \link[RobinCar:robincar_glm]{RobinCar::robincar_glm()}.
-robincar_glm2 <- function(df,
-                          treat_col, response_col,
-                          formula=NULL, car_strata_cols=NULL,
-                          car_scheme="simple",
-                          g_family=stats::gaussian, g_accuracy=7,
-                          contrast_h=NULL, contrast_dh=NULL){
-
-  obj <- robincar_glm(
-    df=df,
-    treat_col=treat_col,
-    response_col=response_col,
-    car_strata_cols=car_strata_cols,
-    car_scheme=car_scheme,
-    g_family=g_family,
-    g_accuracy=g_accuracy,
-    formula=formula,
-    contrast_h=contrast_h,
-    contrast_dh=contrast_dh
-  )
-
-  return(obj)
 }

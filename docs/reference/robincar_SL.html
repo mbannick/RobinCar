@@ -113,11 +113,11 @@ treatment group contrasts using a generalized linear working model.</p>
 
 
 <dt>SL_libraries</dt>
-<dd><p>Vector of super-learner libraries to use for the covariate adjustment (see SuperLearner::listWrappers())</p></dd>
+<dd><p>Vector of super-learner libraries to use for the covariate adjustment (see <a href="https://rdrr.io/pkg/SuperLearner/man/listWrappers.html" class="external-link">SuperLearner::listWrappers</a>)</p></dd>
 
 
 <dt>SL_learners</dt>
-<dd><p>Optional list of super-learner "learners" to use for the covariate adjustment (see SuperLearner::create.Learner)</p></dd>
+<dd><p>Optional list of super-learner "learners" to use for the covariate adjustment (see <a href="https://rdrr.io/pkg/SuperLearner/man/create.Learner.html" class="external-link">SuperLearner::create.Learner())</a></p></dd>
 
 
 <dt>k_split</dt>
@@ -136,11 +136,18 @@ treatment group contrasts using a generalized linear working model.</p>
 <dd><p>An optional jacobian function for the contrast (otherwise use numerical derivative)</p></dd>
 
 </dl></div>
+    <div id="value">
+    <h2>Value</h2>
+    
+
+<p>See value of <a href="robincar_glm.html">RobinCar::robincar_glm</a>, but the working model for \(\hat{\mu}(X_i)\) is based on the AIPW package that uses specified SuperLearner libraries and cross-fitting.
+Also, `mod` attribute is an object of class <a href="https://rdrr.io/pkg/AIPW/man/AIPW.html" class="external-link">AIPW::AIPW</a>.</p>
+    </div>
     <div id="details">
     <h2>Details</h2>
     <p>*WARNING: This function is still under development and has not been extensively tested.*
 This function currently only works for two treatment groups.
-Before using this function, you must load the SuperLearner library with
+Before using this function, you must load the <a href="https://rdrr.io/pkg/SuperLearner/man/SuperLearner.html" class="external-link">SuperLearner</a> library with
 `library(SuperLearner)`, otherwise the function call will fail.</p>
     </div>
 
@@ -210,7 +217,7 @@ Before using this function, you must load the SuperLearner library with
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Marlena Bannick.</p>
+  <p></p><p>Developed by Marlena Bannick, Ting Ye, Yanyao Yi, Faith Bian.</p>
 </div>
 
 <div class="pkgdown">

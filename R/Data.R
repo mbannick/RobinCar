@@ -116,6 +116,30 @@ validate.RoboDataTTE <- function(data, ref_arm, ...){
   return(list(newform, vars))
 }
 
+# Creates formula for robincar_linear
+# based on adj_method=c("ANOVA", "ANCOVA", "ANHECOVA").
+.create.formula <- function(adj_method, response_col, treat_col, covariate_cols){
+
+  if(adj_method == "ANOVA"){
+    form <- paste0(response_col, " ~ ", treat_col)
+  } else {
+
+    if(is.null(covariate_cols)) stop("Must provide covariates if
+                                     adjustment method is ANCOVA or ANHECOVA.")
+    covariates <- paste(covariate_cols, collapse=" + ")
+
+    if(adj_method == "ANCOVA"){
+      form <- paste0(response_col, " ~ ", treat_col, " + ", covariates)
+    } else if(adj_method == "ANHECOVA"){
+      form <- paste0(response_col, " ~ ", treat_col, " * (", covariates, ")")
+    } else {
+      stop("Unrecognized adjustment method.")
+    }
+
+  }
+  return(form)
+}
+
 .df.toclass <- function(df, classname, ...){
 
   data <- list()
@@ -146,7 +170,6 @@ validate.RoboDataTTE <- function(data, ref_arm, ...){
       # Include the covariates that will be needed for the formula
       # in a formula vector
       data[["formula"]] <- forms[[1]]
-      data[["formula_vars"]] <- df[forms[[2]]]
 
     } else if(grepl("col", att_name)){
 
@@ -176,13 +199,14 @@ validate.RoboDataTTE <- function(data, ref_arm, ...){
   data <- .df.toclass(df=df, classname=classname, ...)
 
   if(!is.null(data$treat)){
-    data$treat <- as.factor(as.vector(data$treat[[1]]))
+    data$treat <- data$treat[[1]]
+    if(!is.factor(data$treat)) data$treat <- as.factor(data$treat)
   }
   if(!is.null(data$response)){
-    data$response <- as.vector(data$response[[1]])
+    data$response <- data$response[[1]]
   }
   if(!is.null(data$event)){
-    data$event <- as.vector(data$event[[1]])
+    data$event <- data$event[[1]]
   }
   if(ncol(data$car_strata) == 0){
     data$car_strata <- NULL
@@ -197,9 +221,14 @@ validate.RoboDataTTE <- function(data, ref_arm, ...){
       data$car_strata[col] <- as.factor(data$car_strata[[col]])
     }
   }
-  if(ncol(data$covariate) == 0){
-    data$covariate <- NULL
+  if(!is.null(data$covariate)){
+    if(ncol(data$covariate) == 0){
+      data$covariate <- NULL
+    }
   }
+
+  # Save original data frame
+  data$df <- df
 
   # Add additional data attributes
   data$n <- nrow(df)

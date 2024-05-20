@@ -23,17 +23,9 @@ robincar_calibrate <- function(result, joint=FALSE,
   colnames(mu_a) <- mu_names
 
   # Get new dataset to pass to new robincar_glm func
-  newdat <- data.frame(
-    response=result$data$response,
-    treat=result$data$treat,
-    mu_a
-  )
+  newdat <- cbind(result$original_df, mu_a)
 
-  # Add on covariates and car_strata from the original
-  # robincar_glm function call
-  if(!is.null(result$data$covariate)){
-    newdat <- cbind(newdat, result$data$covariate)
-  }
+  # Add on more covariates
   if(!is.null(add_x)){
     for(cname in c(add_x)){
       if(cname %in% colnames(newdat)) next
@@ -41,27 +33,26 @@ robincar_calibrate <- function(result, joint=FALSE,
       newdat <- cbind(newdat, result$original_df[cname])
     }
   }
-  if(!is.null(result$data$car_strata)){
-    for(cname in colnames(result$data$car_strata)){
-      if(cname %in% colnames(newdat)) next
-      newdat <- cbind(newdat, result$data$car_strata[cname])
-    }
-  }
 
   # Run robincar_glm using the heterogeneous
   # working model and identity link
-  cal_result <- robincar_glm(
+  if(joint){
+    # Use JOINT strata levels with formula notation
+    strata <- colnames(result$data$car_strata)
+    strata <- paste0(strata, collapse="*")
+    covariate_cols <- c(mu_names, add_x, strata)
+  } else {
+    covariate_cols <- c(mu_names, add_x)
+  }
+
+  cal_result <- robincar_linear(
     df=newdat,
-    response_col="response",
-    treat_col="treat",
-    covariate_cols=c(mu_names, add_x),
+    response_col=result$data$response_col,
+    treat_col=result$data$treat_col,
+    covariate_cols=covariate_cols,
     car_strata_cols=colnames(result$data$car_strata),
-    covariate_to_include_strata=joint,
     car_scheme=result$settings$car_scheme,
-    adj_method="heterogeneous",
-    g_family=gaussian(link="identity"),
-    g_accuracy=result$settings$g_accuracy
-    # vcovHC=vcovHC
+    adj_method="ANHECOVA"
   )
   # Designate as calibration result
   # for the print statement to work

@@ -125,11 +125,11 @@ Perform median adjustment to limit randomness induced from cross-fitting.</p>
 
 
 <dt>SL_libraries</dt>
-<dd><p>Vector of super-learner libraries to use for the covariate adjustment (see SuperLearner::listWrappers())</p></dd>
+<dd><p>Vector of super-learner libraries to use for the covariate adjustment (see <a href="https://rdrr.io/pkg/SuperLearner/man/listWrappers.html" class="external-link">SuperLearner::listWrappers</a>)</p></dd>
 
 
 <dt>SL_learners</dt>
-<dd><p>Optional list of super-learner "learners" to use for the covariate adjustment (see SuperLearner::create.Learner)</p></dd>
+<dd><p>Optional list of super-learner "learners" to use for the covariate adjustment (see <a href="https://rdrr.io/pkg/SuperLearner/man/create.Learner.html" class="external-link">SuperLearner::create.Learner())</a></p></dd>
 
 
 <dt>k_split</dt>
@@ -148,6 +148,13 @@ Perform median adjustment to limit randomness induced from cross-fitting.</p>
 <dd><p>An optional jacobian function for the contrast (otherwise use numerical derivative)</p></dd>
 
 </dl></div>
+    <div id="value">
+    <h2>Value</h2>
+    
+
+<p>See value of <a href="robincar_SL.html">RobinCar::robincar_SL</a>.
+Attributes `mods` and `mu_as` are lists of `mod` and `mu_a` attributes, respectively, for each replicate of `robincar_SL` used in the median.</p>
+    </div>
     <div id="details">
     <h2>Details</h2>
     <p>*WARNING: This function is still under development and has not been extensively tested.*
@@ -164,7 +171,7 @@ Before using this function, you must load the SuperLearner library with
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Marlena Bannick.</p>
+  <p></p><p>Developed by Marlena Bannick, Ting Ye, Yanyao Yi, Faith Bian.</p>
 </div>
 
 <div class="pkgdown">

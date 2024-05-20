@@ -1,67 +1,81 @@
-predictions <- function(model, data, mod){
-  UseMethod("predictions", model)
-}
+# Fits a working model based on GLM and computes AIPW estimator
 
-#' @exportS3Method
-predictions.GLMModel <- function(model, data, mod, ...){
-  df <- data.frame(
-    treat=data$treat,
-    response=data$response
-  )
-  dmat <- get.dmat(data, model$adj_vars)
-  if(!is.null(dmat)){
-    df <- cbind(df, dmat)
+# This function allows us to implement the negative binomial model through MASS
+#' @importFrom MASS glm.nb
+fitmod <- function(family, ...){
+  useMASS <- FALSE
+  if(is.character(family)){
+    if(family == "nb"){
+      useMASS <- TRUE
+    }
   }
-  preds <- stats::predict(mod, newdata=df, type="response")
-  return(preds)
-}
-
-get.muhat <- function(model, data, mod){
-  set.treat <- function(a){
-    dat <- data
-    dat$treat <- rep(a, data$n)
-    dat$treat <- factor(dat$treat, levels=data$treat_levels)
-    return(dat)
+  if(useMASS){
+    mod <- MASS::glm.nb(...)
+    # copy over the 'model' attribute to the 'data'
+    # because it has a different name in glm.nb
+    mod$data <- mod$model
+  } else {
+    mod <- stats::glm(..., family=family)
   }
-  pred.treat <- function(dat) predictions.GLMModel(model, dat, mod)
-
-  datas <- lapply(data$treat_levels, set.treat)
-  preds <- lapply(datas, pred.treat)
-
-  pred_cols <- do.call(cbind, preds)
-  return(pred_cols)
+  return(mod)
 }
 
 # Perform GLM adjustment, based on the classes
 # of the model. Will perform adjustment based on the linear
 # model type of `model` and also do G-computation or AIPW
 # based on the second model type of `model`.
+#' @importFrom stats setNames
 #' @exportS3Method
 adjust.GLMModel <- function(model, data, ...){
 
-  # Get the generalized linear model and estimates by AIPW
-  glmod <- linmod(model, data, family=model$g_family, center=FALSE)
+  # 1. Set up data frame
+  df <- data$df
+  columns <- colnames(df)
+  columns[which(columns == data$treat_col)] <- "treat"
+  columns[which(columns == data$response_col)] <- "response"
+  df <- setNames(df, columns)
 
-  # Get g-computation predictions
-  muhat <- get.muhat(model, data, glmod)
+  # 2. Fit GLM working model
+  glmod <- fitmod(
+    family=model$g_family,
+    stats::as.formula(data$formula),
+    data=df)
+
+  # 3. Predict potential outcome for each treatment group
+  # to compute \hat{\mu}_a for a = 1, ..., k
+  predict_a <- function(a){
+
+    # Set up data frame
+    df_a <- df
+    df_a$treat <- rep(a, data$n)
+    df_a$treat <- factor(df_a$treat, levels=data$treat_levels)
+
+    # Create predictions
+    predictions <- stats::predict(glmod, newdata=df_a, type="response")
+
+    return(predictions)
+  }
+
+  preds <- lapply(data$treat_levels, predict_a)
+  muhat <- do.call(cbind, preds)
+
+  # 4. Save the g-computation estimate of \theta for diagnostic purposes
   g.estimate <- colMeans(muhat)
 
-  # Get mutilde from the GLM model, then estimate the treatment means by
-  # taking the mean over all of the potential outcomes
+  # 5. Use the \hat{\mu} to compute the adjusted \hat{\mu} for AIPW estimator
   glmod.adjusted <- get.mutilde(model, data, muhat)
   mutilde <- glmod.adjusted$mutilde
 
-  # Degree of freedom adjustment
-  df_adjust <- glmod.adjusted$df_adjust
-
+  # 6. Compute AIPW estimator of \theta
   estimate <- colMeans(mutilde)
 
-  # Compute the asymptotic variance
+  # 7. Compute the asymptotic variance
   asympt.variance <- vcov_car(model, data, glmod, mutilde)
-
+  df_adjust <- glmod.adjusted$df_adjust
   vcov_wt <- get.vcovHC(model$vcovHC, n=data$n, p=df_adjust)
   variance <- asympt.variance * vcov_wt / data$n
 
+  # 8. Format results
   result <- format_results(data$treat_levels, estimate, variance)
 
   return(

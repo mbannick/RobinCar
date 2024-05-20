@@ -5,13 +5,21 @@
                                     paste0(options, collapse = ", ")))
 }
 
-.check.car_scheme <- function(car_scheme){
+.check.car_scheme <- function(car_scheme, car_strata_cols){
   OPTIONS <- c("simple",
                "permuted-block",
                "pocock-simon",
                "biased-coin",
                "urn")
   .check.options("car_scheme", car_scheme, OPTIONS)
+
+  # Check to make sure that existence of
+  # strata matches with the car scheme
+  if(!is.null(car_strata_cols)){
+    if(car_scheme == "simple") .z.exist.warn()
+  } else {
+    if(car_scheme != "simple") .z.miss.err()
+  }
 }
 
 .check.adj_method.logrank <- function(adj_method){
