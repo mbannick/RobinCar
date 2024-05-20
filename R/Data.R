@@ -170,7 +170,6 @@ validate.RoboDataTTE <- function(data, ref_arm, ...){
       # Include the covariates that will be needed for the formula
       # in a formula vector
       data[["formula"]] <- forms[[1]]
-      data[["formula_vars"]] <- df[forms[[2]]]
 
     } else if(grepl("col", att_name)){
 
@@ -200,13 +199,14 @@ validate.RoboDataTTE <- function(data, ref_arm, ...){
   data <- .df.toclass(df=df, classname=classname, ...)
 
   if(!is.null(data$treat)){
-    data$treat <- as.factor(as.vector(data$treat[[1]]))
+    data$treat <- data$treat[[1]]
+    if(!is.factor(data$treat)) data$treat <- as.factor(data$treat)
   }
   if(!is.null(data$response)){
-    data$response <- as.vector(data$response[[1]])
+    data$response <- data$response[[1]]
   }
   if(!is.null(data$event)){
-    data$event <- as.vector(data$event[[1]])
+    data$event <- data$event[[1]]
   }
   if(ncol(data$car_strata) == 0){
     data$car_strata <- NULL
@@ -227,6 +227,8 @@ validate.RoboDataTTE <- function(data, ref_arm, ...){
     }
   }
 
+  # Save original data frame
+  data$df <- df
 
   # Add additional data attributes
   data$n <- nrow(df)

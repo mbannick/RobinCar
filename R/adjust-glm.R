@@ -28,13 +28,11 @@ fitmod <- function(family, ...){
 adjust.GLMModel <- function(model, data, ...){
 
   # 1. Set up data frame
-  df <- data.frame(
-    treat=data$treat,
-    response=data$response
-  )
-  if(!is.null(data$formula_vars)){
-    df <- cbind(df, data$formula_vars)
-  }
+  df <- data$df
+  columns <- colnames(df)
+  columns[which(columns == data$treat_col)] <- "treat"
+  columns[which(columns == data$response_col)] <- "response"
+  df <- setNames(df, columns)
 
   # 2. Fit GLM working model
   glmod <- fitmod(
