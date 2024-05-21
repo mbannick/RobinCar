@@ -1,6 +1,6 @@
 Package: RobinCar
 Type: Package
-Title: Robust Estimation and Inference in Covariate-Adaptive Randomization
+Title: ROBust INference for Covariate Adjustment in Randomized clinical trials
 Version: 0.3.1
 Authors@R: c(
     person("Marlena", "Bannick", 
