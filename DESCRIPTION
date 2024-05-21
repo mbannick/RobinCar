@@ -1,7 +1,7 @@
 Package: RobinCar
 Type: Package
 Title: ROBust INference for Covariate Adjustment in Randomized clinical trials
-Version: 0.3.1
+Version: 0.3.0
 Authors@R: c(
     person("Marlena", "Bannick", 
         email="mnorwood@uw.edu", 
