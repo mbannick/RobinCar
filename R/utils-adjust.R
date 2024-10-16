@@ -14,21 +14,27 @@ get.vcovHC <- function(vcovHC, n, p){
 
 # Get design matrix for the specified adjustment variables
 # using the data stored.
-get.dmat <- function(data, adj_vars){
+get.dmat <- function(data, adj_vars, indices=NULL){
+
+  if(is.null(indices)){
+    indices <- 1:data$n
+  }
+
   if(is.null(adj_vars)){
+    browser()
     dmat <- NULL
   } else if(adj_vars == "x"){
-    dmat <- data$covariate
+    dmat <- as.matrix(data$covariate[indices, ])
   } else if(adj_vars == "z"){
-    dmat <- data$strata
+    dmat <- data$car_strata[indices]
   } else if(adj_vars == "joint_z"){
-    dmat <- as.matrix(data$joint_strata, ncol=1)
+    dmat <- as.matrix(data$joint_strata[indices], ncol=1)
     colnames(dmat) <- "joint_strata"
   } else if(adj_vars == "joint_z_x"){
-    joint_strata <- data$joint_strata
-    dmat <- cbind(data$covariate, joint_strata)
+    joint_strata <- data$joint_strata[indices]
+    dmat <- cbind(as.matrix(data$covariate[indices, ]), joint_strata)
   } else if(adj_vars == "formula"){
-    dmat <- data$formula_vars
+    dmat <- as.matrix(data$formula_vars[indices, ])
   } else {
     stop(paste("Unrecognized adjustment variable type ", adj_vars))
   }

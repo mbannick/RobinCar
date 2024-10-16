@@ -64,6 +64,13 @@ SLlogic <- function(x_exists, z_exists, car_scheme, cov_strata){
       .z.miss.err()
     }
   }
+
+  if(grepl("joint_z", adj_vars)){
+    stratify_fit <- TRUE
+  } else {
+    stratify_fit <- FALSE
+  }
+
   method=c("SLModel")
   return(list(
     method=method,
@@ -71,6 +78,7 @@ SLlogic <- function(x_exists, z_exists, car_scheme, cov_strata){
     adj_se_z=adj_se_z,
     pu_joint_z=pu_joint_z,
     pu_funcs=pu_funcs,
-    omegaz_func=omegaz_func
+    omegaz_func=omegaz_func,
+    stratify_fit=stratify_fit
   ))
 }
