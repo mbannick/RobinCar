@@ -56,7 +56,8 @@
       pu_joint_z=logic$pu_joint_z,
       pu_funcs=logic$pu_funcs,
       omegaz_func=logic$omegaz_func,
-      g_accuracy=g_accuracy
+      g_accuracy=g_accuracy,
+      stratify_fit=logic$stratify_fit
     ),
     class=c(logic$method)
   )

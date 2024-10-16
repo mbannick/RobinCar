@@ -21,13 +21,28 @@ test_that("simple super learner with random forest.", {
     df=DATA2,
     response_col="y",
     treat_col="A",
-    car_strata_cols=c("z1"),
+    car_strata_cols=c("z1", "z2"),
     covariate_cols=c("x1"),
     SL_libraries=c("SL.ranger"),
     car_scheme="permuted-block",
     covariate_to_include_strata=TRUE
   )
 })
+
+test_that("simple super learner with random forest no strata.", {
+
+  sl.mod <- robincar_SL(
+    df=DATA2,
+    response_col="y",
+    treat_col="A",
+    car_strata_cols=NULL,
+    covariate_cols=c("x1"),
+    SL_libraries=c("SL.ranger"),
+    car_scheme="simple",
+    covariate_to_include_strata=FALSE
+  )
+})
+
 
 test_that("simple super learner with median adjustment, random forest.", {
 
@@ -49,7 +64,6 @@ test_that("simple super learner with median adjustment, random forest.", {
 test_that("super learner with custom learner", {
 
   skip("This works, but not in the testthat environment.")
-
   create_rf <- create.Learner("SL.ranger",
                               tune = list(num.trees=c(25, 50),
                                           max.depth=c(0.1, 0.5)))
