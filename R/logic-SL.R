@@ -1,4 +1,4 @@
-SLlogic <- function(x_exists, z_exists, car_scheme, cov_strata){
+SLlogic <- function(x_exists, z_exists, car_scheme, cov_strata, stratify_fit){
 
   adj_vars <- NULL
 
@@ -63,12 +63,6 @@ SLlogic <- function(x_exists, z_exists, car_scheme, cov_strata){
     } else {
       .z.miss.err()
     }
-  }
-
-  if(grepl("joint_z", adj_vars)){
-    stratify_fit <- TRUE
-  } else {
-    stratify_fit <- FALSE
   }
 
   method=c("SLModel")

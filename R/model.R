@@ -35,7 +35,7 @@
                                    covariate_to_include_strata,
                                    SL_libraries, SL_learners,
                                    k_split,
-                                   g_accuracy, ...) {
+                                   g_accuracy, stratify_fit, ...) {
 
   x_exists <- !is.null(data$covariate)
   z_exists <- !is.null(data$car_strata)
@@ -43,7 +43,8 @@
   # Get logic for adjustment methods
   logic <- SLlogic(car_scheme=car_scheme,
                     x_exists=x_exists, z_exists=z_exists,
-                    cov_strata=covariate_to_include_strata)
+                    cov_strata=covariate_to_include_strata,
+                   stratify_fit=stratify_fit)
   model <- structure(
     list(
       vcovHC=vcovHC,

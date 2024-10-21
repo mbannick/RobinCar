@@ -22,6 +22,7 @@
 #' @param SL_learners Optional list of super-learner "learners" to use for the covariate adjustment (see \link[SuperLearner:create.Learner]{SuperLearner::create.Learner())}
 #' @param k_split Number of splits to use in cross-fitting
 #' @param g_accuracy Level of accuracy to check prediction un-biasedness (in digits).
+#' @param stratify_fit Fit ML models in separate strata
 #'
 #'
 #' @export
@@ -78,6 +79,7 @@ robincar_SL <- function(df,
                         SL_libraries=c(), SL_learners=c(),
                         k_split=2,
                         g_accuracy=7,
+                        stratify_fit=FALSE,
                         contrast_h=NULL, contrast_dh=NULL){
 
   .check.car_scheme(car_scheme, car_strata_cols)
@@ -107,7 +109,8 @@ robincar_SL <- function(df,
     SL_libraries=SL_libraries,
     SL_learners=SL_learners,
     k_split=k_split,
-    g_accuracy=g_accuracy
+    g_accuracy=g_accuracy,
+    stratify_fit=stratify_fit
   )
 
   # Perform adjustment
@@ -155,6 +158,7 @@ robincar_SL_median <- function(n_times, seed, df,
                                SL_libraries=c(), SL_learners=c(),
                                k_split=2,
                                g_accuracy=7,
+                               stratify_fit=FALSE,
                                contrast_h=NULL, contrast_dh=NULL){
 
   if(n_times %% 2 == 0) stop("Must have an odd number of n_times.")
@@ -177,6 +181,7 @@ robincar_SL_median <- function(n_times, seed, df,
       SL_learners=SL_learners,
       k_split=k_split,
       g_accuracy=g_accuracy,
+      stratify_fit=stratify_fit,
       contrast_h=contrast_h,
       contrast_dh=contrast_dh)
   }
