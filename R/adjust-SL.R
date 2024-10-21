@@ -20,6 +20,7 @@ adjust.SLModel <- function(model, data, ...){
   }
 
   for(sl in data$joint_strata_levels){
+    cat("Made it inside strata", sl, "\n")
 
     indices <- which(data$joint_strata == sl)
 
