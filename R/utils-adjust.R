@@ -21,7 +21,6 @@ get.dmat <- function(data, adj_vars, indices=NULL){
   }
 
   if(is.null(adj_vars)){
-    browser()
     dmat <- NULL
   } else if(adj_vars == "x"){
     dmat <- as.matrix(data$covariate[indices, ])

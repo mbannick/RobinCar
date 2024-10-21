@@ -14,10 +14,9 @@ adjust.SLModel <- function(model, data, ...){
 
   # Placeholder for mutilde
   muhat <- matrix(data=NA, nrow=data$n, ncol=data$k)
-  browser()
   if(is.null(data$joint_strata_levels) | (model$stratify_fit == F)){
-    data$joint_strata_levels <- c("0")
-    data$joint_strata <- rep("0", data$n)
+    data$joint_strata <- as.factor(rep("0", data$n))
+    data$joint_strata_levels <- levels(data$joint_strata)
   }
 
   for(sl in data$joint_strata_levels){
