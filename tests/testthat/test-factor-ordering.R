@@ -46,7 +46,7 @@ test_that("GLM full function -- linear (ANOVA)", {
     formula="y ~ A3 + x1")
 
   expect_equal(langENG$result$estimate, langC$result$estimate)
-  expect_equal(langENG$varcov, langC$varcov)
+  expect_equal(c(langENG$varcov), c(langC$varcov))
 
   # Reset the locale
   Sys.setlocale("LC_COLLATE", original_locale)
