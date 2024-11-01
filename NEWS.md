@@ -1,3 +1,9 @@
+# RobinCar 0.3.1
+
+## Bugfixes
+
+* When the following things happened simultaneously, the variance results were incorrect: (1) when the system locale was not set to "C", (2) the user did not specify their treatment variable as a factor, and (3) when inconsistent cases were used in naming treatment levels (e.g., "a", "B"). We have fixed this issue.
+
 # RobinCar 0.3.0
 
 ## Features
