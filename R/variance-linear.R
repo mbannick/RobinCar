@@ -12,9 +12,10 @@ vcov_sr_diag <- function(data, mod, residual=NULL){
   if(is.null(residual)){
     residual <- stats::residuals(mod)
   }
-
-  result <- mod$data %>%
-    dplyr::mutate(resid=residual) %>%
+  result <- dplyr::tibble(
+    resid=residual,
+    treat=data$treat
+  ) %>%
     dplyr::group_by(.data$treat) %>%
     dplyr::summarize(se=stats::sd(.data$resid), .groups="drop") %>%
     dplyr::mutate(se=.data$se*sqrt(1/data$pie))
