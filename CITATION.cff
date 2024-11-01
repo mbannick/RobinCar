@@ -9,7 +9,7 @@ authors:
     given-names: Yanyao
   - family-names: Bian
     given-names: Faith
-title: "RobinCar: robust estimation and inference for covariate-adaptive randomization"
-version: 0.1.0
+title: "RobinCar: robust estimation and inference for covariate adjustment in randomized clinical trials"
+version: 0.3.1
 doi: 10.5281/zenodo.8216051
 date-released: 2023-08-04
