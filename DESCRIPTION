@@ -1,7 +1,7 @@
 Package: RobinCar
 Type: Package
 Title: Robust Inference for Covariate Adjustment in Randomized Clinical Trials
-Version: 0.3.1
+Version: 0.3.2
 Authors@R: c(
     person("Marlena", "Bannick", 
         email="mnorwood@uw.edu", 
