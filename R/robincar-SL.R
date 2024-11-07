@@ -6,7 +6,7 @@
 #'
 #' *WARNING: This function is still under development and has not been extensively tested.*
 #' This function currently only works for two treatment groups.
-#' Before using this function, you must load the \link{SuperLearner} library with
+#' Before using this function, you must load the \link[SuperLearner]{SuperLearner} library with
 #' `library(SuperLearner)`, otherwise the function call will fail.
 #'
 #' @param df A data.frame with the required columns
@@ -69,7 +69,7 @@
 #'
 #' sl.mod$result
 #'
-#' @returns See value of \link[RobinCar:robincar_glm]{RobinCar::robincar_glm}, but the working model for \eqn{\hat{\mu}(X_i)} is based on the \link{AIPW} package that uses specified SuperLearner libraries and cross-fitting.
+#' @returns See value of \link[RobinCar:robincar_glm]{RobinCar::robincar_glm}, but the working model for \eqn{\hat{\mu}(X_i)} is based on the \link[AIPW:AIPW]{AIPW::AIPW} package that uses specified SuperLearner libraries and cross-fitting.
 #' Also, `mod` attribute is an object of class \link[AIPW:AIPW]{AIPW::AIPW}.
 robincar_SL <- function(df,
                         treat_col, response_col, car_strata_cols=NULL, covariate_cols=NULL,
