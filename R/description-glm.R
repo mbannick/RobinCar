@@ -10,7 +10,10 @@ descript.GLMModelResult <- function(x, ...){
 
   if(is.character(x$settings$g_family)){
     if(x$settings$g_family == "nb"){
-      family <- "negative binomial with unknown dispersion"
+      family <- list(
+        family="negative binomial with unknown dispersion",
+        link="log"
+      )
     } else {
       family <- get(x$settings$g_family)()
     }
