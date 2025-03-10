@@ -144,14 +144,15 @@ print.TTEResult <- function(x, ...){
 
   df[, N := 1]
   id.cols <- c("treat")
-  data.table::setorder(df, treat)
-  txtitle <- "Treatment Group"
-
   if(x$settings$car_strata){
     df$car_strata <- x$data$joint_strata
     id.cols <- c(id.cols, "car_strata")
     data.table::setorder(df, car_strata, treat)
+  } else {
+    data.table::setorder(df, treat)
   }
+  txtitle <- "Treatment Group"
+
   summ <- df[, lapply(.SD, sum), by=id.cols, .SDcols=c("N", "observed")]
   summ[, name := paste0(x$data$treat_col, " = ", treat)]
 
