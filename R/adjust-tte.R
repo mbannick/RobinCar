@@ -30,14 +30,6 @@ create.tte.df <- function(model, data){
 
 }
 
-fix.ties <- function(df){
-  ties <- which(base::diff(df$response) == 0) + 1
-  for(i in ties){
-    df[i, c("Y0", "Y1")] <- df[i-1, c("Y0", "Y1")]
-  }
-  return(df)
-}
-
 # Pre-process the time to event dataset by calculating
 # the risk set size, and fixing ties in the failure times.
 #' @importFrom dplyr n
@@ -54,15 +46,21 @@ process.tte.df <- function(df, ref_arm=NULL){
   df <- df %>%
     dplyr::arrange(.data$car_strata, .data$response) %>%
     group_by(.data$car_strata) %>%
-    mutate(Y=dplyr::n():1,
-           trt0=as.integer(.data$treat == trts[1]),
-           trt1=as.integer(.data$treat == trts[2]),
-           Y0=cumsum(.data$trt0[dplyr::n():1])[dplyr::n():1],
-           Y1=cumsum(.data$trt1[dplyr::n():1])[dplyr::n():1])
-
-  # Fix ties
-  df <- fix.ties(df)
-  df <- df %>% ungroup()
+    mutate(
+      Y=dplyr::n():1,
+      trt0=as.integer(.data$treat == trts[1]),
+      trt1=as.integer(.data$treat == trts[2]),
+      Y0=cumsum(.data$trt0[dplyr::n():1])[dplyr::n():1],
+      Y1=cumsum(.data$trt1[dplyr::n():1])[dplyr::n():1]) %>%
+    ungroup() %>%
+    group_by(.data$car_strata, .data$response) %>%
+    mutate(
+      Y=first(Y),
+      Y1=first(Y1),
+      Y0=first(Y0),
+      n.events=sum(event)
+    ) %>%
+    ungroup()
 
   return(df)
 }

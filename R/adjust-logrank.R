@@ -18,7 +18,7 @@ adjust.LogRank <- function(model, data, ...){
     dplyr::mutate(
       uu_cl  = .data$trt1 * (.data$O.hat - .data$adjust1) -
                .data$trt0 * (.data$O.hat - .data$adjust0),
-      ssig_l = .data$event * .data$Y0 * .data$Y1 / .data$Y^2
+      ssig_l = .data$event * .data$Y0 * .data$Y1 * (.data$Y - .data$n.events) / .data$Y^2 / (.data$Y-1)
     )
 
   # Summarize by car_strata (if CL, then single car_strata)
@@ -34,7 +34,7 @@ adjust.LogRank <- function(model, data, ...){
 
   # Final quantities for the C(S)L statistic
   U_CSL     <- mean(df$uu_cl)
-  var_CSL   <- mean(df$ssig_l) - sum(ss$var_adj) / data$n
+  var_CSL   <- mean(df$ssig_l, na.rm=TRUE) - sum(ss$var_adj) / data$n
   se        <- sqrt(var_CSL / data$n)
   statistic <- U_CSL / se
 
