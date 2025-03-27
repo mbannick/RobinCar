@@ -60,6 +60,16 @@ process.tte.df <- function(df, ref_arm=NULL){
       Y0=first(Y0),
       n.events=sum(event)
     ) %>%
+    ungroup() %>%
+    mutate(
+      cum.delta.Y0.over.Ysq=cumsum(Y0/Y^2*event),
+      cum.delta.Y1.over.Ysq=cumsum(Y1/Y^2*delta)
+    ) %>%
+    group_by(.data$car_strata, .data$response) %>%
+    mutate(
+      cum.delta.Y0.over.Ysq=last(cum.delta.Y0.over.Ysq),
+      cum.delta.Y1.over.Ysq=last(cum.delta.Y1.over.Ysq)
+    ) %>%
     ungroup()
 
   return(df)
@@ -73,9 +83,12 @@ get.ordered.data <- function(df, ref_arm){
     mutate(
       mu_t            = .data$Y1 / .data$Y,
 
-      O.hat           = .data$event * (.data$trt1 - .data$mu_t) -
-        .data$trt1 * cumsum(.data$event / .data$Y) +
-        cumsum(.data$event * .data$Y1 / .data$Y^2),
+      O.hat1          = .data$delta * (.data$Y0/.data$Y) -
+        .data$cum.delta.Y0.over.Ysq,
+      O.hat.0         = .data$delta * (.data$Y1/.data$Y) -
+        .data.cum.delta.Y1.over.Ysq,
+      O.hat           = (.data$trt1 == 1) * .data$O.hat1 +
+        (.data$trt0 == 1) * .data$O.hat0,
 
       s0_seq          = exp(.data$lin_pred),
       s1_seq          = .data$s0_seq * .data$trt1,
