@@ -34,7 +34,7 @@ adjust.LogRank <- function(model, data, ...){
 
   # Final quantities for the C(S)L statistic
   U_CSL     <- mean(df$uu_cl)
-  var_CSL   <- mean(df$ssig_l, na.rm=TRUE) - sum(ss$var_adj) / data$n
+  var_CSL   <- sum(df$ssig_l, na.rm=TRUE) / data$n - sum(ss$var_adj) / data$n
   se        <- sqrt(var_CSL / data$n)
   statistic <- U_CSL / se
 
