@@ -33,9 +33,9 @@ adjust.LogRank <- function(model, data, ...){
     dplyr::arrange(.data$car_strata)
 
   # Final quantities for the C(S)L statistic
-  U_CSL     <- mean(df$uu_cl)
-  var_CSL   <- sum(df$ssig_l, na.rm=TRUE) / data$n - sum(ss$var_adj) / data$n
-  se        <- sqrt(var_CSL / data$n)
+  U_CSL     <- sum(df$uu_cl) / data$n
+  var_CSL   <- (sum(df$ssig_l, na.rm=TRUE) - sum(ss$var_adj)) / data$n^2
+  se        <- sqrt(var_CSL)
   statistic <- U_CSL / se
 
   result <- list(

@@ -55,20 +55,21 @@ process.tte.df <- function(df, ref_arm=NULL){
     ungroup() %>%
     group_by(.data$car_strata, .data$response) %>%
     mutate(
-      Y=first(Y),
-      Y1=first(Y1),
-      Y0=first(Y0),
-      n.events=sum(event)
+      Y=first(.data$Y),
+      Y1=first(.data$Y1),
+      Y0=first(.data$Y0),
+      n.events=sum(.data$event)
     ) %>%
     ungroup() %>%
+    group_by(.data$car_strata) %>%
     mutate(
-      cum.delta.Y0.over.Ysq=cumsum(Y0/Y^2*event),
-      cum.delta.Y1.over.Ysq=cumsum(Y1/Y^2*delta)
+      cum.delta.Y0.over.Ysq=cumsum(.data$Y0/.data$Y^2*.data$event),
+      cum.delta.Y1.over.Ysq=cumsum(.data$Y1/.data$Y^2*.data$event)
     ) %>%
     group_by(.data$car_strata, .data$response) %>%
     mutate(
-      cum.delta.Y0.over.Ysq=last(cum.delta.Y0.over.Ysq),
-      cum.delta.Y1.over.Ysq=last(cum.delta.Y1.over.Ysq)
+      cum.delta.Y0.over.Ysq=last(.data$cum.delta.Y0.over.Ysq),
+      cum.delta.Y1.over.Ysq=last(.data$cum.delta.Y1.over.Ysq)
     ) %>%
     ungroup()
 
@@ -83,12 +84,12 @@ get.ordered.data <- function(df, ref_arm){
     mutate(
       mu_t            = .data$Y1 / .data$Y,
 
-      O.hat1          = .data$delta * (.data$Y0/.data$Y) -
+      O.hat1          = .data$event * (.data$Y0/.data$Y) -
         .data$cum.delta.Y0.over.Ysq,
-      O.hat.0         = .data$delta * (.data$Y1/.data$Y) -
-        .data.cum.delta.Y1.over.Ysq,
-      O.hat           = (.data$trt1 == 1) * .data$O.hat1 +
-        (.data$trt0 == 1) * .data$O.hat0,
+      O.hat0          = .data$event * (.data$Y1/.data$Y) -
+        .data$cum.delta.Y1.over.Ysq,
+      O.hat           = .data$trt1 * .data$O.hat1 +
+        .data$trt0 * .data$O.hat0,
 
       s0_seq          = exp(.data$lin_pred),
       s1_seq          = .data$s0_seq * .data$trt1,
@@ -109,9 +110,6 @@ get.ordered.data <- function(df, ref_arm){
         .data$s0_seq * .data$cumsum_at_risk2,
 
       u_i             = .data$event * (.data$trt1 - .data$mu_t)
-    ) %>% mutate(
-      O.hat           = -.data$O.hat * (.data$trt0 == 1) +
-        .data$O.hat * (.data$trt1 == 1)
     ) %>% ungroup()
 
   return(df)
