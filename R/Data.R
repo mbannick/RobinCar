@@ -88,6 +88,16 @@ validate.RoboDataTTE <- function(data, ref_arm, ...){
   .return.error(errors)
 }
 
+#' @exportS3Method
+validate.RoboDataMH <- function(data, ...){
+  
+  errors <- character()
+  errors <- c(errors, .check.treat(data))
+  
+  .return.error(errors)
+  
+}
+
 .edit.formula <- function(form, response_col, treat_col){
 
   # Convert formula to character
