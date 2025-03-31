@@ -2,6 +2,20 @@
 #' @importFrom dplyr group_by mutate ungroup
 get.ordered.data.est <- function(df, lin_predictors){
 
+  # Add on cumulative delta for ties
+  df <- df %>%
+    group_by(.data$car_strata) %>%
+    mutate(
+      cum.delta.Y0.over.Ysq.theta_L=cumsum(.data$event*.data$Y0/(exp(lin_predictors)*.data$Y1 + .data$Y0)^2),
+      cum.delta.Y1.over.Ysq.theta_L=cumsum(.data$event*.data$Y1/(exp(lin_predictors)*.data$Y1 + .data$Y0)^2)
+    ) %>%
+    group_by(.data$car_strata, .data$response) %>%
+    mutate(
+      cum.delta.Y0.over.Ysq.theta_L=last(.data$cum.delta.Y0.over.Ysq.theta_L),
+      cum.delta.Y1.over.Ysq.theta_L=last(.data$cum.delta.Y1.over.Ysq.theta_L)
+    ) %>%
+    ungroup()
+
   data <- df %>% dplyr::mutate(lin_pred=lin_predictors)
 
   data <- data %>%
@@ -15,9 +29,9 @@ get.ordered.data.est <- function(df, lin_predictors){
       mu_t            = .data$mu_num / .data$mu_denom,
       score_i         = .data$event * (.data$trt1 - .data$mu_t),
       O.hat1          = .data$event * .data$Y0 / .data$mu_denom -
-        .data$s0_seq * cumsum(.data$event * .data$Y0 / .data$mu_denom**2),
+        .data$s0_seq * .data$cum.delta.Y0.over.Ysq.theta_L,
       O.hat0          = .data$event * .data$s0_seq * .data$Y1 / .data$mu_denom -
-        .data$s0_seq * cumsum(.data$event * .data$Y1 / .data$mu_denom**2)
+        .data$s0_seq * .data$cum.delta.Y1.over.Ysq.theta_L
     ) %>% dplyr::mutate(
       O.hat           = .data$O.hat0 * (.data$trt0 == 1) +
         .data$O.hat1 * (.data$trt1 == 1)
