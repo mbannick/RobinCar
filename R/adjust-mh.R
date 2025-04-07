@@ -1,5 +1,5 @@
 #' @importFrom stats weighted.mean
-estimate.mh <- function(df.mh, estimand) {
+estimate.mh <- function(df.mh) {
   delta <- df.mh$y1.k - df.mh$y0.k
   weight <- df.mh$n.1k * df.mh$n.0k / (df.mh$n.1k + df.mh$n.0k)
   delta_all <- weighted.mean(delta, weight)
@@ -82,7 +82,7 @@ var.ate.nu <- function(df, ATE.est){
 }
 
 est.var.mh <- function(df.mh, estimand, ci_type){
-  mh_est <- estimate.mh(df.mh, estimand)
+  mh_est <- estimate.mh(df.mh)
   var_est <- with(df.mh,
                   switch(ci_type,
                          "GR"    = var.mh.GR(n11k, n10k, n.1k, n.0k),
