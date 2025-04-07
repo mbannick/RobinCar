@@ -21,6 +21,24 @@ A result object with the following attributes:
 \description{
 Perform a robust covariate-adjusted logrank test ("CL") that can be stratified ("CSL") if desired.
 }
+\details{
+Note: Since RobinCar version 0.4.0, the variance of the test statistic has changed
+to better accommodate tied event times.
+
+The variance of the test statistic for the
+covariate-adjusted (possibly stratified) log-rank test is given by Ye, Shao, and Yi (2024) after
+equation (8) on page 700, \eqn{\hat{\sigma}_{\rm CSL}^2}, but with \eqn{\hat{\sigma}_{\rm SL}^2} replaced
+by the following estimator, which is the standard variance of the (stratified) logrank test:
+
+\deqn{\sum_{j} \sum_{i} v_j(t_i)}
+\deqn{v_j(t_i) = \frac{Y_{0,j}(t)Y_{1,j}(t)d_j(t)\left[Y_j(t) - d_j(t)\right]}{Y_j(t)^2\left[Y_j(t) - 1 \right]}}
+where \eqn{t_i} are strata-specific unique failure times, \eqn{d_j(t)} is the number of events at time \eqn{t} in strata \eqn{j},
+\eqn{Y_j(t)} is the number at risk within strata \eqn{j} at time \eqn{t},
+and \eqn{Y_{a,j}(t)} is the number at risk within strata \eqn{j} and treatment \eqn{a} at time \eqn{t}.
+
+Please see Ye, Shao, and Yi (2024)'s \link[=https://academic.oup.com/biomet/article/111/2/691/7232224?login=true]{"Covariate-adjusted log-rank test: guaranteed efficiency
+gain and universal applicability"} in \emph{Biometrika} for more details about \eqn{\hat{\sigma}_{\rm CSL}^2}.
+}
 \examples{
 library(magrittr)
 library(dplyr)
