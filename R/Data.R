@@ -102,7 +102,7 @@ validate.RoboDataTTE <- function(data, ref_arm, ...){
 }
 
 #' @exportS3Method
-validate.RoboDataMH <- function(data, estimand, ...){
+validate.RoboDataMH <- function(data, ...){
   
   errors <- character()
   errors <- c(errors, .check.attributes(data, "treat", "response", "joint_strata"))

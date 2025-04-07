@@ -38,7 +38,7 @@ robincar_mh <- function(df, treat_col, response_col, strata_cols, estimand="ATE"
     car_strata_cols = strata_cols,
     formula = NULL
   )
-  validate(data, estimand)
+  validate(data)
   
   model <- .make.model(
     data = data,
