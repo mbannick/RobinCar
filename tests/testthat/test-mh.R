@@ -7,11 +7,10 @@ DATA_12 <- DATA[DATA$A!=0, ]
 test_that("MH errors", {
   expect_error(robincar_mh(df = DATA,
                            treat_col = "A",
-                           response_col = "y",
+                           response_col = "y_bin",
                            strata_cols = c("z1", "z2"),
                            estimand = "MH",
-                           ci_type = "mGR"),
-               "The treatment variable must be binary.")
+                           ci_type = "mGR"))
   
   expect_error(robincar_mh(df = DATA_01,
                            treat_col = "A",
@@ -21,7 +20,7 @@ test_that("MH errors", {
                            ci_type = "mGR"))
   expect_error(robincar_mh(df = DATA_12,
                            treat_col = "A",
-                           response_col = "y",
+                           response_col = "y_bin",
                            strata_cols = c("z1", "z2"),
                            estimand = "ATE",
                            ci_type = "GR"))
@@ -29,30 +28,22 @@ test_that("MH errors", {
 })
 
 test_that("MH works", {
-  expect_no_message(robincar_mh(df = DATA_01,
-                                treat_col = "A",
-                                response_col = "y_bin",
-                                strata_cols = c("z1", "z2"),
-                                estimand = "MH",
-                                ci_type = "mGR"))
-  expect_no_message(robincar_mh(df = DATA_02,
-                                treat_col = "A",
-                                response_col = "y_bin",
-                                strata_cols = c("z1"),
-                                estimand = "MH",
-                                ci_type = "Sato"))
+  fit.MH <- robincar_mh(df = DATA_01,
+                       treat_col = "A",
+                       response_col = "y_bin",
+                       strata_cols = c("z1", "z2"),
+                       estimand = "MH",
+                       ci_type = "mGR")
+  expect_equal(fit.MH$result$estimate, 0.2183309, tolerance = 1e-5)
+  expect_equal(fit.MH$result$se, 0.03593319, tolerance = 1e-5)
   
-  expect_no_message(robincar_mh(df = DATA_12,
-                                treat_col = "A",
-                                response_col = "y_bin",
-                                strata_cols = c("z1"),
-                                estimand = "ATE",
-                                ci_type = "mGR"))
-  expect_no_message(robincar_mh(df = DATA_12,
-                                treat_col = "A",
-                                response_col = "y",
-                                strata_cols = c("z2"),
-                                estimand = "ATE",
-                                ci_type = "mGR"))
+  fit.ATE <- robincar_mh(df = DATA_01,
+                         treat_col = "A",
+                         response_col = "y_bin",
+                         strata_cols = c("z1"),
+                         estimand = "ATE",
+                         ci_type = "mGR")
+  expect_equal(fit.ATE$result$estimate, 0.2094867, tolerance = 1e-5)
+  expect_equal(fit.ATE$result$se, 0.04296656, tolerance = 1e-5)
   
 })

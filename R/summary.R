@@ -231,7 +231,7 @@ print.CalibrationResult <- function(x, ...){
 #' @returns Prints estimates (and variances) of treatment contrasts based on MH risk difference or ATE
 print.MHResult <- function(x, ...){
   if("MH" == x$settings$estimand){
-    est_type <- "Mantel-Haensze risk difference"
+    est_type <- "Mantel-Haenszel risk difference"
   } else {
     est_type <- "ATE"
   }

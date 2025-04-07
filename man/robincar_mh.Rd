@@ -27,7 +27,7 @@ robincar_mh(
 \item{ci_type}{A character string specifying the type of confidence interval. One of "GR", "mGR" (default), "Sato"}
 }
 \description{
-This function estimates Mantel-Haenszel risk difference and averate treatment effect.
+This function estimates Mantel-Haenszel risk difference and average treatment effect.
 }
 \details{
 The estimand of interest can be either Mantel-Haenszel risk difference or Average Treatment Effect (ATE). 
@@ -36,10 +36,10 @@ The latter is the default option of `estimand`. When `estimand="ATE"`, `ci_type`
 }
 \examples{
 df <- RobinCar:::data_sim
-df$y = df$y>2.5
+df$y_bin = ifelse(df$y>2.5, 1, 0)
 robincar_mh(df = df[df$A!=2,],
             treat_col = "A",
-            response_col = "y",
+            response_col = "y_bin",
             strata_cols = c("z1", "z2"),
             estimand = "MH",
             ci_type = "mGR")

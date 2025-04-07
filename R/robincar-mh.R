@@ -1,7 +1,7 @@
 #' Estimate Mantel-Haenszel Risk Difference
 #'
 #' @description
-#' This function estimates Mantel-Haenszel risk difference and averate treatment effect.
+#' This function estimates Mantel-Haenszel risk difference and average treatment effect.
 #'
 #' @param df A data.frame with the required columns
 #' @param treat_col Name of column in df with treatment variable. Must be binary
@@ -17,24 +17,28 @@
 #' 
 #' @examples
 #' df <- RobinCar:::data_sim
-#' df$y = df$y>2.5
+#' df$y_bin = ifelse(df$y>2.5, 1, 0)
 #' robincar_mh(df = df[df$A!=2,],
 #'             treat_col = "A",
-#'             response_col = "y",
+#'             response_col = "y_bin",
 #'             strata_cols = c("z1", "z2"),
 #'             estimand = "MH",
 #'             ci_type = "mGR")
 #' 
 #' @export
 robincar_mh <- function(df, treat_col, response_col, strata_cols, estimand="ATE", ci_type='mGR') {
+  
+  .check.estimand_ci(estimand, ci_type)
+  
   data <- .make.data(
-    df=df, classname="RoboDataMH",
-    treat_col=treat_col,
-    response_col=response_col,
-    car_strata_cols=strata_cols,
-    formula=NULL
+    df = df,
+    classname = "RoboDataMH",
+    treat_col = treat_col,
+    response_col = response_col,
+    car_strata_cols = strata_cols,
+    formula = NULL
   )
-  validate(data)
+  validate(data, estimand)
   
   model <- .make.model(
     data = data,

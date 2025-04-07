@@ -1,83 +1,82 @@
 #' @importFrom stats weighted.mean
 estimate.mh <- function(df.mh, estimand) {
-  with(df.mh, {
-    delta <- y1.k - y0.k
-    if (estimand == "MH") {
-      weight <- n.1k * n.0k / (n.1k + n.0k)
-      delta_all <- weighted.mean(delta, weight)
-    } else{
-      n = sum(n.1k + n.0k)
-      weight <- (n.1k + n.0k) / n
-      delta_all <- sum(delta[n.1k * n.0k != 0] * weight[n.1k * n.0k != 0])
-    }
-    return(delta_all)
-  })
+  delta <- df.mh$y1.k - df.mh$y0.k
+  weight <- df.mh$n.1k * df.mh$n.0k / (df.mh$n.1k + df.mh$n.0k)
+  delta_all <- weighted.mean(delta, weight)
+  
+  return(delta_all)
 }
 
-var.mh.GR <- function(n11k, n10k, n.1k, n.0k){
-  weight <- n.1k * n.0k/ (n.1k + n.0k)
-  var.k = (n11k * (n.1k - n11k) * n.0k^3 + n10k * (n.0k - n10k) * n.1k^3) / n.1k / n.0k / (n.1k + n.0k)^2
-  var.est.GR = sum(var.k[weight!=0])/(sum(weight)^2)
+var.mh.GR <- function(n11k, n10k, n.1k, n.0k) {
+  weight <- n.1k * n.0k / (n.1k + n.0k)
+  var.k <- (n11k * (n.1k - n11k) * n.0k^3 + n10k * (n.0k - n10k) * n.1k^3) / n.1k / n.0k / (n.1k + n.0k)^2
+  var.est.GR <- sum(var.k[weight != 0]) / (sum(weight)^2)
   return(var.est.GR)
 }
 
 
 
 var.mh.mGR <- function(n11k, n10k, n.1k, n.0k){
-  help_f = Vectorize(function(x){
-    if(x>1){return( x/(x-1))}else {1}
+  help_f <- Vectorize(function(x) {
+    if (x > 1) {
+      return(x / (x - 1))
+    } else {
+      1
+    }
   })
   
-  n01k = n.1k - n11k
-  n00k = n.0k - n10k
-  weight <- n.1k * n.0k/ (n.1k + n.0k)
-  var.k = weight^2 * (n11k * n01k / n.1k^3 * help_f(n.1k) + n10k*n00k/n.0k^3*help_f(n.0k))
-  var.est.mGR = sum(var.k[weight!=0])/(sum(weight)^2)
+  n01k <- n.1k - n11k
+  n00k <- n.0k - n10k
+  weight <- n.1k * n.0k / (n.1k + n.0k)
+  var.k <- weight^2 * (n11k * n01k / n.1k^3 * help_f(n.1k) + n10k * n00k /
+                         n.0k^3 * help_f(n.0k))
+  var.est.mGR <- sum(var.k[weight != 0]) / (sum(weight)^2)
   return(var.est.mGR)
 }
 
 
 var.mh.Sato <- function(n11k, n10k, n.1k, n.0k){
-  weight <- n.1k * n.0k/ (n.1k + n.0k)
-  Pk = (n.1k^2 * n10k - n.0k^2*n11k +n.1k*n.0k * (n.0k-n.1k)/2)/ (n.1k + n.0k)^2
-  Qk = (n11k * (n.0k-n10k)+n10k *(n.1k - n11k))/2/(n.1k  + n.0k)
+  weight <- n.1k * n.0k / (n.1k + n.0k)
+  Pk <- (n.1k^2 * n10k - n.0k^2 * n11k + n.1k * n.0k * (n.0k - n.1k) / 2) / (n.1k + n.0k)^2
+  Qk <- (n11k * (n.0k - n10k) + n10k * (n.1k - n11k)) / 2 / (n.1k  + n.0k)
   delta <- n11k / n.1k - n10k / n.0k
   delta_all <- weighted.mean(delta, weight)
-  var.est.Sato = (delta_all*sum(Pk)+sum(Qk))/(sum(weight)^2)
+  var.est.Sato <- (delta_all * sum(Pk) + sum(Qk)) / (sum(weight)^2)
   return(var.est.Sato)
 }
 
-var.ate.nu = function(df, ATE.est){
-  n.1k = df$n.1k
-  n.0k = df$n.0k
-  n11k = df$n11k
-  n10k = df$n10k
-  y1.k = df$y1.k
-  y0.k = df$y0.k
-  y1.var.k = df$y1.var.k
-  y0.var.k = df$y0.var.k
+var.ate.nu <- function(df, ATE.est){
+  n.1k <- df$n.1k
+  n.0k <- df$n.0k
+  n11k <- df$n11k
+  n10k <- df$n10k
+  y1.k <- df$y1.k
+  y0.k <- df$y0.k
+  y1.var.k <- df$y1.var.k
+  y0.var.k <- df$y0.var.k
   
-  K = length(n11k)
-  n.k = n.1k + n.0k
-  n = sum(n.k)
-  pi1 = sum(n.1k) / n
-  pi0 = sum(n.0k) / n
-  rho.hat = n.k/n
-  delta.k = n11k / n.1k - n10k / n.0k
-  weights = n.1k*n.0k / (n.1k + n.0k)
+  K <- length(n11k)
+  n.k <- n.1k + n.0k
+  n <- sum(n.k)
+  pi1 <- sum(n.1k) / n
+  pi0 <- sum(n.0k) / n
+  rho.hat <- n.k/n
+  delta.k <- n11k / n.1k - n10k / n.0k
+  weights <- n.1k*n.0k / (n.1k + n.0k)
   
-  p1k = n11k / n.1k
-  p0k = n10k / n.0k
+  p1k <- n11k / n.1k
+  p0k <- n10k / n.0k
   
-  p1k.sq = p1k^2 - ifelse(n.1k>1,y1.var.k,0) / n.1k
-  p0k.sq = p0k^2 - ifelse(n.0k>1,y0.var.k,0) / n.0k
+  p1k.sq <- p1k^2 - ifelse(n.1k>1,y1.var.k,0) / n.1k
+  p0k.sq <- p0k^2 - ifelse(n.0k>1,y0.var.k,0) / n.0k
   
-  delta.k.sq = p1k.sq - 2*p1k * p0k + p0k.sq
-  tmp1<-rho.hat*(delta.k.sq-ATE.est^2)
-  tmp2<-(delta.k.sq - 2*delta.k*ATE.est +ATE.est^2)*pi1*pi0*(n.k-1)/n.k*(n.k-1-(4*n.k-6)*pi1*pi0)/n
-  var.est.nu = sum(tmp1[weights!=0])*pi1^2*pi0^2 + sum(tmp2[weights!=0])
+  delta.k.sq <- p1k.sq - 2*p1k * p0k + p0k.sq
+  tmp1 <- rho.hat * (delta.k.sq - ATE.est^2)
+  tmp2 <- (delta.k.sq - 2 * delta.k * ATE.est + ATE.est^2) * pi1 * pi0 *
+    (n.k - 1) / n.k * (n.k - 1 - (4 * n.k - 6) * pi1 * pi0) / n
+  var.est.nu <- sum(tmp1[weights!=0])*pi1^2*pi0^2 + sum(tmp2[weights!=0])
   
-  var.est.nu = var.est.nu / n / (sum(weights)/n)^2
+  var.est.nu <- var.est.nu / n / (sum(weights)/n)^2
   
   return(var.est.nu)
 }
@@ -109,18 +108,12 @@ adjust.MHModel <- function(model, data, ...){
   
   treat_levels <- data$treat_levels
   n_treat <- length(treat_levels)
-  if(n_treat>2) {stop("The treatment variable must be binary.")}
-  if(estimand=="MH" & !all(data$response %in% c(0,1))) {
-    stop('The response variable must take values at 0 or 1 when estimaing MH risk difference.\n Please set estimand = "ATE" if response is not binary.')
-  }
-  if(estimand=="ATE" & ci_type!="mGR"){
-    stop(paste0('Using ', ci_type, ' variance estimator is invalid when estimating ATE.\n Please use modified GR estimator and set ci_type = "mGR".'))
-  }
+  
   strata_list <- split(data$df, strata)
   
-  n.k <- matrix(0, nrow=length(strata_list), ncol=n_treat)  # Total in each group
-  n1.k <- matrix(0, nrow=length(strata_list), ncol=n_treat) # Events in each group
-  y.var.k <- matrix(0, nrow=length(strata_list), ncol=n_treat) # Events in each group
+  n.k <- matrix(0, nrow = length(strata_list), ncol = n_treat)  # Total in each group
+  n1.k <- matrix(0, nrow = length(strata_list), ncol = n_treat) # Events in each group
+  y.var.k <- matrix(0, nrow = length(strata_list), ncol = n_treat) # Events in each group
   
   for (i in seq_along(strata_list)) {
     df_k <- strata_list[[i]]
@@ -129,12 +122,12 @@ adjust.MHModel <- function(model, data, ...){
       t_level <- treat_levels[j]
       n.k[i, j] <- sum(df_k[[treat_col]] == t_level)   # Total subjects in treatment j
       n1.k[i, j] <- sum(df_k[[response_col]][df_k[[treat_col]] == t_level])  # Events in treatment j
-      y.var.k[i,j] <- var(df_k[[response_col]][df_k[[treat_col]] == t_level])
+      y.var.k[i, j] <- var(df_k[[response_col]][df_k[[treat_col]] == t_level])
     }
   }
   
-  risk_diffs <- matrix(0, nrow=n_treat, ncol=n_treat)
-  var_mh <- matrix(0, nrow=n_treat, ncol=n_treat)
+  risk_diffs <- matrix(0, nrow = n_treat, ncol = n_treat)
+  var_mh <- matrix(0, nrow = n_treat, ncol = n_treat)
   
   # Reserved for multiple treatment levels
   for (j in 1:(n_treat-1)) {
@@ -165,8 +158,8 @@ adjust.MHModel <- function(model, data, ...){
     
   c_est <- risk_diffs[upper.tri(risk_diffs)]
   
-  vcv_ncol = (n_treat^2 - n_treat)/2
-  vcv <- diag(x=var_mh[upper.tri(var_mh)], nrow = vcv_ncol, ncol = vcv_ncol)
+  vcv_ncol <- (n_treat^2 - n_treat)/2
+  vcv <- diag(x = var_mh[upper.tri(var_mh)], nrow = vcv_ncol, ncol = vcv_ncol)
   result <- format_results(lab, c_est, vcv, label_name = "contrast")
   
   return(structure(class = "MHResult", list(result = result, settings = model)))
