@@ -22,6 +22,11 @@
   }
 }
 
+.check.variance_type <- function(variance_type){
+  OPTIONS <- c(1, 2, 3)
+  .check.options("variance_type", variance_type, OPTIONS)
+}
+
 .check.adj_method.logrank <- function(adj_method){
   OPTIONS <- c("CL",
                "CSL")

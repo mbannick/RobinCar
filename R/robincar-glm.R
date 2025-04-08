@@ -13,6 +13,47 @@
 #' Alternatively, if `formula` is used, the working model can be specified according to the user.
 #'
 #' Importantly, the estimated variance accounts for misspecification of the working model, and for covariate-adaptive randomization.
+#' The variance estimator is given by
+#' \deqn{\hat{V} = \hat{V}_{\rm SR} - \hat{V}_{\Omega}}
+#' where \eqn{\hat{V}_{\rm SR}} is the contribution to the variance under simple randomization, and \eqn{\hat{V}_{\Omega}} is a term
+#' that only appears when a covariate-adaptive randomization scheme is used.
+#' The \eqn{\hat{V}_{\Omega}} is the second line of \eqn{\hat{V}} in \link[=https://arxiv.org/pdf/2306.10213]{Bannick et al. (2025)}.
+#'
+#' There are three different estimators available for \eqn{\hat{V}_{\rm SR}}, which the user
+#' can choose with the argument \code{variance_type}. We describe these here.
+#'
+#' The three variance types are given as follows:
+#'
+#' \itemize{
+#'  \item{
+#'    Type 1 (default):
+#'    \deqn{\mathrm{diag}\left[\hat{\pi}_a^{-1} (\mathrm{Var}_a(Y_i) - 2\hat{Q}_{a,a} + \hat{\Sigma}_{a,a} ), a = 1, \dots, K \right] + \hat{Q} + \hat{Q}^T - \hat{\Sigma}}
+#'  }
+#'  \item{
+#'    Type 2:
+#'    \deqn{\mathrm{diag}\left[\hat{\pi}_a^{-1} (\mathrm{Var}_a(Y_i - \hat{\mu}_a(X_i)) - 2\hat{Q}_{a,a} + \hat{\Sigma}_{a,a} ), a = 1, \dots, K \right] + \hat{Q} + \hat{Q}^T - \hat{\Sigma}}
+#'  }
+#'  \item{
+#'    Type 3:
+#'    \deqn{\mathrm{diag}\left[\hat{\pi}_a^{-1} E_a([Y_i - \hat{\mu}_a(X_i)]^2), a = 1, \dots, K \right] + \hat{A}}
+#'  }
+#' }
+#'
+#' where \eqn{\hat{\pi}_a} is the treatment proportion for group a,
+#' \eqn{\hat{Q}_{a,b} = \mathrm{Cov}_a(Y_i, \hat{\mu}_b(X_i))},
+#' \eqn{\hat{\Sigma}_{a,b} = \mathrm{Cov}(\hat{\mu}_a(X_i), \hat{\mu}_b(X_i))},
+#' and the matrix \eqn{A} has diagonal entries for \eqn{(a, a)} given by
+#' \deqn{2\mathrm{Cov}_a(Y_i - \hat{\mu}_a(X_i)) + \mathrm{Var}_a(\hat{\mu}_a(X_i))}
+#' and off-diagonal entries for \eqn{(a, b)} given by
+#' \deqn{\mathrm{Cov}_a(Y_i, \hat{\mu}_b(X_i)) + \mathrm{Cov}_b(Y_i, \hat{\mu}_a(X_i)) - (1/2) \left[\mathrm{Cov}_a(\hat{\mu}_a(X_i), \hat{\mu}_b(X_i)) + \mathrm{Cov}_b(\hat{\mu}_a(X_i), \hat{\mu}_b(X_i)) \right].}
+#' We use \eqn{E_a}, \eqn{\mathrm{Var}_a}, and \eqn{\mathrm{Cov}_a} to refer to the empirical expectation, variance, and
+#'  covariance among observations in group a only, and \eqn{\mathrm{Cov}} is the covariance within
+#' the entire sample.
+#'
+#' Please see the Supplemental Material Sect. H of \link[=https://arxiv.org/pdf/2306.10213]{Bannick et al. (2025)} for a discussion
+#' of the merits of each type of variance estimator. Briefly, we recommend
+#' variance types 1 generally, and variance type 3 if it is anticipated
+#' that the distribution of \eqn{X} varies substantially over treatment groups.
 #'
 #' @param df A data.frame with the required columns
 #' @param treat_col Name of column in df with treatment variable
@@ -25,6 +66,7 @@
 #' @param g_family Family that would be supplied to glm(...), e.g., binomial. If no link specified, will use default link, like behavior in glm.
 #'                 If you wish to use a negative binomial working model with an unknown dispersion parameter, then use `g_family="nb"`.
 #' @param g_accuracy Level of accuracy to check prediction un-biasedness.
+#' @param variance_type The type of variance estimator to use, type 1, 2, or 3. All three are asymptotically equivalent. See details for more.
 #' @export
 #'
 #' @returns If `contrast_h` argument is used, outputs a `main` and a `contrast` object. The `main` object has the following structure:
@@ -44,9 +86,11 @@ robincar_glm <- function(df,
                          formula=NULL, car_strata_cols=NULL,
                          car_scheme="simple",
                          g_family=stats::gaussian, g_accuracy=7,
-                         contrast_h=NULL, contrast_dh=NULL){
+                         contrast_h=NULL, contrast_dh=NULL,
+                         variance_type=1){
 
   .check.car_scheme(car_scheme, car_strata_cols)
+  .check.variance_type(variance_type)
 
   vcovHC <- "HC0"
 
@@ -65,7 +109,8 @@ robincar_glm <- function(df,
     car_scheme=car_scheme,
     vcovHC=vcovHC,
     g_family=g_family,
-    g_accuracy=g_accuracy
+    g_accuracy=g_accuracy,
+    variance_type=variance_type
   )
 
   # Perform adjustment
