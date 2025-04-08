@@ -36,8 +36,8 @@ where \eqn{t_i} are strata-specific unique failure times, \eqn{d_j(t)} is the nu
 \eqn{Y_j(t)} is the number at risk within strata \eqn{j} at time \eqn{t},
 and \eqn{Y_{a,j}(t)} is the number at risk within strata \eqn{j} and treatment \eqn{a} at time \eqn{t}.
 
-Please see Ye, Shao, and Yi (2024)'s \link[=https://academic.oup.com/biomet/article/111/2/691/7232224?login=true]{"Covariate-adjusted log-rank test: guaranteed efficiency
-gain and universal applicability"} in \emph{Biometrika} for more details about \eqn{\hat{\sigma}_{\rm CSL}^2}.
+Please see Ye, Shao, and Yi (2024)'s "Covariate-adjusted log-rank test: guaranteed efficiency
+gain and universal applicability" in \emph{Biometrika} for more details about \eqn{\hat{\sigma}_{\rm CSL}^2}.
 }
 \examples{
 library(magrittr)
