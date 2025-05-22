@@ -18,7 +18,7 @@ treatment group contrasts using a generalized linear working model."><!-- mathja
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RobinCar</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -40,6 +40,9 @@ treatment group contrasts using a generalized linear working model."><!-- mathja
     </li>
     <li>
       <a href="../articles/Robust-Testing-for-Time-to-Event-Data.html">Robust Testing for Time-to-Event Data</a>
+    </li>
+    <li>
+      <a href="../articles/Mantel-Haenszel-Statistic.html">Mantel-Haenszel-Statistic</a>
     </li>
   </ul></li>
 <li>
@@ -78,7 +81,8 @@ treatment group contrasts using a generalized linear working model.</p>
 <span>  k_split <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  g_accuracy <span class="op">=</span> <span class="fl">7</span>,</span>
 <span>  contrast_h <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  contrast_dh <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  contrast_dh <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  variance_type <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -135,12 +139,16 @@ treatment group contrasts using a generalized linear working model.</p>
 <dt>contrast_dh</dt>
 <dd><p>An optional jacobian function for the contrast (otherwise use numerical derivative)</p></dd>
 
+
+<dt>variance_type</dt>
+<dd><p>The type of variance estimator to use, type 1, 2, or 3. All three are asymptotically equivalent. See details of <a href="robincar_glm.html">RobinCar::robincar_glm</a> for more.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
     
 
-<p>See value of <a href="robincar_glm.html">RobinCar::robincar_glm</a>, but the working model for \(\hat{\mu}(X_i)\) is based on the AIPW package that uses specified SuperLearner libraries and cross-fitting.
+<p>See value of <a href="robincar_glm.html">RobinCar::robincar_glm</a>, but the working model for \(\hat{\mu}(X_i)\) is based on the <a href="https://rdrr.io/pkg/AIPW/man/AIPW.html" class="external-link">AIPW::AIPW</a> package that uses specified SuperLearner libraries and cross-fitting.
 Also, `mod` attribute is an object of class <a href="https://rdrr.io/pkg/AIPW/man/AIPW.html" class="external-link">AIPW::AIPW</a>.</p>
     </div>
     <div id="details">
@@ -217,7 +225,7 @@ Before using this function, you must load the <a href="https://rdrr.io/pkg/Super
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Marlena Bannick, Ting Ye, Yanyao Yi, Faith Bian.</p>
+  <p></p><p>Developed by Marlena Bannick, Yuhan Qian, Ting Ye, Yanyao Yi, Faith Bian.</p>
 </div>
 
 <div class="pkgdown">

@@ -16,19 +16,13 @@
     <loc>/articles/Continuous-and-GLM-Type-Outcomes.html</loc>
   </url>
   <url>
+    <loc>/articles/Mantel-Haenszel-Statistic.html</loc>
+  </url>
+  <url>
     <loc>/articles/Robust-Testing-for-Time-to-Event-Data.html</loc>
   </url>
   <url>
-    <loc>/articles/calibration.html</loc>
-  </url>
-  <url>
     <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/use-linear-glm.html</loc>
-  </url>
-  <url>
-    <loc>/articles/use-survival.html</loc>
   </url>
   <url>
     <loc>/authors.html</loc>
@@ -73,6 +67,9 @@
     <loc>/reference/print.LinModelResult.html</loc>
   </url>
   <url>
+    <loc>/reference/print.MHResult.html</loc>
+  </url>
+  <url>
     <loc>/reference/print.TTEResult.html</loc>
   </url>
   <url>
@@ -97,16 +94,13 @@
     <loc>/reference/robincar_glm.html</loc>
   </url>
   <url>
-    <loc>/reference/robincar_glm2.html</loc>
-  </url>
-  <url>
     <loc>/reference/robincar_linear.html</loc>
   </url>
   <url>
-    <loc>/reference/robincar_linear2.html</loc>
+    <loc>/reference/robincar_logrank.html</loc>
   </url>
   <url>
-    <loc>/reference/robincar_logrank.html</loc>
+    <loc>/reference/robincar_mh.html</loc>
   </url>
   <url>
     <loc>/reference/robincar_tte.html</loc>

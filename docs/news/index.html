@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RobinCar</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -40,6 +40,9 @@
     <li>
       <a href="../articles/Robust-Testing-for-Time-to-Event-Data.html">Robust Testing for Time-to-Event Data</a>
     </li>
+    <li>
+      <a href="../articles/Mantel-Haenszel-Statistic.html">Mantel-Haenszel-Statistic</a>
+    </li>
   </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -57,6 +60,26 @@
       
     </div>
 
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.0.0" id="robincar-100">RobinCar 1.0.0<a class="anchor" aria-label="anchor" href="#robincar-100"></a></h2>
+<div class="section level3">
+<h3 id="features-1-0-0">Features<a class="anchor" aria-label="anchor" href="#features-1-0-0"></a></h3>
+<ul><li>Including a new function <code>robincar_mh</code>, which calculates a Mantel-Haenszel statistic. Please see <a href="https://arxiv.org/pdf/2408.12541" class="external-link">Xiaoyu Qiu, Yuhan Qian, Jaehwan Yi, Jinqiu Wang, Yu Du, Yanyao Yi, Ting Ye (2025)</a> for methods, and our new vignette.</li>
+<li>Added two new variance estimators for <code>robincar_glm</code>. They are asymptotically equivalent to the original estimator, but have different finite sample properties. See the description of the function for details.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bugfixes-1-0-0">Bugfixes<a class="anchor" aria-label="anchor" href="#bugfixes-1-0-0"></a></h3>
+<ul><li>Fixed an issue with printing the results from a negative binomial working model with unknown dispersion parameter in <code>robincar_glm</code>.</li>
+<li>Fix when there are ties in time-to-event data. This impacts <code>robincar_logrank</code>, <code>robincar_coxscore</code>, and <code>robincar_covhr</code>.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.3.1" id="robincar-031">RobinCar 0.3.1<small>2024-11-07</small><a class="anchor" aria-label="anchor" href="#robincar-031"></a></h2>
+<div class="section level3">
+<h3 id="bugfixes-0-3-1">Bugfixes<a class="anchor" aria-label="anchor" href="#bugfixes-0-3-1"></a></h3>
+<ul><li>When the following things happened simultaneously, the variance results were incorrect: (1) when the system locale was not set to “C”, (2) the user did not specify their treatment variable as a factor, and (3) when inconsistent cases were used in naming treatment levels (e.g., “a”, “B”). We have fixed this issue.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.3.0" id="robincar-030">RobinCar 0.3.0<small>2024-05-20</small><a class="anchor" aria-label="anchor" href="#robincar-030"></a></h2>
 <div class="section level3">
@@ -112,7 +135,7 @@
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Marlena Bannick, Ting Ye, Yanyao Yi, Faith Bian.</p>
+  <p></p><p>Developed by Marlena Bannick, Yuhan Qian, Ting Ye, Yanyao Yi, Faith Bian.</p>
 </div>
 
 <div class="pkgdown">

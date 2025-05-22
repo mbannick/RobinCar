@@ -18,7 +18,7 @@ treatment group contrasts using a generalized linear working model."><!-- mathja
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RobinCar</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -40,6 +40,9 @@ treatment group contrasts using a generalized linear working model."><!-- mathja
     </li>
     <li>
       <a href="../articles/Robust-Testing-for-Time-to-Event-Data.html">Robust Testing for Time-to-Event Data</a>
+    </li>
+    <li>
+      <a href="../articles/Mantel-Haenszel-Statistic.html">Mantel-Haenszel-Statistic</a>
     </li>
   </ul></li>
 <li>
@@ -75,7 +78,8 @@ treatment group contrasts using a generalized linear working model.</p>
 <span>  g_family <span class="op">=</span> <span class="fu">stats</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/stats/family.html" class="external-link">gaussian</a></span>,</span>
 <span>  g_accuracy <span class="op">=</span> <span class="fl">7</span>,</span>
 <span>  contrast_h <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  contrast_dh <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  contrast_dh <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  variance_type <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -121,6 +125,10 @@ If you wish to use a negative binomial working model with an unknown dispersion 
 <dt>contrast_dh</dt>
 <dd><p>An optional jacobian function for the contrast (otherwise use numerical derivative)</p></dd>
 
+
+<dt>variance_type</dt>
+<dd><p>The type of variance estimator to use, type 1, 2, or 3. All three are asymptotically equivalent. See details for more.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -162,7 +170,35 @@ If you wish to use a negative binomial working model with an unknown dispersion 
 and \(\hat{\mu}_a\) is the estimated conditional mean function based on the GLM working model.
 This working model has treatment \(a\)-specific coefficients if `adj_method` is "heterogeneous". Otherwise, they are shared across the treatment arms.
 Alternatively, if `formula` is used, the working model can be specified according to the user.</p>
-<p>Importantly, the estimated variance accounts for misspecification of the working model, and for covariate-adaptive randomization.</p>
+<p>Importantly, the estimated variance accounts for misspecification of the working model, and for covariate-adaptive randomization.
+The variance estimator is given by
+$$\hat{V} = \hat{V}_{\rm SR} - \hat{V}_{\Omega}$$
+where \(\hat{V}_{\rm SR}\) is the contribution to the variance under simple randomization, and \(\hat{V}_{\Omega}\) is a term
+that only appears when a covariate-adaptive randomization scheme is used.
+The \(\hat{V}_{\Omega}\) is the second line of \(\hat{V}\) in <a href="https://doi.org/10.1093/biomet/asaf029" class="external-link">Bannick et al. (2025)</a>.</p>
+<p>There are three different estimators available for \(\hat{V}_{\rm SR}\), which the user
+can choose with the argument <code>variance_type</code>. We describe these here.</p>
+<p>The three variance types are given as follows:</p>
+<ul><li><p>Type 1 (default):
+   $$\mathrm{diag}\left[\hat{\pi}_a^{-1} (\mathrm{Var}_a(Y_i) - 2\hat{Q}_{a,a} + \hat{\Sigma}_{a,a} ), a = 1, \dots, K \right] + \hat{Q} + \hat{Q}^T - \hat{\Sigma}$$</p></li>
+<li><p>Type 2:
+   $$\mathrm{diag}\left[\hat{\pi}_a^{-1} (\mathrm{Var}_a(Y_i - \hat{\mu}_a(X_i)) - 2\hat{Q}_{a,a} + \hat{\Sigma}_{a,a} ), a = 1, \dots, K \right] + \hat{Q} + \hat{Q}^T - \hat{\Sigma}$$</p></li>
+<li><p>Type 3:
+   $$\mathrm{diag}\left[\hat{\pi}_a^{-1} E_a([Y_i - \hat{\mu}_a(X_i)]^2), a = 1, \dots, K \right] + \hat{A}$$</p></li>
+</ul><p>where \(\hat{\pi}_a\) is the treatment proportion for group a,
+\(\hat{Q}_{a,b} = \mathrm{Cov}_a(Y_i, \hat{\mu}_b(X_i))\),
+\(\hat{\Sigma}_{a,b} = \mathrm{Cov}(\hat{\mu}_a(X_i), \hat{\mu}_b(X_i))\),
+and the matrix \(\hat{A}\) has diagonal entries for \((a, a)\) given by
+$$2\mathrm{Cov}_a(Y_i - \hat{\mu}_a(X_i), \hat{\mu}_a(X_i)) + \mathrm{Var}_a(\hat{\mu}_a(X_i))$$
+and off-diagonal entries for \((a, b)\) given by
+$$\mathrm{Cov}_a(Y_i, \hat{\mu}_b(X_i)) + \mathrm{Cov}_b(Y_i, \hat{\mu}_a(X_i)) - (1/2) \left[\mathrm{Cov}_a(\hat{\mu}_a(X_i), \hat{\mu}_b(X_i)) + \mathrm{Cov}_b(\hat{\mu}_a(X_i), \hat{\mu}_b(X_i)) \right].$$
+We use \(E_a\), \(\mathrm{Var}_a\), and \(\mathrm{Cov}_a\) to refer to the empirical expectation, variance, and
+ covariance among observations in group a only, and \(\mathrm{Cov}\) is the covariance within
+the entire sample.</p>
+<p>Please see the Supplemental Material Sect. H of <a href="https://doi.org/10.1093/biomet/asaf029" class="external-link">Bannick et al. (2025)</a> for a discussion
+of the merits of each type of variance estimator. Briefly, we recommend
+variance types 1 generally, and variance type 3 if it is anticipated
+that the distribution of \(X\) varies substantially over treatment groups.</p>
     </div>
 
   </div>
@@ -173,7 +209,7 @@ Alternatively, if `formula` is used, the working model can be specified accordin
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Marlena Bannick, Ting Ye, Yanyao Yi, Faith Bian.</p>
+  <p></p><p>Developed by Marlena Bannick, Yuhan Qian, Ting Ye, Yanyao Yi, Faith Bian.</p>
 </div>
 
 <div class="pkgdown">

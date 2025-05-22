@@ -1,9 +1,10 @@
-pandoc: 3.1.1
+pandoc: '3.2'
 pkgdown: 2.0.8
 pkgdown_sha: ~
 articles:
   Calibration-for-GLM-Models: Calibration-for-GLM-Models.html
   Continuous-and-GLM-Type-Outcomes: Continuous-and-GLM-Type-Outcomes.html
+  Mantel-Haenszel-Statistic: Mantel-Haenszel-Statistic.html
   Robust-Testing-for-Time-to-Event-Data: Robust-Testing-for-Time-to-Event-Data.html
-last_built: 2024-05-21T19:32Z
+last_built: 2025-05-22T20:54Z
 
