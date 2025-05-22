@@ -6,7 +6,7 @@
 # with settings for covariate randomization
 # scheme and vcovHC type.
 .make.model.RoboDataGLM <- function(data, car_scheme, vcovHC,
-                                    g_family, g_accuracy, ...) {
+                                    g_family, g_accuracy, variance_type, ...) {
 
   # Get logic for car scheme + adjustment methods
   z_exists <- !is.null(data$car_strata)
@@ -20,7 +20,8 @@
       car_scheme=car_scheme,
       pu_joint_z=logic$pu_joint_z,
       pu_funcs=logic$pu_funcs,
-      omegaz_func=logic$omegaz_func
+      omegaz_func=logic$omegaz_func,
+      variance_type=variance_type
     ),
     class=c(logic$method)
   )
@@ -35,7 +36,7 @@
                                    covariate_to_include_strata,
                                    SL_libraries, SL_learners,
                                    k_split,
-                                   g_accuracy, ...) {
+                                   g_accuracy, variance_type, ...) {
 
   x_exists <- !is.null(data$covariate)
   z_exists <- !is.null(data$car_strata)
@@ -56,7 +57,8 @@
       pu_joint_z=logic$pu_joint_z,
       pu_funcs=logic$pu_funcs,
       omegaz_func=logic$omegaz_func,
-      g_accuracy=g_accuracy
+      g_accuracy=g_accuracy,
+      variance_type=variance_type
     ),
     class=c(logic$method)
   )
