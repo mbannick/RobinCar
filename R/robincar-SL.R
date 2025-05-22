@@ -22,7 +22,7 @@
 #' @param SL_learners Optional list of super-learner "learners" to use for the covariate adjustment (see \link[SuperLearner:create.Learner]{SuperLearner::create.Learner())}
 #' @param k_split Number of splits to use in cross-fitting
 #' @param g_accuracy Level of accuracy to check prediction un-biasedness (in digits).
-#'
+#' @param variance_type The type of variance estimator to use, type 1, 2, or 3. All three are asymptotically equivalent. See details of \link[RobinCar:robincar_glm]{RobinCar::robincar_glm} for more.
 #'
 #' @export
 #' @importFrom SuperLearner listWrappers
@@ -78,7 +78,8 @@ robincar_SL <- function(df,
                         SL_libraries=c(), SL_learners=c(),
                         k_split=2,
                         g_accuracy=7,
-                        contrast_h=NULL, contrast_dh=NULL){
+                        contrast_h=NULL, contrast_dh=NULL,
+                        variance_type=1){
 
   .check.car_scheme(car_scheme, car_strata_cols)
   # .check.sl.libraries(SL_libraries)
@@ -107,7 +108,8 @@ robincar_SL <- function(df,
     SL_libraries=SL_libraries,
     SL_learners=SL_learners,
     k_split=k_split,
-    g_accuracy=g_accuracy
+    g_accuracy=g_accuracy,
+    variance_type=variance_type
   )
 
   # Perform adjustment
