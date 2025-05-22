@@ -18,7 +18,8 @@ robincar_SL(
   k_split = 2,
   g_accuracy = 7,
   contrast_h = NULL,
-  contrast_dh = NULL
+  contrast_dh = NULL,
+  variance_type = 1
 )
 }
 \arguments{
@@ -47,6 +48,8 @@ robincar_SL(
 \item{contrast_h}{An optional function to specify a desired contrast}
 
 \item{contrast_dh}{An optional jacobian function for the contrast (otherwise use numerical derivative)}
+
+\item{variance_type}{The type of variance estimator to use, type 1, 2, or 3. All three are asymptotically equivalent. See details of \link[RobinCar:robincar_glm]{RobinCar::robincar_glm} for more.}
 }
 \value{
 See value of \link[RobinCar:robincar_glm]{RobinCar::robincar_glm}, but the working model for \eqn{\hat{\mu}(X_i)} is based on the \link[AIPW:AIPW]{AIPW::AIPW} package that uses specified SuperLearner libraries and cross-fitting.

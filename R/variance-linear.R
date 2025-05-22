@@ -81,6 +81,8 @@ get.erb <- function(model, data, mod, mu_hat=NULL){
 }
 
 # Gets AIPW asymptotic variance under simple randomization
+#' @importFrom stats cov
+#' @importFrom stats var
 vcov_car <- function(model, data, mod, mutilde){
 
   # Get predictions for observed treatment group
