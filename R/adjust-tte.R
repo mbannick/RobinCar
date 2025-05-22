@@ -30,14 +30,6 @@ create.tte.df <- function(model, data){
 
 }
 
-fix.ties <- function(df){
-  ties <- which(base::diff(df$response) == 0) + 1
-  for(i in ties){
-    df[i, c("Y0", "Y1")] <- df[i-1, c("Y0", "Y1")]
-  }
-  return(df)
-}
-
 # Pre-process the time to event dataset by calculating
 # the risk set size, and fixing ties in the failure times.
 #' @importFrom dplyr n
@@ -54,15 +46,32 @@ process.tte.df <- function(df, ref_arm=NULL){
   df <- df %>%
     dplyr::arrange(.data$car_strata, .data$response) %>%
     group_by(.data$car_strata) %>%
-    mutate(Y=dplyr::n():1,
-           trt0=as.integer(.data$treat == trts[1]),
-           trt1=as.integer(.data$treat == trts[2]),
-           Y0=cumsum(.data$trt0[dplyr::n():1])[dplyr::n():1],
-           Y1=cumsum(.data$trt1[dplyr::n():1])[dplyr::n():1])
-
-  # Fix ties
-  df <- fix.ties(df)
-  df <- df %>% ungroup()
+    mutate(
+      Y=dplyr::n():1,
+      trt0=as.integer(.data$treat == trts[1]),
+      trt1=as.integer(.data$treat == trts[2]),
+      Y0=cumsum(.data$trt0[dplyr::n():1])[dplyr::n():1],
+      Y1=cumsum(.data$trt1[dplyr::n():1])[dplyr::n():1]) %>%
+    ungroup() %>%
+    group_by(.data$car_strata, .data$response) %>%
+    mutate(
+      Y=first(.data$Y),
+      Y1=first(.data$Y1),
+      Y0=first(.data$Y0),
+      n.events=sum(.data$event)
+    ) %>%
+    ungroup() %>%
+    group_by(.data$car_strata) %>%
+    mutate(
+      cum.delta.Y0.over.Ysq=cumsum(.data$Y0/.data$Y^2*.data$event),
+      cum.delta.Y1.over.Ysq=cumsum(.data$Y1/.data$Y^2*.data$event)
+    ) %>%
+    group_by(.data$car_strata, .data$response) %>%
+    mutate(
+      cum.delta.Y0.over.Ysq=last(.data$cum.delta.Y0.over.Ysq),
+      cum.delta.Y1.over.Ysq=last(.data$cum.delta.Y1.over.Ysq)
+    ) %>%
+    ungroup()
 
   return(df)
 }
@@ -75,9 +84,12 @@ get.ordered.data <- function(df, ref_arm){
     mutate(
       mu_t            = .data$Y1 / .data$Y,
 
-      O.hat           = .data$event * (.data$trt1 - .data$mu_t) -
-        .data$trt1 * cumsum(.data$event / .data$Y) +
-        cumsum(.data$event * .data$Y1 / .data$Y^2),
+      O.hat1          = .data$event * (.data$Y0/.data$Y) -
+        .data$cum.delta.Y0.over.Ysq,
+      O.hat0          = .data$event * (.data$Y1/.data$Y) -
+        .data$cum.delta.Y1.over.Ysq,
+      O.hat           = .data$trt1 * .data$O.hat1 +
+        .data$trt0 * .data$O.hat0,
 
       s0_seq          = exp(.data$lin_pred),
       s1_seq          = .data$s0_seq * .data$trt1,
@@ -98,9 +110,6 @@ get.ordered.data <- function(df, ref_arm){
         .data$s0_seq * .data$cumsum_at_risk2,
 
       u_i             = .data$event * (.data$trt1 - .data$mu_t)
-    ) %>% mutate(
-      O.hat           = -.data$O.hat * (.data$trt0 == 1) +
-        .data$O.hat * (.data$trt1 == 1)
     ) %>% ungroup()
 
   return(df)

@@ -1,43 +1,5 @@
 library(dplyr)
 
-test_that("fix ties", {
-
-  n <- 10
-  data.simu <- data.frame(
-    id=1:n,
-    response=c(1,1,1,2,3,4,5,6,6,8),
-    Y1=1:n,
-    Y=n:1
-  ) %>%
-    mutate(Y0=Y-Y1)
-
-  data_fix_tie <- fix.ties(data.simu)
-
-  expect_true(all(diff(data_fix_tie$Y1[1:3])==0))
-  expect_true(all(diff(data_fix_tie$Y1[8:9])==0))
-  expect_true(all(diff(data_fix_tie$Y0[1:3])==0))
-  expect_true(all(diff(data_fix_tie$Y0[8:9])==0))
-
-})
-
-test_that("fix_tie() for no tie data",{
-
-  n <- 10
-  data.simu <- data.frame(
-    id=1:n,
-    response=1:n,
-    Y1=1:n,
-    Y=n:1) %>% mutate(Y0=Y-Y1)
-
-  data_fix_tie=fix.ties(data.simu)
-
-  expect_true(all(diff(data_fix_tie$Y1)!=0))
-  expect_true(all(diff(data_fix_tie$Y1)!=0))
-  expect_true(all(diff(data_fix_tie$Y0)!=0))
-  expect_true(all(diff(data_fix_tie$Y0)!=0))
-
-})
-
 test_that("data preprocessing", {
 
   set.seed(0)
