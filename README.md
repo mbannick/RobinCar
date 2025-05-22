@@ -4,7 +4,7 @@
 # RobinCar: ROBust estimation and INference for Covariate Adjustment in Randomized clinical trials
 
 ## Authors
-Ting Ye, Yanyao Yi, Marlena Bannick (maintainer), and Faith Bian
+Ting Ye, Yanyao Yi, Marlena Bannick (maintainer), Yuhan Qian, and Faith Bian
 
 ## Documentation
 
@@ -39,7 +39,7 @@ git clone https://github.com/mbannick/RobinCar.git
 Here are publications and preprints that explain the methods in RobinCar:
 
 * [Ting Ye, Jun Shao, Yanyao Yi (2023)](https://doi.org/10.1093/biomet/asad045)
-* [Marlena Bannick, Jun Shao, Jingyi Liu, Yu Du, Yanyao Yi, Ting Ye (2024)](https://doi.org/10.48550/arXiv.2306.10213)
+* [Marlena Bannick, Jun Shao, Jingyi Liu, Yu Du, Yanyao Yi, Ting Ye (2024)](https://doi.org/10.1093/biomet/asaf029)
 * [Ting Ye, Marlena Bannick, Yanyao Yi, Jun Shao (2023)](https://doi.org/10.1080/24754269.2023.2205802)
 * [Ting Ye, Jun Shao, Yanyao Yi, Qinyuan Zhao (2023)](https://doi.org/10.1080/01621459.2022.2049278)
-
+* [Xiaoyu Qiu, Yuhan Qian, Jaehwan Yi, Jinqiu Wang, Yu Du, Yanyao Yi, Ting Ye (2025)](https://arxiv.org/pdf/2408.12541)

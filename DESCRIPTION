@@ -1,7 +1,7 @@
 Package: RobinCar
 Type: Package
 Title: Robust Inference for Covariate Adjustment in Randomized Clinical Trials
-Version: 0.3.2
+Version: 1.0.0
 Authors@R: c(
     person("Marlena", "Bannick", 
         email="mnorwood@uw.edu", 
@@ -16,7 +16,8 @@ Description: Performs robust estimation and inference when using covariate adjus
     Ting Ye, Jun Shao, Yanyao Yi, Qinyuan Zhao (2023) <doi:10.1080/01621459.2022.2049278>.
     Ting Ye, Marlena Bannick, Yanyao Yi, Jun Shao (2023) <doi:10.1080/24754269.2023.2205802>.
     Ting Ye, Jun Shao, Yanyao Yi (2023) <doi:10.1093/biomet/asad045>.
-    Marlena Bannick, Jun Shao, Jingyi Liu, Yu Du, Yanyao Yi, Ting Ye (2024) <doi:10.48550/arXiv.2306.10213>.
+    Marlena Bannick, Jun Shao, Jingyi Liu, Yu Du, Yanyao Yi, Ting Ye (2024) <doi:10.1093/biomet/asaf029>.
+    Xiaoyu Qiu, Yuhan Qian, Jaehwan Yi, Jinqiu Wang, Yu Du, Yanyao Yi, Ting Ye (2025)<doi:10.48550/arXiv.2408.12541>
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

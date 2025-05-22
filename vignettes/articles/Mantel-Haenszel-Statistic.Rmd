@@ -14,6 +14,8 @@ rm(list=ls())
 library(RobinCar)
 ```
 
+Please see [Qiu, Qian, Yi, Wang, Du, Yi, Ye (2025)](https://arxiv.org/pdf/2408.12541) for more information about the Mantel-Haenszel estimator.
+
 ## Mantel Haenszel Statistic
 
 The dataset that we will use for this is included in the package.

@@ -1,3 +1,16 @@
+# RobinCar 1.0.0
+
+## Features
+
+* Including a new function `robincar_mh`, which calculates a Mantel-Haenszel statistic. Please see [Xiaoyu Qiu, Yuhan Qian, Jaehwan Yi, Jinqiu Wang, Yu Du, Yanyao Yi, Ting Ye (2025)](https://arxiv.org/pdf/2408.12541) for methods,
+and our new vignette.
+* Added two new variance estimators for `robincar_glm`. They are asymptotically equivalent to the original estimator, but have different finite sample properties. See the description of the function for details.
+
+## Bugfixes
+
+* Fixed an issue with printing the results from a negative binomial working model with unknown dispersion parameter in `robincar_glm`.
+* Fix when there are ties in time-to-event data. This impacts `robincar_logrank`, `robincar_coxscore`, and `robincar_covhr`.
+
 # RobinCar 0.3.1
 
 ## Bugfixes
