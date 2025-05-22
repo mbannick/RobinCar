@@ -6,6 +6,7 @@ articles:
   - articles/Continuous-and-GLM-Type-Outcomes
   - articles/Calibration-for-GLM-Models
   - articles/Robust-Testing-for-Time-to-Event-Data
+  - articles/Mantel-Haenszel-Statistic
 
 template:
   params:
@@ -23,6 +24,7 @@ reference:
   - robincar_covhr
   - robincar_coxscore
   - robincar_tte
+  - robincar_mh
   - robincar_SL
   - robincar_SL_median
 - title: "Summary printing functions."
@@ -32,6 +34,7 @@ reference:
   - print.ContrastResult
   - print.CalibrationResult
   - print.TTEResult
+  - print.MHResult
 - title: "Simulation"
 - contents:
   - car_sr

@@ -7,6 +7,7 @@ Authors@R: c(
         email="mnorwood@uw.edu", 
         role=c("cre", "aut"),
         comment=c(ORCID="0000-0001-6279-5978")),
+    person("Yuhan", "Qian", role="aut"),
     person("Ting", "Ye", role="aut"),
     person("Yanyao", "Yi", role="aut"),
     person("Faith", "Bian", role="aut")
