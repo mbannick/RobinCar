@@ -42,15 +42,15 @@
 #' where \eqn{\hat{\pi}_a} is the treatment proportion for group a,
 #' \eqn{\hat{Q}_{a,b} = \mathrm{Cov}_a(Y_i, \hat{\mu}_b(X_i))},
 #' \eqn{\hat{\Sigma}_{a,b} = \mathrm{Cov}(\hat{\mu}_a(X_i), \hat{\mu}_b(X_i))},
-#' and the matrix \eqn{A} has diagonal entries for \eqn{(a, a)} given by
-#' \deqn{2\mathrm{Cov}_a(Y_i - \hat{\mu}_a(X_i)) + \mathrm{Var}_a(\hat{\mu}_a(X_i))}
+#' and the matrix \eqn{\hat{A}} has diagonal entries for \eqn{(a, a)} given by
+#' \deqn{2\mathrm{Cov}_a(Y_i - \hat{\mu}_a(X_i), \hat{\mu}_a(X_i)) + \mathrm{Var}_a(\hat{\mu}_a(X_i))}
 #' and off-diagonal entries for \eqn{(a, b)} given by
 #' \deqn{\mathrm{Cov}_a(Y_i, \hat{\mu}_b(X_i)) + \mathrm{Cov}_b(Y_i, \hat{\mu}_a(X_i)) - (1/2) \left[\mathrm{Cov}_a(\hat{\mu}_a(X_i), \hat{\mu}_b(X_i)) + \mathrm{Cov}_b(\hat{\mu}_a(X_i), \hat{\mu}_b(X_i)) \right].}
 #' We use \eqn{E_a}, \eqn{\mathrm{Var}_a}, and \eqn{\mathrm{Cov}_a} to refer to the empirical expectation, variance, and
 #'  covariance among observations in group a only, and \eqn{\mathrm{Cov}} is the covariance within
 #' the entire sample.
 #'
-#' Please see the Supplemental Material Sect. H of \link[=https://arxiv.org/pdf/2306.10213]{Bannick et al. (2025)} for a discussion
+#' Please see the Supplemental Material Sect. H of \link[=https://doi.org/10.1093/biomet/asaf029]{Bannick et al. (2025)} for a discussion
 #' of the merits of each type of variance estimator. Briefly, we recommend
 #' variance types 1 generally, and variance type 3 if it is anticipated
 #' that the distribution of \eqn{X} varies substantially over treatment groups.
