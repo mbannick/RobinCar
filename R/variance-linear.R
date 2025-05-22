@@ -145,7 +145,7 @@ vcov_car <- function(model, data, mod, mutilde){
     v <- matrix(data=NA, nrow=K, ncol=K)
 
     for(a in 1:K){
-      for(b in 1:K){
+      for(b in a:K){
 
         # Diagonal entries in the vcov matrix
         if(a == b){
@@ -169,7 +169,7 @@ vcov_car <- function(model, data, mod, mutilde){
           term3 <- cov(mutilde[which(a_group), c(a, b)])[1, 2]
           term4 <- cov(mutilde[which(b_group), c(a, b)])[1, 2]
 
-          v[a, b] <- v[a, b] <- term1 + term2 - (term3 + term4) / 2
+          v[a, b] <- v[b, a] <- term1 + term2 - (term3 + term4) / 2
 
         }
       }
