@@ -36,7 +36,7 @@
                                    covariate_to_include_strata,
                                    SL_libraries, SL_learners,
                                    k_split,
-                                   g_accuracy, ...) {
+                                   g_accuracy, variance_type, ...) {
 
   x_exists <- !is.null(data$covariate)
   z_exists <- !is.null(data$car_strata)
@@ -57,7 +57,8 @@
       pu_joint_z=logic$pu_joint_z,
       pu_funcs=logic$pu_funcs,
       omegaz_func=logic$omegaz_func,
-      g_accuracy=g_accuracy
+      g_accuracy=g_accuracy,
+      variance_type=variance_type
     ),
     class=c(logic$method)
   )
