@@ -220,3 +220,40 @@ print.CalibrationResult <- function(x, ...){
   cat("\nVariance-Covariance Matrix:\n")
   print(x$varcov)
 }
+
+
+#' Print MH result
+#'
+#' @param x A ContrastResult object
+#' @param ... Additional arguments
+#' @export
+#'
+#' @returns Prints estimates (and variances) of treatment contrasts based on MH risk difference or ATE
+print.MHResult <- function(x, ...){
+  if("MH" == x$settings$estimand){
+    est_type <- "Mantel-Haenszel risk difference"
+  } else {
+    est_type <- "ATE"
+  }
+  if("GR" == x$settings$ci_type){
+    c_type <- "Greenland's estimator"
+  } else if("mGR" == x$settings$ci_type){
+    c_type <- "modified Greenland's estimator"
+  } else{
+    c_type <- "Sato's estimator"
+  }
+  output_title <- sprintf("Treatment group contrasts based on %s", est_type)
+  output_estimand <- sprintf("Estimand: %s", est_type)
+  output_strat <- sprintf("Stratified by %s", paste(x$settings$strata_cols, collapse=", "))
+  output_ci <- sprintf("SE calculated via %s", c_type)
+  cat(output_title)
+  cat("\n")
+  cat(output_estimand)
+  cat("\n")
+  cat(output_strat)
+  cat("\n")
+  cat(output_ci)
+  cat("\n\n")
+  cat("Contrasts:\n")
+  print(x$result)
+}

@@ -102,3 +102,20 @@
 
   return(model)
 }
+
+
+# Makes a model class for the MH method
+# with settings for estimand and CI type
+.make.model.RoboDataMH <- function(data, estimand, ci_type, strata_cols, ...) {
+  
+  model <- structure(
+    list(
+      estimand = estimand,
+      ci_type = ci_type,
+      strata_cols = strata_cols
+    ),
+    class=c("MHModel")
+  )
+  
+  return(model)
+}

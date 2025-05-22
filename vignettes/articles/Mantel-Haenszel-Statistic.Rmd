@@ -1,0 +1,56 @@
+---
+title: "Mantel-Haenszel-Statistic"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+rm(list=ls())
+library(RobinCar)
+```
+
+## Mantel Haenszel Statistic
+
+The dataset that we will use for this is included in the package.
+
+```{r}
+data <- RobinCar:::data_sim
+data <- data[data$A != 2, ]
+data$A <- as.factor(data$A)
+data$y_bin <- ifelse(data$y > 2, 1, 0)
+```
+
+### Estimate MH risk difference
+
+```{r}
+fit.MHrd.mGR <- robincar_mh(
+  df = data,
+  treat_col = "A",
+  response_col = "y_bin",
+  strata_cols = c("z1", "z2"),
+  estimand = "MH",
+  ci_type = "mGR"
+)
+
+fit.MHrd.mGR
+```
+
+### Estimate Average Treatment Effect
+
+```{r}
+fit.ATE.mGR <- robincar_mh(
+  df = data,
+  treat_col = "A",
+  response_col = "y_bin",
+  strata_cols = c("z1", "z2"),
+  estimand = "ATE",
+  ci_type = "mGR"
+)
+
+fit.ATE.mGR
+```

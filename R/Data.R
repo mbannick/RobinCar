@@ -19,6 +19,19 @@
   }
 }
 
+.check.bin_response <- function(data){
+  if(!all(data$response %in% c(0, 1))){
+    return("Response column must contain only 0 and 1.")
+  }
+}
+
+.check.bin_treat <- function(data){
+  .check.treat(data)
+  if(length(data$treat_levels)>2){
+    return("Treatment column must be a binary variable.")
+  }
+}
+
 .check.attributes <- function(x, ...){
   required <- c(...)
   existing <- names(x)
@@ -86,6 +99,18 @@ validate.RoboDataTTE <- function(data, ref_arm, ...){
   }
 
   .return.error(errors)
+}
+
+#' @exportS3Method
+validate.RoboDataMH <- function(data, ...){
+  
+  errors <- character()
+  errors <- c(errors, .check.attributes(data, "treat", "response", "joint_strata"))
+  errors <- c(errors, .check.bin_treat(data))
+  errors <- c(errors, .check.bin_response(data))
+  
+  .return.error(errors)
+  
 }
 
 .edit.formula <- function(form, response_col, treat_col){
