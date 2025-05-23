@@ -75,7 +75,7 @@ The variance estimator is given by
 \deqn{\hat{V} = \hat{V}_{\rm SR} - \hat{V}_{\Omega}}
 where \eqn{\hat{V}_{\rm SR}} is the contribution to the variance under simple randomization, and \eqn{\hat{V}_{\Omega}} is a term
 that only appears when a covariate-adaptive randomization scheme is used.
-The \eqn{\hat{V}_{\Omega}} is the second line of \eqn{\hat{V}} in \href{https://doi.org/10.1093/biomet/asaf029}{Bannick et al. (2025)}.
+The \eqn{\hat{V}_{\Omega}} is the second line of \eqn{\hat{V}} in \insertCite{bannickGeneralFormCovariate2025}{RobinCar}.
 
 There are three different estimators available for \eqn{\hat{V}_{\rm SR}}, which the user
 can choose with the argument \code{variance_type}. We describe these here.
@@ -108,8 +108,11 @@ We use \eqn{E_a}, \eqn{\mathrm{Var}_a}, and \eqn{\mathrm{Cov}_a} to refer to the
  covariance among observations in group a only, and \eqn{\mathrm{Cov}} is the covariance within
 the entire sample.
 
-Please see the Supplemental Material Sect. H of \href{https://doi.org/10.1093/biomet/asaf029}{Bannick et al. (2025)} for a discussion
+Please see the Supplemental Material Sect. H of \insertCite{bannickGeneralFormCovariate2025}{RobinCar} for a discussion
 of the merits of each type of variance estimator. Briefly, we recommend
 variance types 1 generally, and variance type 3 if it is anticipated
 that the distribution of \eqn{X} varies substantially over treatment groups.
+}
+\references{
+\insertAllCited{}
 }
