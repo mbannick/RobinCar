@@ -5,9 +5,27 @@ diff <- function(est){
   return(cont)
 }
 
+odds_ratio <- function(est){
+  base <- est[1] / (1-est[1])
+  cont <- est[-1] / (1-est[-1]) / base
+  return(cont)
+}
+
+log_odds_ratio <- function(est){
+  base <- est[1] / (1-est[1])
+  cont <- log(est[-1] / (1-est[-1]) / base)
+  return(cont)
+}
+
 ratio <- function(est){
   base <- est[1]
   cont <- est[-1] / base
+  return(cont)
+}
+
+log_ratio <- function(est){
+  base <- est[1]
+  cont <- log(est[-1] / base)
   return(cont)
 }
 
@@ -26,6 +44,30 @@ jacobian.DIFF <- function(settings, est){
 jacobian.RATIO <- function(settings, est){
   col1 <- -1 * est[-1] / est[1]^2
   mat1 <- diag(1/est[1], length(est)-1)
+  jacob <- cbind(col1, mat1)
+  return(jacob)
+}
+
+#' @exportS3Method
+jacobian.LOGRATIO <- function(settings, est){
+  col1 <- -1 / est[1]
+  mat1 <- diag(1/est[-1], length(est)-1)
+  jacob <- cbind(col1, mat1)
+  return(jacob)
+}
+
+#' @exportS3Method
+jacobian.ODDSRATIO <- function(settings, est){
+  col1 <- -1 / est[1] ** 2 * est[-1] / (1-est[-1])
+  mat1 <- diag((1-est[-1]) / est[-1] / (1-est[1]) ** 2, length(est)-1)
+  jacob <- cbind(col1, mat1)
+  return(jacob)
+}
+
+#' @exportS3Method
+jacobian.LOGODDSRATIO <- function(settings, est){
+  col1 <- -1 / (est[1] * (1 - est[1]))
+  mat1 <- diag(1 / (est[-1] * (1 - est[-1])), length(est)-1)
   jacob <- cbind(col1, mat1)
   return(jacob)
 }
@@ -59,6 +101,18 @@ contrast.settings <- function(k, contrast_h, contrast_dh=NULL){
     h <- ratio
     type <- "RATIO"
     name <- function(tl) paste0("treat ", tl[-1], " / ", tl[1])
+  } else if(contrast_h == "log_ratio"){
+    h <- log_ratio
+    type <- "LOGRATIO"
+    name <- function(tl) paste0("log(treat ", tl[-1], " / ", tl[1], ")")
+  } else if(contrast_h == "odds_ratio"){
+    h <- odds_ratio
+    type <- "ODDSRATIO"
+    name <- function(tl) paste0("odds(treat ", tl[-1], ") / odds(", tl[1], ")")
+  } else if(contrast_h == "log_odds_ratio"){
+    h <- log_odds_ratio
+    type <- "LOGODDSRATIO"
+    name <- function(tl) paste0("log(odds(treat ", tl[-1], ")) - log(odds(", tl[1], "))")
   } else {
     stop("Unrecognized contrast function name.")
   }
@@ -79,6 +133,22 @@ contrast <- function(settings, treat, est, varcov){
 
   # Get labels
   lab <- settings$name(treat)
+
+  # If using an odds ratio contrast, make sure
+  # give a warning if the estimates are not between 1 and 0.
+  if(class(settings)[2] %in% c("ODDSRATIO", "LOGODDSRATIO")){
+    if(any(est < 0) || any(est > 1)){
+      warning("Estimates are not between 0 and 1: are you sure you want an odds ratio?")
+    }
+  }
+
+  # If using a ratio or odds ratio, give a warning
+  # that the performance is better with logs.
+  if(class(settings)[2] %in% c("ODDSRATIO", "RATIO")){
+    warning("Using a ratio or odds ratio is not recommended.
+            Consider using log_ratio or log_odds_ratio for better
+            performance of the variance estimator.")
+  }
 
   # Get transformed estimate
   c_est <- settings$h(est)
