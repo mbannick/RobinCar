@@ -60,8 +60,9 @@ For the binary outcome, we can use a logistic regression model instead.
 robin_glm(
   y_bin ~ arms * (wtkg + hemo + oprior),
   treatment = arms ~ pb(strat),
-  family=binomial(link="logit"),
-  data=data
+  family = binomial(link = "logit"),
+  contrast = "risk_ratio",
+  data = data
 )
 ```
 
@@ -71,8 +72,8 @@ Rather than a linear contrast, we can instead estimate a risk ratio. This does n
 robin_glm(
   y_bin ~ arms * (strat + wtkg + hemo + oprior),
   treatment = arms ~ pb(strat),
-  family=binomial(link="logit"),
-  contrast="risk_ratio",
+  family = binomial(link = "logit"),
+  contrast = "log_risk_ratio",
   data=data
 )
 ```
@@ -103,10 +104,10 @@ For a survival outcome with right-censoring, we can use the RobinCar2 function `
 to do a covariate-adjusted, stratified log-rank test.
 
 ```{r}
-surv <- robin_surv(
-  Surv(days, cens) ~ arms * strat + wtkg + oprior + hemo,
-  treatment=arms ~ pb(strat),
-  data=data
+robin_surv(
+  Surv(days, cens) ~ wtkg + oprior + hemo,
+  treatment = arms ~ pb(strat),
+  data = data
 )
 ```
 
