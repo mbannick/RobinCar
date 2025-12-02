@@ -1,0 +1,118 @@
+---
+title: "RobinCar Family"
+author: "Marlena Bannick"
+date: "2025-08-21"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(RobinCar)
+library(RobinCar2)
+library(dplyr)
+```
+
+This vignette is to accompany the Results section of the RobinCar Family paper.
+
+**Data Manipulation**
+
+Creates continuous and binary outcomes, and does simple data manipulations.
+
+```{r}
+# Data are from the speff2trial package
+data <- tibble(speff2trial::ACTG175)
+
+data <- data %>% mutate(
+  # Create continuous and binary outcomes
+  y_cont = cd420 - cd40,
+  y_bin = as.numeric((y_cont / cd40) > 0.5)
+) %>% filter(
+  # Focus on two treatment arms
+  arms %in% c("0", "1")
+) %>% mutate(
+  # Factor variables for treatment
+  # and stratification variable
+  arms = factor(arms),
+  strat = factor(strat)
+)
+```
+
+**Linear Adjustment**
+
+The following shows a linear model with treatment-by-covariate interactions, including strata as covariates,
+and using the four covariates of weight, hemophilia status, and prior use of non-zidovudine antiretroviral therapy. These specifications ensure that the covariate adjustment has guaranteed efficiency gain (asymptotically).
+
+```{r}
+robin_lm(
+  y_cont ~ arms * (strat + wtkg + hemo + oprior), 
+  treatment = arms ~ pb(strat), 
+  data=data)
+```
+
+**Generalized Linear Models**
+
+For the binary outcome, we can use a logistic regression model instead.
+
+```{r}
+robin_glm(
+  y_bin ~ arms * (wtkg + hemo + oprior),
+  treatment = arms ~ pb(strat),
+  family = binomial(link = "logit"),
+  contrast = "risk_ratio",
+  data = data
+)
+```
+
+Rather than a linear contrast, we can instead estimate a risk ratio. This does not change the marginal mean estimates, but it changes the contrast estimates (and p-values).
+
+```{r}
+robin_glm(
+  y_bin ~ arms * (strat + wtkg + hemo + oprior),
+  treatment = arms ~ pb(strat),
+  family = binomial(link = "logit"),
+  contrast = "log_risk_ratio",
+  data=data
+)
+```
+
+**Mantel-Haenszel**
+
+RobinCar includes functions for robust Mantel-Haenszel estimation. Here we create a new variable that is the interaction of prior use of non-zidovudine antiretroviral therapy and hemophilia status, and use that as the stratification variable.
+
+By default, the function uses the average treatment effect as the estimand of interest. Specifying the estimand argument as "MH" does not
+change the estimate, but it does change the standard error calculation.
+
+The MH function in RobinCar is only valid for simple randomization.
+
+```{r}
+data <- data %>% mutate(
+  X=interaction(oprior, hemo)
+)
+
+robincar_mh(
+  data, "arms", "y_bin",
+  strata_cols=c("oprior", "hemo")
+)
+```
+
+**Survival Analysis**
+
+For a survival outcome with right-censoring, we can use the RobinCar2 function `robin_surv`
+to do a covariate-adjusted, stratified log-rank test.
+
+```{r}
+robin_surv(
+  Surv(days, cens) ~ wtkg + oprior + hemo,
+  treatment = arms ~ pb(strat),
+  data = data
+)
+```
+
+You can use the `table` function to see the number of events and number at-risk
+
+```{r}
+table(surv)
+```
