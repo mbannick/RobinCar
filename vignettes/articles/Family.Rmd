@@ -11,8 +11,16 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 library(RobinCar)
-library(RobinCar2)
 library(dplyr)
+
+if (!require("remotes")) {
+  install.packages("remotes")
+}
+remotes::install_github(
+  "openpharma/RobinCar2"
+)
+
+library(RobinCar2)
 ```
 
 This vignette is to accompany the Results section of the RobinCar Family paper.
@@ -104,8 +112,8 @@ For a survival outcome with right-censoring, we can use the RobinCar2 function `
 to do a covariate-adjusted, stratified log-rank test.
 
 ```{r}
-robin_surv(
-  Surv(days, cens) ~ wtkg + oprior + hemo,
+surv <- robin_surv(
+  Surv(days, cens) ~ wtkg + oprior + hemo + strata(strat),
   treatment = arms ~ pb(strat),
   data = data
 )

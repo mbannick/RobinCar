@@ -17,7 +17,7 @@
 #' @param car_scheme Name of the type of covariate-adaptive randomization scheme. One of: "simple", "pocock-simon", "biased-coin", "permuted-block".
 #' @param ref_arm Reference arm of the treatment group, defaults to NULL,
 #'                which results in using the first element of `unique(data[, treat_col])`.
-#' @param p_trt Treatment allocation ratio for the reference arm.
+#' @param p_trt Treatment allocation ratio for the treatment arm.
 #' @param adj_method Adjustment method (one of "CL", "CSL", or "coxscore")
 #' @param sparse_remove Remove sparse car_strata from calculation
 #'

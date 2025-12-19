@@ -34,7 +34,7 @@ robincar_tte(
 
 \item{covariate_cols}{Names of columns in df with covariate variables}
 
-\item{p_trt}{Treatment allocation ratio for the reference arm.}
+\item{p_trt}{Treatment allocation ratio for the treatment arm.}
 
 \item{ref_arm}{Reference arm of the treatment group, defaults to NULL,
 which results in using the first element of `unique(data[, treat_col])`.}
