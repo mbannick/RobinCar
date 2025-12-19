@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Robust Inference for Covariate Adjustment in Randomized Clinical Trials">
-<meta property="og:description" content="Performs robust estimation and inference when using covariate adjustment and/or covariate-adaptive randomization in randomized clinical trials. Ting Ye, Jun Shao, Yanyao Yi, Qinyuan Zhao (2023) &lt;doi:10.1080/01621459.2022.2049278&gt;. Ting Ye, Marlena Bannick, Yanyao Yi, Jun Shao (2023) &lt;doi:10.1080/24754269.2023.2205802&gt;. Ting Ye, Jun Shao, Yanyao Yi (2023) &lt;doi:10.1093/biomet/asad045&gt;. Marlena Bannick, Jun Shao, Jingyi Liu, Yu Du, Yanyao Yi, Ting Ye (2024) &lt;doi:10.1093/biomet/asaf029&gt;. Xiaoyu Qiu, Yuhan Qian, Jaehwan Yi, Jinqiu Wang, Yu Du, Yanyao Yi, Ting Ye (2025)&lt;doi:10.48550/arXiv.2408.12541&gt;.">
+<meta property="og:description" content="Performs robust estimation and inference when using covariate adjustment and/or covariate-adaptive randomization in randomized clinical trials. Ting Ye, Jun Shao, Yanyao Yi, Qinyuan Zhao (2023) &lt;doi:10.1080/01621459.2022.2049278&gt;. Ting Ye, Marlena Bannick, Yanyao Yi, Jun Shao (2023) &lt;doi:10.1080/24754269.2023.2205802&gt;. Ting Ye, Jun Shao, Yanyao Yi (2023) &lt;doi:10.1093/biomet/asad045&gt;. Marlena Bannick, Jun Shao, Jingyi Liu, Yu Du, Yanyao Yi, Ting Ye (2024) &lt;doi:10.1093/biomet/asaf029&gt;. Xiaoyu Qiu, Yuhan Qian, Jaehwan Yi, Jinqiu Wang, Yu Du, Yanyao Yi, Ting Ye (2025) &lt;doi:10.48550/arXiv.2408.12541&gt;.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -84,10 +84,12 @@
 <div class="section level1">
 <div class="page-header"><h1 id="robincar-robust-estimation-and-inference-for-covariate-adjustment-in-randomized-clinical-trials">RobinCar: ROBust estimation and INference for Covariate Adjustment in Randomized clinical trials<a class="anchor" aria-label="anchor" href="#robincar-robust-estimation-and-inference-for-covariate-adjustment-in-randomized-clinical-trials"></a>
 </h1></div>
+<p>RobinCar is a package that allows for robust estimation and inference for treatment effects in randomized clinical trials when covariates are used at the design and/or analysis stages of the trial. Supported covariate-adaptive randomization schemes at the design phase are simple randomization, stratified permuted block randomization, biased coin randomization, and Pocock and Simon’s minimization. Statistical methods at the analysis stage are model-assisted and assumption-lean, in accordance with <a href="https://www.fda.gov/regulatory-information/search-fda-guidance-documents/adjusting-covariates-randomized-clinical-trials-drugs-and-biological-products" class="external-link">FDA guidance on covariate adjustment</a>. Publications describing the methods are listed <a href="#publications">here</a>.</p>
+<p>See also <a href="https://openpharma.github.io/RobinCar2/main/" class="external-link">RobinCar2</a>, which is a lite version of RobinCar and is supported by the <a href="https://carswg.github.io/subteam_software.html" class="external-link">ASA Biopharmaceutical Section Covariate Adjustment Scientific Working Group Software Subteam</a>.</p>
 <div class="section level2">
 <h2 id="authors">Authors<a class="anchor" aria-label="anchor" href="#authors"></a>
 </h2>
-<p>Ting Ye, Yanyao Yi, Marlena Bannick (maintainer), Yuhan Qian, and Faith Bian</p>
+<p><a href="https://sites.google.com/view/tingye" class="external-link">Ting Ye</a>, Yanyao Yi, <a href="https://marlenabannick.com/" class="external-link">Marlena Bannick</a> (maintainer), Yuhan Qian, and Faith Bian</p>
 </div>
 <div class="section level2">
 <h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
@@ -101,6 +103,9 @@
 <div class="section level3">
 <h3 id="id_1-install-via-cran">1. Install via CRAN<a class="anchor" aria-label="anchor" href="#id_1-install-via-cran"></a>
 </h3>
+<div class="float">
+<img src="https://www.r-pkg.org/badges/version-last-release/RobinCar" alt="CRAN"><div class="figcaption">CRAN</div>
+</div>
 <pre><code><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"RobinCar"</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="section level3">
@@ -116,12 +121,13 @@
 </div>
 </div>
 <div class="section level2">
-<h2 id="publications">Publications<a class="anchor" aria-label="anchor" href="#publications"></a>
+<h2 id="publications">
+<a id="publications"></a>Publications<a class="anchor" aria-label="anchor" href="#publications"></a>
 </h2>
 <p>Here are publications and preprints that explain the methods in RobinCar:</p>
 <ul>
 <li><a href="https://doi.org/10.1093/biomet/asad045" class="external-link">Ting Ye, Jun Shao, Yanyao Yi (2023)</a></li>
-<li><a href="https://doi.org/10.1093/biomet/asaf029" class="external-link">Marlena Bannick, Jun Shao, Jingyi Liu, Yu Du, Yanyao Yi, Ting Ye (2024)</a></li>
+<li><a href="https://doi.org/10.1093/biomet/asaf029" class="external-link">Marlena Bannick, Jun Shao, Jingyi Liu, Yu Du, Yanyao Yi, Ting Ye (2025)</a></li>
 <li><a href="https://doi.org/10.1080/24754269.2023.2205802" class="external-link">Ting Ye, Marlena Bannick, Yanyao Yi, Jun Shao (2023)</a></li>
 <li><a href="https://doi.org/10.1080/01621459.2022.2049278" class="external-link">Ting Ye, Jun Shao, Yanyao Yi, Qinyuan Zhao (2023)</a></li>
 <li><a href="https://arxiv.org/pdf/2408.12541" class="external-link">Xiaoyu Qiu, Yuhan Qian, Jaehwan Yi, Jinqiu Wang, Yu Du, Yanyao Yi, Ting Ye (2025)</a></li>

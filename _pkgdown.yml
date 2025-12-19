@@ -7,6 +7,7 @@ articles:
   - articles/Calibration-for-GLM-Models
   - articles/Robust-Testing-for-Time-to-Event-Data
   - articles/Mantel-Haenszel-Statistic
+  - articles/Family
 
 template:
   params:

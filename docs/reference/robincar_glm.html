@@ -175,7 +175,8 @@ The variance estimator is given by
 $$\hat{V} = \hat{V}_{\rm SR} - \hat{V}_{\Omega}$$
 where \(\hat{V}_{\rm SR}\) is the contribution to the variance under simple randomization, and \(\hat{V}_{\Omega}\) is a term
 that only appears when a covariate-adaptive randomization scheme is used.
-The \(\hat{V}_{\Omega}\) is the second line of \(\hat{V}\) in <a href="https://doi.org/10.1093/biomet/asaf029" class="external-link">Bannick et al. (2025)</a>.</p>
+The \(\hat{V}_{\Omega}\) is the second line of \(\hat{V}\) in (Bannick et al. 2025)
+.</p>
 <p>There are three different estimators available for \(\hat{V}_{\rm SR}\), which the user
 can choose with the argument <code>variance_type</code>. We describe these here.</p>
 <p>The three variance types are given as follows:</p>
@@ -195,10 +196,19 @@ $$\mathrm{Cov}_a(Y_i, \hat{\mu}_b(X_i)) + \mathrm{Cov}_b(Y_i, \hat{\mu}_a(X_i)) 
 We use \(E_a\), \(\mathrm{Var}_a\), and \(\mathrm{Cov}_a\) to refer to the empirical expectation, variance, and
  covariance among observations in group a only, and \(\mathrm{Cov}\) is the covariance within
 the entire sample.</p>
-<p>Please see the Supplemental Material Sect. H of <a href="https://doi.org/10.1093/biomet/asaf029" class="external-link">Bannick et al. (2025)</a> for a discussion
+<p>Please see the Supplemental Material Sect. H of (Bannick et al. 2025)
+ for a discussion
 of the merits of each type of variance estimator. Briefly, we recommend
 variance types 1 generally, and variance type 3 if it is anticipated
 that the distribution of \(X\) varies substantially over treatment groups.</p>
+    </div>
+    <div id="references">
+    <h2>References</h2>
+    <p>Bannick MS, Shao J, Liu J, Du Y, Yi Y, Ye T (2025).
+“A General Form of Covariate Adjustment in Clinical Trials under Covariate-Adaptive Randomization.”
+<em>Biometrika</em>, asaf029.
+ISSN 1464-3510, <a href="https://doi.org/10.1093/biomet/asaf029" class="external-link">doi:10.1093/biomet/asaf029</a>
+.</p>
     </div>
 
   </div>
