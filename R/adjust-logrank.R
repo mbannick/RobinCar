@@ -39,7 +39,7 @@ adjust.LogRank <- function(model, data, ...){
   statistic <- U_CSL / se
   if ("id" %in% colnames(df)) {
     influence_function <- df$uu_cl + (model$p_trt) * df$adjust1 - (1 - model$p_trt) * df$adjust0
-    inf_func <- data.frame(id = df$id, inf_func = influence_function, uu_cl = df$uu_cl)
+    inf_func <- data.frame(id = df$id, inf_func = influence_function)
   }
   result <- list(
     strata_sum=ss,
