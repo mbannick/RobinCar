@@ -103,11 +103,9 @@ validate.RoboDataTTE <- function(data, ref_arm, ...){
       )
     }
   }
-  if ("return_influence" %in% names(data)){
-    if (data$return_influence == TRUE) {
-      errors <- c(errors, .check.attributes(data, "id"))
-      errors <- c(errors, .check.id(data))
-    }
+  if (!is.null(data$id_col)) {
+    errors <- c(errors, .check.attributes(data, "id"))
+    errors <- c(errors, .check.id(data))
   }
 
   .return.error(errors)
@@ -221,8 +219,6 @@ validate.RoboDataMH <- function(data, ...){
       }
       data[[att_name]] <- df[att]
 
-    } else if (att_name == "return_influence"){
-      next
     } else {
 
       stop(paste0("Unrecognized column arguments ",
@@ -256,18 +252,9 @@ validate.RoboDataMH <- function(data, ...){
   if(ncol(data$car_strata) == 0){
     data$car_strata <- NULL
   }
-  if ("return_influence" %in% names(data)){
-    if (!is.logical(data$return_influence)) stop("return_influence must be either TRUE or FALSE.")
-    if (data$return_influence) {
-      if (!"id_col" %in% names(data)) stop("id_col must not be NULL if return_influence is TRUE")
-      if (!is.null(data$covariate)){
-        if ("id" %in% colnames(data$covariate)){
-          stop("if return_influence is TRUE, no covariate can be called 'id'.")
-        }
-      }
-      if (!is.null(data$id)) {
-        data$id <- data$id[[1]]
-      }
+  if (!is.null(data$id)){
+    if (ncol(data$id) > 0) {
+      data$id <- data$id[[1]]
     }
   }
   if(!is.null(data$car_strata)){

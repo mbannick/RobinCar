@@ -44,7 +44,7 @@ adjust.LogRank <- function(model, data, ...){
     se=se,
     statistic=statistic
   )
-  if (data$return_influence) {
+  if (model$return_influence) {
     influence_function <- df$uu_cl + (model$p_trt) * df$adjust1 - (1 - model$p_trt) * df$adjust0
     result$inf_func <- data.frame(id = df$id, inf_func = influence_function)
   } 

@@ -40,7 +40,6 @@ robincar_tte <- function(df,
     event_col=event_col,
     car_strata_cols=car_strata_cols,
     covariate_cols=covariate_cols,
-    return_influence=return_influence, 
     id_col=id_col
   )
   validate(data, ref_arm)
@@ -52,7 +51,8 @@ robincar_tte <- function(df,
     car_scheme=car_scheme,
     p_trt=p_trt,
     ref_arm=ref_arm,
-    sparse_remove=sparse_remove
+    sparse_remove=sparse_remove, 
+    return_influence=return_influence
   )
 
   # Perform adjustment

@@ -9,8 +9,8 @@ create.tte.df <- function(model, data){
     event=data$event,
     nu_d=nu.d(model$car_scheme)
   )
-  if ("return_influence" %in% names(data)){
-    if (data$return_influence) {
+  if ("return_influence" %in% names(model)){
+    if (model$return_influence) {
       df$id <- data$id
     }
   }
