@@ -1,7 +1,7 @@
 
 #' @importFrom dplyr mutate group_by summarise arrange n
 #' @exportS3Method
-adjust.LogRank <- function(model, data, return_influence, id_col, ...){
+adjust.LogRank <- function(model, data, ...){
 
   # Creates data
   df <- create.tte.df(model, data)
@@ -44,7 +44,7 @@ adjust.LogRank <- function(model, data, return_influence, id_col, ...){
     se=se,
     statistic=statistic
   )
-  if ("id" %in% colnames(df)) {
+  if (data$return_influence) {
     influence_function <- df$uu_cl + (model$p_trt) * df$adjust1 - (1 - model$p_trt) * df$adjust0
     result$inf_func <- data.frame(id = df$id, inf_func = influence_function)
   } 

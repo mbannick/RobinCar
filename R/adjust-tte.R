@@ -9,8 +9,10 @@ create.tte.df <- function(model, data){
     event=data$event,
     nu_d=nu.d(model$car_scheme)
   )
-  if ("id" %in% colnames(data$df)) {
-    df$id <- data$df$id
+  if ("return_influence" %in% names(data)){
+    if (data$return_influence) {
+      df$id <- data$id
+    }
   }
   # Adjust for x-covariates
   if(model$adj_cov){
