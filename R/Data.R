@@ -32,6 +32,12 @@
   }
 }
 
+.check.id <- function(data){
+  if (!length(data$id) == length(unique(data$id))){
+    return("Id column must not have duplicated values")
+  }
+}
+
 .check.attributes <- function(x, ...){
   required <- c(...)
   existing <- names(x)
@@ -95,6 +101,12 @@ validate.RoboDataTTE <- function(data, ref_arm, ...){
           data$treat_levels
         )
       )
+    }
+  }
+  if ("return_influence" %in% names(list(...)){
+    if (return_influence) {
+      errors <- c(errors, .check.attributes(data, "id"))
+      errors <- c(errors, .check.id(data))
     }
   }
 
@@ -235,6 +247,11 @@ validate.RoboDataMH <- function(data, ...){
   }
   if(ncol(data$car_strata) == 0){
     data$car_strata <- NULL
+  }
+  if (return_influence %in% names(list(...))){
+    if (return_influence & !is.null(data$id)){
+      data$id <- dat$id[[1]]
+    }
   }
   if(!is.null(data$car_strata)){
     # Create joint car_strata levels

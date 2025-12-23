@@ -78,7 +78,7 @@
 #'
 #' @returns A result object with the following attributes:
 #'
-#' \item{result}{A list: "statistic" is the adjusted logrank test statistic which can be used to obtain p-values; "U" and "se" are the numerator and denominator of the test statistic, respectively; if the input parameter "df" has a column called "id", the list will contain an element called "inf_func", which is a data.frame with columns "id" and "inf_func", which is the influence function for each subject for the covariate-adjusted log-rank test (stratified or unstratified). This influence function can be used, e.g., to calculate the correlation between interim and final test statistics in a group sequential design.}
+#' \item{result}{A list: "statistic" is the adjusted logrank test statistic which can be used to obtain p-values; "U" and "se" are the numerator and denominator of the test statistic, respectively; if the input parameter "return_influence" is set to TRUE and if the input parameter "df" has a column called "id", the list will contain an element called "inf_func", which is a data.frame with columns "id" and "inf_func", which is the influence function for each subject for the covariate-adjusted log-rank test (stratified or unstratified). This influence function can be used, e.g., to calculate the correlation between interim and final test statistics in a group sequential design.}
 #' \item{settings}{The covariate adjustment settings used.}
 #' \item{original_df}{The dataset supplied by the user.}
 #'
