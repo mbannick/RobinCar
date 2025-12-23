@@ -71,7 +71,7 @@
 # with settings for covariate randomization
 # scheme and vcovHC type.
 .make.model.RoboDataTTE <- function(data, adj_method, car_scheme,
-                                    p_trt, ref_arm, ...) {
+                                    p_trt, ref_arm, return_influence, ...) {
 
   x_exists <- !is.null(data$covariate)
   z_exists <- !is.null(data$car_strata)
@@ -97,11 +97,24 @@
       car_scheme=car_scheme,
       p_trt=p_trt,
       ref_arm=ref_arm,
+      return_influence=return_influence,
       ...
     ),
     class=c(classtype, logic$method)
   )
 
+  if ("return_influence" %in% names(model)){
+    if (!is.logical(model$return_influence)) stop("return_influence must be either TRUE or FALSE.")
+    if (model$return_influence) {
+      if (!"id_col" %in% names(data)) stop("id_col must not be NULL if return_influence is TRUE")
+      if (!is.null(data$covariate)){
+        if ("id" %in% colnames(data$covariate)){
+          stop("if return_influence is TRUE, no covariate can be called 'id'.")
+        }
+      }
+    }
+  }
+  
   return(model)
 }
 

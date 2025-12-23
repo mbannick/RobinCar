@@ -37,14 +37,17 @@ adjust.LogRank <- function(model, data, ...){
   var_CSL   <- (sum(df$ssig_l, na.rm=TRUE) - sum(ss$var_adj)) / data$n^2
   se        <- sqrt(var_CSL)
   statistic <- U_CSL / se
-
+  
   result <- list(
     strata_sum=ss,
     U=U_CSL,
     se=se,
     statistic=statistic
   )
-
+  if (model$return_influence) {
+    influence_function <- df$uu_cl + (model$p_trt) * df$adjust1 - (1 - model$p_trt) * df$adjust0
+    result$inf_func <- data.frame(id = df$id, inf_func = influence_function)
+  } 
   return(
     structure(
       class="TTEResult",
