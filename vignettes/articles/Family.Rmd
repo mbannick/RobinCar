@@ -1,9 +1,11 @@
 ---
 title: "RobinCar Family"
 author: "Marlena Bannick"
-date: "2025-08-21"
+date: "2026-01-19"
 output: html_document
 ---
+
+This vignette accompanies the Results section of the RobinCar Family paper.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -14,8 +16,6 @@ library(RobinCar)
 library(RobinCar2)
 library(dplyr)
 ```
-
-This vignette is to accompany the Results section of the RobinCar Family paper.
 
 **Data Manipulation**
 
