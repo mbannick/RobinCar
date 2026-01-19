@@ -248,41 +248,36 @@ function <code>robin_surv</code> to do a covariate-adjusted, stratified
 log-rank test.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">surv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/RobinCar2/man/robin_surv.html" class="external-link">robin_surv</a></span><span class="op">(</span></span>
-<span>  <span class="fu">Surv</span><span class="op">(</span><span class="va">days</span>, <span class="va">cens</span><span class="op">)</span> <span class="op">~</span> <span class="va">wtkg</span> <span class="op">+</span> <span class="va">oprior</span> <span class="op">+</span> <span class="va">hemo</span> <span class="op">+</span> <span class="fu">strata</span><span class="op">(</span><span class="va">strat</span><span class="op">)</span>,</span>
+<span>  <span class="fu">Surv</span><span class="op">(</span><span class="va">days</span>, <span class="va">cens</span><span class="op">)</span> <span class="op">~</span> <span class="va">wtkg</span> <span class="op">+</span> <span class="va">oprior</span> <span class="op">+</span> <span class="va">hemo</span> <span class="op">+</span> <span class="va">strat</span>,</span>
 <span>  treatment <span class="op">=</span> <span class="va">arms</span> <span class="op">~</span> <span class="fu">pb</span><span class="op">(</span><span class="va">strat</span><span class="op">)</span>,</span>
 <span>  data <span class="op">=</span> <span class="va">data</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">surv</span></span></code></pre></div>
-<pre><code><span><span class="co">## Model        : Surv(days, cens) ~ wtkg + oprior + hemo + strata(strat)</span></span>
+<pre><code><span><span class="co">## Model        : Surv(days, cens) ~ wtkg + oprior + hemo + strat</span></span>
 <span><span class="co">## Randomization: arms ~ pb(strat) (Permuted-Block)</span></span>
-<span><span class="co">## Stratification variables:  strat </span></span>
-<span><span class="co">## Covariates adjusted for: wtkg, oprior, hemo (including interactions with arms)</span></span>
+<span><span class="co">## Covariates adjusted for: wtkg, oprior, hemo, strat (including interactions with arms)</span></span>
 <span><span class="co">## </span></span>
-<span><span class="co">## Contrast     : Covariate-adjusted Stratified Log Hazard Ratio</span></span>
+<span><span class="co">## Contrast     : Covariate-adjusted Log Hazard Ratio</span></span>
 <span><span class="co">## </span></span>
-<span><span class="co">##          Estimate  Std.Err Z Value  Pr(&gt;|z|)    </span></span>
-<span><span class="co">## 1 v.s. 0 -0.69673  0.12323 -5.6539 1.569e-08 ***</span></span>
+<span><span class="co">##          Estimate  Std.Err Z Value Pr(&gt;|z|)    </span></span>
+<span><span class="co">## 1 v.s. 0 -0.68785  0.12237 -5.6209  1.9e-08 ***</span></span>
 <span><span class="co">## ---</span></span>
 <span><span class="co">## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
 <span><span class="co">## </span></span>
-<span><span class="co">## Test         : Covariate-adjusted Stratified Log-Rank</span></span>
+<span><span class="co">## Test         : Covariate-adjusted Log-Rank</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">##          Test Stat.  Pr(&gt;|z|)    </span></span>
-<span><span class="co">## 1 v.s. 0    -5.7736 7.757e-09 ***</span></span>
+<span><span class="co">## 1 v.s. 0    -5.7444 9.223e-09 ***</span></span>
 <span><span class="co">## ---</span></span>
 <span><span class="co">## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code></pre>
 <p>You can use the <code>table</code> function to see the number of
 events and number at-risk</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/RobinCar2/man/surv_effect_methods.html" class="external-link">table</a></span><span class="op">(</span><span class="va">surv</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Number of patients and events per stratum and treatment arm:</span></span>
-<span><span class="co">##   strat arms Patients Events</span></span>
-<span><span class="co">## 1     1    0      223     59</span></span>
-<span><span class="co">## 2     1    1      213     34</span></span>
-<span><span class="co">## 3     2    0       96     30</span></span>
-<span><span class="co">## 4     2    1      106     20</span></span>
-<span><span class="co">## 5     3    0      213     92</span></span>
-<span><span class="co">## 6     3    1      203     49</span></span></code></pre>
+<pre><code><span><span class="co">## Number of patients and events per treatment arm:</span></span>
+<span><span class="co">##   arms Patients Events</span></span>
+<span><span class="co">## 1    0      532    181</span></span>
+<span><span class="co">## 2    1      522    103</span></span></code></pre>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
