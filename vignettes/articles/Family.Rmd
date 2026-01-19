@@ -1,9 +1,11 @@
 ---
 title: "RobinCar Family"
 author: "Marlena Bannick"
-date: "2025-08-21"
+date: "2026-01-19"
 output: html_document
 ---
+
+This vignette accompanies the Results section of the RobinCar Family paper.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -11,19 +13,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 library(RobinCar)
-library(dplyr)
-
-if (!require("remotes")) {
-  install.packages("remotes")
-}
-remotes::install_github(
-  "openpharma/RobinCar2"
-)
-
 library(RobinCar2)
+library(dplyr)
 ```
-
-This vignette is to accompany the Results section of the RobinCar Family paper.
 
 **Data Manipulation**
 
@@ -117,6 +109,7 @@ surv <- robin_surv(
   treatment = arms ~ pb(strat),
   data = data
 )
+surv
 ```
 
 You can use the `table` function to see the number of events and number at-risk
