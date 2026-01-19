@@ -104,11 +104,12 @@ For a survival outcome with right-censoring, we can use the RobinCar2 function `
 to do a covariate-adjusted, stratified log-rank test.
 
 ```{r}
-robin_surv(
-  Surv(days, cens) ~ wtkg + oprior + hemo,
+surv <- robin_surv(
+  Surv(days, cens) ~ wtkg + oprior + hemo + strat,
   treatment = arms ~ pb(strat),
   data = data
 )
+surv
 ```
 
 You can use the `table` function to see the number of events and number at-risk
