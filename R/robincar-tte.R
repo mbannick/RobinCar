@@ -29,10 +29,9 @@ robincar_tte <- function(df,
                          adj_method,
                          car_strata_cols=NULL, covariate_cols=NULL,
                          p_trt=0.5, ref_arm=NULL, sparse_remove=TRUE,
-                         car_scheme="simple"){
+                         car_scheme="simple",return_influence=FALSE,id_col=NULL){
 
   .check.car_scheme(car_scheme, car_strata_cols)
-
   data <- .make.data(
     df=df,
     classname="RoboDataTTE",
@@ -40,7 +39,8 @@ robincar_tte <- function(df,
     response_col=response_col,
     event_col=event_col,
     car_strata_cols=car_strata_cols,
-    covariate_cols=covariate_cols
+    covariate_cols=covariate_cols,
+    id_col=id_col
   )
   validate(data, ref_arm)
 
@@ -51,11 +51,12 @@ robincar_tte <- function(df,
     car_scheme=car_scheme,
     p_trt=p_trt,
     ref_arm=ref_arm,
-    sparse_remove=sparse_remove
+    sparse_remove=sparse_remove, 
+    return_influence=return_influence
   )
 
   # Perform adjustment
-  result <- adjust(model, data)
+  result <- adjust(model, data, return_influence)
   result$original_df <- df
 
   return(result)

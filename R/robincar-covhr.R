@@ -57,7 +57,8 @@ robincar_covhr <- function(df,
     car_scheme=car_scheme,
     p_trt=p_trt,
     ref_arm=ref_arm,
-    interval=interval
+    interval=interval, 
+    return_influence=F
   )
 
   # Append the CovHR classification
