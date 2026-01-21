@@ -1,5 +1,9 @@
 # RobinCar 1.1.0
 
+## Features
+
+* Included new contrast options for `robincar_glm`: "log_ratio" and "log_odds_ratio". Now, when users ask for "ratio" or "odds_ratio" they get a warning that they should switch to the log scale, as this has better performance. To obtain risk ratios, or odds ratios, exponentiate the estimates.
+
 # RobinCar 1.0.0
 
 ## Features
