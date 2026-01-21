@@ -4,7 +4,7 @@ Title: Robust Inference for Covariate Adjustment in Randomized Clinical Trials
 Version: 1.1.0
 Authors@R: c(
     person("Marlena", "Bannick", 
-        email="mnorwood@uw.edu", 
+        email="marlena.bannick@outlook.com", 
         role=c("cre", "aut"),
         comment=c(ORCID="0000-0001-6279-5978")),
     person("Yuhan", "Qian", role="aut"),
