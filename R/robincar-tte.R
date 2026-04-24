@@ -20,6 +20,8 @@
 #' @param p_trt Treatment allocation ratio for the treatment arm.
 #' @param adj_method Adjustment method (one of "CL", "CSL", or "coxscore")
 #' @param sparse_remove Remove sparse car_strata from calculation
+#' @param return_influence Return the influence function for the covariate-adjusted log-rank test for each individual
+#' @param id_col Name of the column in df indicating individual ids
 #'
 #' @export
 #'
@@ -29,7 +31,7 @@ robincar_tte <- function(df,
                          adj_method,
                          car_strata_cols=NULL, covariate_cols=NULL,
                          p_trt=0.5, ref_arm=NULL, sparse_remove=TRUE,
-                         car_scheme="simple",return_influence=FALSE,id_col=NULL){
+                         car_scheme="simple", return_influence=FALSE, id_col=NULL){
 
   .check.car_scheme(car_scheme, car_strata_cols)
   data <- .make.data(
@@ -51,7 +53,7 @@ robincar_tte <- function(df,
     car_scheme=car_scheme,
     p_trt=p_trt,
     ref_arm=ref_arm,
-    sparse_remove=sparse_remove, 
+    sparse_remove=sparse_remove,
     return_influence=return_influence
   )
 

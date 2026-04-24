@@ -15,7 +15,9 @@ robincar_tte(
   p_trt = 0.5,
   ref_arm = NULL,
   sparse_remove = TRUE,
-  car_scheme = "simple"
+  car_scheme = "simple",
+  return_influence = FALSE,
+  id_col = NULL
 )
 }
 \arguments{
@@ -42,6 +44,10 @@ which results in using the first element of `unique(data[, treat_col])`.}
 \item{sparse_remove}{Remove sparse car_strata from calculation}
 
 \item{car_scheme}{Name of the type of covariate-adaptive randomization scheme. One of: "simple", "pocock-simon", "biased-coin", "permuted-block".}
+
+\item{return_influence}{Return the influence function for the covariate-adjusted log-rank test for each individual}
+
+\item{id_col}{Name of the column in df indicating individual ids}
 }
 \value{
 For adjustment method "CL" or "CSL", see value of \link[RobinCar:robincar_linear]{RobinCar::robincar_logrank()}; for adjustment method "coxscore" see value of \link[RobinCar:robincar_coxscore]{RobinCar::robincar_coxscore()}.
