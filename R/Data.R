@@ -32,6 +32,12 @@
   }
 }
 
+.check.id <- function(data){
+  if (!length(data$id) == length(unique(data$id))){
+    return("Id column must not have duplicated values")
+  }
+}
+
 .check.attributes <- function(x, ...){
   required <- c(...)
   existing <- names(x)
@@ -96,6 +102,10 @@ validate.RoboDataTTE <- function(data, ref_arm, ...){
         )
       )
     }
+  }
+  if (!is.null(data$id_col)) {
+    errors <- c(errors, .check.attributes(data, "id"))
+    errors <- c(errors, .check.id(data))
   }
 
   .return.error(errors)
@@ -200,7 +210,13 @@ validate.RoboDataMH <- function(data, ...){
 
       att_name <- gsub("_cols", "", att_name)
       att_name <- gsub("_col", "", att_name)
-
+      if(!is.null(att)){
+        for (a in att) {
+          if (!a %in% colnames(df)) {
+            stop(paste0("Column ", a, " not found."))
+          }
+        }
+      }
       data[[att_name]] <- df[att]
 
     } else {
@@ -235,6 +251,11 @@ validate.RoboDataMH <- function(data, ...){
   }
   if(ncol(data$car_strata) == 0){
     data$car_strata <- NULL
+  }
+  if (!is.null(data$id)){
+    if (ncol(data$id) > 0) {
+      data$id <- data$id[[1]]
+    }
   }
   if(!is.null(data$car_strata)){
     # Create joint car_strata levels
