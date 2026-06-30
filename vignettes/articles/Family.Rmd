@@ -17,8 +17,10 @@ knitr::opts_chunk$set(echo = TRUE)
 library(RobinCar)
 library(RobinCar2)
 library(dplyr)
-library(ranger)
 library(SuperLearner)
+library(ranger)
+library(xgboost)
+library(glmnet)
 ```
 ## Case Study 1: ACTG175 Dataset
 
