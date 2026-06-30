@@ -2,7 +2,9 @@
 title: "RobinCar Family"
 author: "Marlena Bannick"
 date: "2026-01-19"
-output: html_document
+output:
+  html_document: default
+  pdf_document: default
 ---
 
 This vignette accompanies the Results section of the RobinCar Family paper.
@@ -15,11 +17,17 @@ knitr::opts_chunk$set(echo = TRUE)
 library(RobinCar)
 library(RobinCar2)
 library(dplyr)
+library(ranger)
+library(SuperLearner)
 ```
+## Case Study 1: ACTG175 Dataset
 
 **Data Manipulation**
 
-Creates continuous and binary outcomes, and does simple data manipulations.
+We use data from the Juraska et al. (2022) R package, which comes from a
+study of nucleoside treatment regimens for individuals with HIV-1 (Hammer et al.
+1996) called the AIDS Clinical Trials Group Study 175. This trial had
+stratified permuted block randomization.
 
 ```{r}
 # Data are from the speff2trial package
@@ -55,18 +63,7 @@ robin_lm(
 **Generalized Linear Models**
 
 For the binary outcome, we can use a logistic regression model instead.
-
-```{r}
-robin_glm(
-  y_bin ~ arms * (wtkg + hemo + oprior),
-  treatment = arms ~ pb(strat),
-  family = binomial(link = "logit"),
-  contrast = "risk_ratio",
-  data = data
-)
-```
-
-Rather than a linear contrast, we can instead estimate a risk ratio. This does not change the marginal mean estimates, but it changes the contrast estimates (and p-values).
+Rather than a linear contrast, we could instead estimate a log risk ratio. This does not change the marginal mean estimates, but it changes the contrast estimates (and p-values).
 
 ```{r}
 robin_glm(
@@ -116,4 +113,92 @@ You can use the `table` function to see the number of events and number at-risk
 
 ```{r}
 table(surv)
+```
+
+## Case Study 2: RCT of Indomethacin for Post-ERCP Pancreatitis
+
+**Data Manipulation**
+
+This case study uses a different dataset, `medicaldata::indo_rct`, which was
+a randomized trial of rectal indomethacin to prevent post-ERCP pancreatitis
+(Elmunzer, Higgins, et al. 2012). This study used simple randomization
+stratified by study site (this is not the same as stratified permuted block
+randomization in the first example).
+
+```{r}
+require(medicaldata)
+
+data2 <- medicaldata::indo_rct %>%
+  mutate(
+    outcome2=as.numeric(outcome)-1
+  ) %>%
+  select(
+    -c(outcome, status, type, bleed)
+  )
+```
+
+First fit a really simple logistic regression working model only adjusting 
+for site, and a risk difference as our contrast of interest.
+
+```{r}
+robin_glm(
+  outcome2 ~ rx * site, 
+  treatment = rx ~ sr(1), 
+  data=data2,
+  family=binomial(link="logit"),
+  contrast = "difference"
+)
+```
+
+There are 27 baseline covariates included in this dataset and 602 patients.
+If we include all of the covariates in a logistic regression working model,
+the model fails to converge and returns NA.
+
+```{r}
+# Create formula with all baseline covariates included in dataset
+covariates <- setdiff(colnames(data2), c("id", "outcome2", "rx"))
+formula <- as.formula(
+  sprintf("outcome2 ~ rx * (%s)", paste0(covariates, collapse=" + "))
+)
+```
+
+```{r}
+robin_glm(
+  as.formula(formula), 
+  treatment = rx ~ sr(1), 
+  data=data2,
+  family=binomial(link="logit"),
+  contrast = "difference"
+)
+```
+
+If you do want to include all of the baseline covariates because you aren't
+sure which ones are the most prognostic, this is a use-case for the
+SuperLearner approach. We'll test an ensemble
+of random forest (SL.ranger), elastic net regression (Sl.glmnet),
+and XGboost (SL.xgboost). SuperLearner
+will figure out the optimal combination of these approaches.
+See [this link](https://cran.r-project.org/web/packages/SuperLearner/vignettes/Guide-to-SuperLearner.html) for documentation on the SuperLearner.
+
+RobinCar includes SuperLearner working models
+with cross-fitting to ensure we aren't over-fitting to the data.
+We will use 5 folds for cross-fitting. Since cross-fitting is a random
+process, we'll also set a seed for reproducibility. 
+
+```{r}
+set.seed(1989)
+
+sl <- robincar_SL(
+  df=data2,
+  response_col="outcome2",
+  treat_col="rx",
+  covariate_cols=covariates,
+  SL_libraries=c("SL.xgboost", "SL.glmnet", "SL.ranger"),
+  car_scheme="simple",
+  k_split=5
+)
+
+# Make a linear contrast
+contrast <- robincar_contrast(sl, contrast_h="diff")
+contrast
 ```

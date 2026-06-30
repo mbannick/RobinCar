@@ -1,3 +1,7 @@
+# RobinCar 1.2.0
+
+* Adds an option to return the influence function for the covariate-adjusted log-rank test.
+
 # RobinCar 1.1.0
 
 ## Features
