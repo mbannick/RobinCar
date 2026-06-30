@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">RobinCar</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
       </span>
     </div>
 
@@ -100,26 +100,21 @@ Bannick</h4>
 paper.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">RobinCar</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/openpharma/RobinCar2/" class="external-link">RobinCar2</a></span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">## Attaching package: 'RobinCar2'</span></span></code></pre>
-<pre><code><span><span class="co">## The following object is masked from 'package:base':</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##     table</span></span></code></pre>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">## Attaching package: 'dplyr'</span></span></code></pre>
-<pre><code><span><span class="co">## The following objects are masked from 'package:stats':</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##     filter, lag</span></span></code></pre>
-<pre><code><span><span class="co">## The following objects are masked from 'package:base':</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##     intersect, setdiff, setequal, union</span></span></code></pre>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/openpharma/RobinCar2/" class="external-link">RobinCar2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ecpolley/SuperLearner" class="external-link">SuperLearner</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://imbs-hl.github.io/ranger/" class="external-link">ranger</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/dmlc/xgboost" class="external-link">xgboost</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://glmnet.stanford.edu" class="external-link">glmnet</a></span><span class="op">)</span></span></code></pre></div>
+<div class="section level2">
+<h2 id="case-study-1-actg175-dataset">Case Study 1: ACTG175 Dataset<a class="anchor" aria-label="anchor" href="#case-study-1-actg175-dataset"></a>
+</h2>
 <p><strong>Data Manipulation</strong></p>
-<p>Creates continuous and binary outcomes, and does simple data
-manipulations.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<p>We use data from the Juraska et al. (2022) R package, which comes
+from a study of nucleoside treatment regimens for individuals with HIV-1
+(Hammer et al. 1996) called the AIDS Clinical Trials Group Study 175.
+This trial had stratified permuted block randomization.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Data are from the speff2trial package</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span><span class="fu">speff2trial</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/speff2trial/man/ACTG175.html" class="external-link">ACTG175</a></span><span class="op">)</span></span>
 <span></span>
@@ -142,7 +137,7 @@ interactions, including strata as covariates, and using the four
 covariates of weight, hemophilia status, and prior use of non-zidovudine
 antiretroviral therapy. These specifications ensure that the covariate
 adjustment has guaranteed efficiency gain (asymptotically).</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/RobinCar2/man/robin_lm.html" class="external-link">robin_lm</a></span><span class="op">(</span></span>
 <span>  <span class="va">y_cont</span> <span class="op">~</span> <span class="va">arms</span> <span class="op">*</span> <span class="op">(</span><span class="va">strat</span> <span class="op">+</span> <span class="va">wtkg</span> <span class="op">+</span> <span class="va">hemo</span> <span class="op">+</span> <span class="va">oprior</span><span class="op">)</span>, </span>
 <span>  treatment <span class="op">=</span> <span class="va">arms</span> <span class="op">~</span> <span class="fu">pb</span><span class="op">(</span><span class="va">strat</span><span class="op">)</span>, </span>
@@ -162,36 +157,10 @@ adjustment has guaranteed efficiency gain (asymptotically).</p>
 <span><span class="co">## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code></pre>
 <p><strong>Generalized Linear Models</strong></p>
 <p>For the binary outcome, we can use a logistic regression model
-instead.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/RobinCar2/man/robin_glm.html" class="external-link">robin_glm</a></span><span class="op">(</span></span>
-<span>  <span class="va">y_bin</span> <span class="op">~</span> <span class="va">arms</span> <span class="op">*</span> <span class="op">(</span><span class="va">wtkg</span> <span class="op">+</span> <span class="va">hemo</span> <span class="op">+</span> <span class="va">oprior</span><span class="op">)</span>,</span>
-<span>  treatment <span class="op">=</span> <span class="va">arms</span> <span class="op">~</span> <span class="fu">pb</span><span class="op">(</span><span class="va">strat</span><span class="op">)</span>,</span>
-<span>  family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">binomial</a></span><span class="op">(</span>link <span class="op">=</span> <span class="st">"logit"</span><span class="op">)</span>,</span>
-<span>  contrast <span class="op">=</span> <span class="st">"risk_ratio"</span>,</span>
-<span>  data <span class="op">=</span> <span class="va">data</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Warning in robin_glm(y_bin ~ arms * (wtkg + hemo + oprior), treatment = arms ~</span></span>
-<span><span class="co">## : Consider using the log transformation `log_odds_ratio` and `log_risk_ratio`</span></span>
-<span><span class="co">## to replace `odds_ratio` and `risk_ratio` to improve the performance of normal</span></span>
-<span><span class="co">## approximation.</span></span></code></pre>
-<pre><code><span><span class="co">## Model        :  y_bin ~ arms * (wtkg + hemo + oprior) </span></span>
-<span><span class="co">## Randomization:  arms ~ pb(strat)  ( Permuted-Block )</span></span>
-<span><span class="co">## Variance Type:  vcovG </span></span>
-<span><span class="co">## Marginal Mean: </span></span>
-<span><span class="co">##    Estimate   Std.Err     2.5 % 97.5 %</span></span>
-<span><span class="co">## 0 0.0496651 0.0092998 0.0314378 0.0679</span></span>
-<span><span class="co">## 1 0.1828118 0.0168988 0.1496908 0.2159</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## Contrast     :  risk_ratio</span></span>
-<span><span class="co">##          Estimate Std.Err Z Value  Pr(&gt;|z|)    </span></span>
-<span><span class="co">## 1 v.s. 0  3.68089 0.76609  3.4994 0.0004662 ***</span></span>
-<span><span class="co">## ---</span></span>
-<span><span class="co">## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code></pre>
-<p>Rather than a linear contrast, we can instead estimate a risk ratio.
-This does not change the marginal mean estimates, but it changes the
-contrast estimates (and p-values).</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+instead. Rather than a linear contrast, we could instead estimate a log
+risk ratio. This does not change the marginal mean estimates, but it
+changes the contrast estimates (and p-values).</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/RobinCar2/man/robin_glm.html" class="external-link">robin_glm</a></span><span class="op">(</span></span>
 <span>  <span class="va">y_bin</span> <span class="op">~</span> <span class="va">arms</span> <span class="op">*</span> <span class="op">(</span><span class="va">strat</span> <span class="op">+</span> <span class="va">wtkg</span> <span class="op">+</span> <span class="va">hemo</span> <span class="op">+</span> <span class="va">oprior</span><span class="op">)</span>,</span>
 <span>  treatment <span class="op">=</span> <span class="va">arms</span> <span class="op">~</span> <span class="fu">pb</span><span class="op">(</span><span class="va">strat</span><span class="op">)</span>,</span>
@@ -223,7 +192,7 @@ change the estimate, but it does change the standard error
 calculation.</p>
 <p>The MH function in RobinCar is only valid for simple
 randomization.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
 <span>  X<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/interaction.html" class="external-link">interaction</a></span><span class="op">(</span><span class="va">oprior</span>, <span class="va">hemo</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
@@ -246,7 +215,7 @@ randomization.</p>
 <p>For a survival outcome with right-censoring, we can use the RobinCar2
 function <code>robin_surv</code> to do a covariate-adjusted, stratified
 log-rank test.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">surv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/RobinCar2/man/robin_surv.html" class="external-link">robin_surv</a></span><span class="op">(</span></span>
 <span>  <span class="fu">Surv</span><span class="op">(</span><span class="va">days</span>, <span class="va">cens</span><span class="op">)</span> <span class="op">~</span> <span class="va">wtkg</span> <span class="op">+</span> <span class="va">oprior</span> <span class="op">+</span> <span class="va">hemo</span> <span class="op">+</span> <span class="va">strat</span>,</span>
 <span>  treatment <span class="op">=</span> <span class="va">arms</span> <span class="op">~</span> <span class="fu">pb</span><span class="op">(</span><span class="va">strat</span><span class="op">)</span>,</span>
@@ -272,17 +241,134 @@ log-rank test.</p>
 <span><span class="co">## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code></pre>
 <p>You can use the <code>table</code> function to see the number of
 events and number at-risk</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/RobinCar2/man/surv_effect_methods.html" class="external-link">table</a></span><span class="op">(</span><span class="va">surv</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Number of patients and events per treatment arm:</span></span>
 <span><span class="co">##   arms Patients Events</span></span>
 <span><span class="co">## 1    0      532    181</span></span>
 <span><span class="co">## 2    1      522    103</span></span></code></pre>
+</div>
+<div class="section level2">
+<h2 id="case-study-2-rct-of-indomethacin-for-post-ercp-pancreatitis">Case Study 2: RCT of Indomethacin for Post-ERCP Pancreatitis<a class="anchor" aria-label="anchor" href="#case-study-2-rct-of-indomethacin-for-post-ercp-pancreatitis"></a>
+</h2>
+<p><strong>Data Manipulation</strong></p>
+<p>This case study uses a different dataset,
+<code><a href="https://higgi13425.github.io/medicaldata/reference/indo_rct.html" class="external-link">medicaldata::indo_rct</a></code>, which was a randomized trial of
+rectal indomethacin to prevent post-ERCP pancreatitis (Elmunzer,
+Higgins, et al. 2012). This study used simple randomization stratified
+by study site (this is not the same as stratified permuted block
+randomization in the first example).</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://higgi13425.github.io/medicaldata/" class="external-link">medicaldata</a></span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Loading required package: medicaldata</span></span></code></pre>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data2</span> <span class="op">&lt;-</span> <span class="fu">medicaldata</span><span class="fu">::</span><span class="va"><a href="https://higgi13425.github.io/medicaldata/reference/indo_rct.html" class="external-link">indo_rct</a></span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    outcome2<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">outcome</span><span class="op">)</span><span class="op">-</span><span class="fl">1</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span></span>
+<span>    <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">outcome</span>, <span class="va">status</span>, <span class="va">type</span>, <span class="va">bleed</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p>First fit a really simple logistic regression working model only
+adjusting for site, and a risk difference as our contrast of
+interest.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/RobinCar2/man/robin_glm.html" class="external-link">robin_glm</a></span><span class="op">(</span></span>
+<span>  <span class="va">outcome2</span> <span class="op">~</span> <span class="va">rx</span> <span class="op">*</span> <span class="va">site</span>, </span>
+<span>  treatment <span class="op">=</span> <span class="va">rx</span> <span class="op">~</span> <span class="fu">sr</span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>, </span>
+<span>  data<span class="op">=</span><span class="va">data2</span>,</span>
+<span>  family<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">binomial</a></span><span class="op">(</span>link<span class="op">=</span><span class="st">"logit"</span><span class="op">)</span>,</span>
+<span>  contrast <span class="op">=</span> <span class="st">"difference"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Model        :  outcome2 ~ rx * site </span></span>
+<span><span class="co">## Randomization:  rx ~ sr(1)  ( Simple )</span></span>
+<span><span class="co">## Variance Type:  vcovG </span></span>
+<span><span class="co">## Marginal Mean: </span></span>
+<span><span class="co">##                Estimate  Std.Err    2.5 % 97.5 %</span></span>
+<span><span class="co">## 0_placebo      0.167499 0.021227 0.125894 0.2091</span></span>
+<span><span class="co">## 1_indomethacin 0.092527 0.016766 0.059666 0.1254</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Contrast     :  difference</span></span>
+<span><span class="co">##                                Estimate   Std.Err Z Value Pr(&gt;|z|)   </span></span>
+<span><span class="co">## 1_indomethacin v.s. 0_placebo -0.074971  0.026910  -2.786 0.005337 **</span></span>
+<span><span class="co">## ---</span></span>
+<span><span class="co">## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code></pre>
+<p>There are 27 baseline covariates included in this dataset and 602
+patients. If we include all of the covariates in a logistic regression
+working model, the model fails to converge and returns NA.</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Create formula with all baseline covariates included in dataset</span></span>
+<span><span class="va">covariates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://generics.r-lib.org/reference/setops.html" class="external-link">setdiff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">data2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"id"</span>, <span class="st">"outcome2"</span>, <span class="st">"rx"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">formula</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/formula.html" class="external-link">as.formula</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"outcome2 ~ rx * (%s)"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">covariates</span>, collapse<span class="op">=</span><span class="st">" + "</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/RobinCar2/man/robin_glm.html" class="external-link">robin_glm</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/formula.html" class="external-link">as.formula</a></span><span class="op">(</span><span class="va">formula</span><span class="op">)</span>, </span>
+<span>  treatment <span class="op">=</span> <span class="va">rx</span> <span class="op">~</span> <span class="fu">sr</span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>, </span>
+<span>  data<span class="op">=</span><span class="va">data2</span>,</span>
+<span>  family<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">binomial</a></span><span class="op">(</span>link<span class="op">=</span><span class="st">"logit"</span><span class="op">)</span>,</span>
+<span>  contrast <span class="op">=</span> <span class="st">"difference"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Model        :  outcome2 ~ rx * (site + age + risk + gender + sod + pep + recpanc +      psphinc + precut + difcan + pneudil + amp + paninj + acinar +      brush + asa81 + asa325 + asa + prophystent + therastent +      pdstent + sodsom + bsphinc + bstent + chole + pbmal + train) </span></span>
+<span><span class="co">## Randomization:  rx ~ sr(1)  ( Simple )</span></span>
+<span><span class="co">## Variance Type:  vcovG </span></span>
+<span><span class="co">## Marginal Mean: </span></span>
+<span><span class="co">##                Estimate Std.Err 2.5 % 97.5 %</span></span>
+<span><span class="co">## 0_placebo            NA      NA    NA     NA</span></span>
+<span><span class="co">## 1_indomethacin       NA      NA    NA     NA</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Contrast     :  difference</span></span>
+<span><span class="co">##                               Estimate Std.Err Z Value Pr(&gt;|z|)</span></span>
+<span><span class="co">## 1_indomethacin v.s. 0_placebo       NA      NA      NA       NA</span></span></code></pre>
+<p>If you do want to include all of the baseline covariates because you
+aren’t sure which ones are the most prognostic, this is a use-case for
+the SuperLearner approach. We’ll test an ensemble of random forest
+(SL.ranger), elastic net regression (Sl.glmnet), and XGboost
+(SL.xgboost). SuperLearner will figure out the optimal combination of
+these approaches. See <a href="https://cran.r-project.org/web/packages/SuperLearner/vignettes/Guide-to-SuperLearner.html" class="external-link">this
+link</a> for documentation on the SuperLearner.</p>
+<p>RobinCar includes SuperLearner working models with cross-fitting to
+ensure we aren’t over-fitting to the data. We will use 5 folds for
+cross-fitting. Since cross-fitting is a random process, we’ll also set a
+seed for reproducibility.</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1989</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">sl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/robincar_SL.html">robincar_SL</a></span><span class="op">(</span></span>
+<span>  df<span class="op">=</span><span class="va">data2</span>,</span>
+<span>  response_col<span class="op">=</span><span class="st">"outcome2"</span>,</span>
+<span>  treat_col<span class="op">=</span><span class="st">"rx"</span>,</span>
+<span>  covariate_cols<span class="op">=</span><span class="va">covariates</span>,</span>
+<span>  SL_libraries<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SL.xgboost"</span>, <span class="st">"SL.glmnet"</span>, <span class="st">"SL.ranger"</span><span class="op">)</span>,</span>
+<span>  car_scheme<span class="op">=</span><span class="st">"simple"</span>,</span>
+<span>  k_split<span class="op">=</span><span class="fl">5</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Done!</span></span></code></pre>
+<pre><code><span><span class="co">## Warning in func(): Prediction unbiasedness does not hold.</span></span></code></pre>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Make a linear contrast</span></span>
+<span><span class="va">contrast</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/robincar_contrast.html">robincar_contrast</a></span><span class="op">(</span><span class="va">sl</span>, contrast_h<span class="op">=</span><span class="st">"diff"</span><span class="op">)</span></span>
+<span><span class="va">contrast</span></span></code></pre></div>
+<pre><code><span><span class="co">## Treatment group contrasts using linear contrast</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Contrasts:</span></span>
+<span><span class="co">## <span style="color: #949494;"># A tibble: 1 × 4</span></span></span>
+<span><span class="co">##   contrast                         estimate     se `pval (2-sided)`</span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                               <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> treat 1_indomethacin - 0_placebo  -<span style="color: #BB0000;">0.081</span><span style="color: #BB0000; text-decoration: underline;">2</span> 0.026<span style="text-decoration: underline;">9</span>          0.002<span style="text-decoration: underline;">56</span></span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Variance-Covariance Matrix for Contrasts:</span></span>
+<span><span class="co">##              [,1]</span></span>
+<span><span class="co">## [1,] 0.0007245833</span></span></code></pre>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-      </div>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
+</div>
 
 </div>
 

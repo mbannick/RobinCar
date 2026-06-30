@@ -13,7 +13,7 @@ This vignette accompanies the Results section of the RobinCar Family paper.
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r}
+```{r, results='hide', message=FALSE, warning=FALSE}
 library(RobinCar)
 library(RobinCar2)
 library(dplyr)
