@@ -22,6 +22,7 @@
 #' @param sparse_remove Remove sparse car_strata from calculation
 #' @param return_influence Return the influence function for the covariate-adjusted log-rank test for each individual
 #' @param id_col Name of the column in df indicating individual ids
+#' @param finite_sample Perform a finite-sample size correction
 #'
 #' @export
 #'
@@ -31,7 +32,7 @@ robincar_tte <- function(df,
                          adj_method,
                          car_strata_cols=NULL, covariate_cols=NULL,
                          p_trt=0.5, ref_arm=NULL, sparse_remove=TRUE,
-                         car_scheme="simple", return_influence=FALSE, id_col=NULL){
+                         car_scheme="simple", return_influence=FALSE, id_col=NULL, finite_sample = FALSE){
 
   .check.car_scheme(car_scheme, car_strata_cols)
   data <- .make.data(
@@ -60,6 +61,13 @@ robincar_tte <- function(df,
   # Perform adjustment
   result <- adjust(model, data, return_influence)
   result$original_df <- df
+
+  ## Finite sample correction
+  if (finite_sample){
+    
+    result <- apply_correction(result)
+    
+  }
 
   return(result)
 
