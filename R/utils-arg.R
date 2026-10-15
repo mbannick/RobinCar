@@ -28,7 +28,8 @@
 # covariates with these names would be silently overwritten or clash.
 .TTE.RESERVED.NAMES <- c(
   # create.tte.df
-  "treat", "response", "event", "nu_d", "id", "carcov_z", "car_strata",
+  "treat", "response", "event", "nu_d", "carcov_z", "car_strata",
+  # note: "id" is only added when return_influence=TRUE, and is checked in model.R
   # process.tte.df
   "Y", "Y0", "Y1", "trt0", "trt1", "n.events",
   "cum.delta.Y0.over.Ysq", "cum.delta.Y1.over.Ysq",

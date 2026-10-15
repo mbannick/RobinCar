@@ -101,7 +101,7 @@ test_that("Logrank ovarian", {
 
   # (1) Survdiff function
   lr <- survdiff(Surv(tte, obs) ~ rx, data = DATA)
-  lr_p <- lr$pvalue
+  lr_p <- pchisq(lr$chisq, df=1, lower.tail=FALSE)
   lr_num <- lr$obs[1] - lr$exp[1]
   lr_var <- lr$var[1, 1] / nrow(DATA)
 
@@ -116,7 +116,7 @@ test_that("Logrank ovarian", {
   )
   RC1res <- (2 * pnorm(abs(RC1$result$statistic), lower.tail = F))
 
-  data <- DATA %>% select(t = tte)
+  data <- DATA %>% dplyr::select(t = tte)
   data$delta <- 1*(DATA$obs==T)
   data$I1 <- DATA$rx - 1
   data$I0 <- 1 - data$I1
@@ -141,7 +141,7 @@ test_that("Logrank Ovarian with ties", {
 
   # (1) Survdiff function
   lr <- survdiff(Surv(tte, obs) ~ rx, data = DATA2)
-  lr_p <- lr$pvalue
+  lr_p <- pchisq(lr$chisq, df=1, lower.tail=FALSE)
   lr_num <- lr$obs[1] - lr$exp[1]
   lr_var <- lr$var[1, 1] / nrow(DATA)
 
