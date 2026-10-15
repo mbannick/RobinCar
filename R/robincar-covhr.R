@@ -17,6 +17,7 @@
 #' @param p_trt Treatment allocation ratio for the reference arm.
 #' @param adj_method Adjustment method (one of "CL", "CSL")
 #' @param interval Interval for uniroot function
+#' @param finite_sample Perform a finite-sample size correction
 #'
 #' @export
 #'
@@ -35,7 +36,8 @@ robincar_covhr <- function(df,
                            p_trt=0.5, ref_arm=NULL,
                            car_scheme="simple",
                            adj_method="CL",
-                           interval=c(-10, 10)){
+                           interval=c(-10, 10),
+                           finite_sample = FALSE){
 
   .check.car_scheme(car_scheme, car_strata_cols)
 
@@ -69,6 +71,14 @@ robincar_covhr <- function(df,
   result <- adjust(model, data)
   result$original_df <- df
 
+  ## Finite sample correction
+  if (finite_sample){
+    
+    result <- apply_correction(result)
+    
+  }
+  
+  
   return(result)
 
 }
