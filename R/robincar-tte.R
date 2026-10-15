@@ -35,6 +35,15 @@ robincar_tte <- function(df,
                          car_scheme="simple", return_influence=FALSE, id_col=NULL, finite_sample = FALSE){
 
   .check.car_scheme(car_scheme, car_strata_cols)
+  .check.tte_reserved_names(
+    df=df,
+    treat_col=treat_col,
+    response_col=response_col,
+    event_col=event_col,
+    car_strata_cols=car_strata_cols,
+    covariate_cols=covariate_cols,
+    id_col=id_col
+  )
   data <- .make.data(
     df=df,
     classname="RoboDataTTE",
