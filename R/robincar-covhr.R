@@ -73,11 +73,8 @@ robincar_covhr <- function(df,
 
   ## Finite sample correction
   if (finite_sample){
-    
     result <- apply_correction(result)
-    
   }
-  
   
   return(result)
 

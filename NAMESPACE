@@ -50,39 +50,49 @@ import(tidyverse)
 importFrom(MASS,glm.nb)
 importFrom(Rdpack,reprompt)
 importFrom(SuperLearner,listWrappers)
-importFrom(data.table,":=")
-importFrom(data.table,.SD)
-importFrom(data.table,data.table)
-importFrom(data.table,setnames)
-importFrom(data.table,setorder)
-importFrom(dplyr,arrange)
-importFrom(dplyr,cur_group_id)
-importFrom(dplyr,everything)
-importFrom(dplyr,filter)
-importFrom(dplyr,group_by)
-importFrom(dplyr,group_by_all)
-importFrom(dplyr,group_modify)
-importFrom(dplyr,left_join)
-importFrom(dplyr,mutate)
-importFrom(dplyr,n)
-importFrom(dplyr,select)
-importFrom(dplyr,summarise)
-importFrom(dplyr,summarise_all)
-importFrom(dplyr,summarize)
-importFrom(dplyr,ungroup)
+importFrom(data.table,
+  ":=",
+  .SD,
+  data.table,
+  setnames,
+  setorder
+)
+importFrom(dplyr,
+  arrange,
+  cur_group_id,
+  everything,
+  filter,
+  group_by,
+  group_by_all,
+  group_modify,
+  left_join,
+  mutate,
+  n,
+  select,
+  summarise,
+  summarise_all,
+  summarize,
+  ungroup
+)
 importFrom(emulator,quad.tform)
 importFrom(magrittr,"%>%")
 importFrom(rlang,.data)
-importFrom(stats,cov)
-importFrom(stats,model.matrix)
-importFrom(stats,rbinom)
-importFrom(stats,sd)
-importFrom(stats,setNames)
-importFrom(stats,uniroot)
-importFrom(stats,var)
-importFrom(stats,weighted.mean)
-importFrom(survival,Surv)
-importFrom(survival,coxph)
-importFrom(tidyr,pivot_wider)
-importFrom(tidyr,replace_na)
+importFrom(stats,
+  cov,
+  model.matrix,
+  rbinom,
+  sd,
+  setNames,
+  uniroot,
+  var,
+  weighted.mean
+)
+importFrom(survival,
+  Surv,
+  coxph
+)
+importFrom(tidyr,
+  pivot_wider,
+  replace_na
+)
 importFrom(utils,combn)

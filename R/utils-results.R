@@ -28,7 +28,6 @@ apply_correction <- function(result){
   n_0 <- n * result$data$pie[1,1]
   n_1 <- n * result$data$pie[2,1]
   
-  
   ### work out how many terms come from the covariate columns...
   form <- paste0(result$data$response_col, " ~ ", paste(c("1", result$data$covariate_cols), collapse = "+"))
   fit_lin <- lm(as.formula(form), data = result$original_df)
@@ -51,7 +50,6 @@ apply_correction <- function(result){
   if (attr(result$settings, "class")[1] == "CovHR"){
     
     result$result$se_theta_CL <- result$result$se_theta_CL * sqrt(correction)
-    
     
   }
   else {

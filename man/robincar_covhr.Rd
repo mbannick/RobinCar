@@ -15,7 +15,8 @@ robincar_covhr(
   ref_arm = NULL,
   car_scheme = "simple",
   adj_method = "CL",
-  interval = c(-10, 10)
+  interval = c(-10, 10),
+  finite_sample = FALSE
 )
 }
 \arguments{
@@ -42,6 +43,8 @@ which results in using the first element of `unique(data[, treat_col])`.}
 \item{adj_method}{Adjustment method (one of "CL", "CSL")}
 
 \item{interval}{Interval for uniroot function}
+
+\item{finite_sample}{Perform a finite-sample size correction}
 }
 \value{
 An object with attribute named "result", which lists:

@@ -17,7 +17,8 @@ robincar_tte(
   sparse_remove = TRUE,
   car_scheme = "simple",
   return_influence = FALSE,
-  id_col = NULL
+  id_col = NULL,
+  finite_sample = FALSE
 )
 }
 \arguments{
@@ -48,6 +49,8 @@ which results in using the first element of `unique(data[, treat_col])`.}
 \item{return_influence}{Return the influence function for the covariate-adjusted log-rank test for each individual}
 
 \item{id_col}{Name of the column in df indicating individual ids}
+
+\item{finite_sample}{Perform a finite-sample size correction}
 }
 \value{
 For adjustment method "CL" or "CSL", see value of \link[RobinCar:robincar_linear]{RobinCar::robincar_logrank()}; for adjustment method "coxscore" see value of \link[RobinCar:robincar_coxscore]{RobinCar::robincar_coxscore()}.
