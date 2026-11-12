@@ -69,7 +69,7 @@ robincar_tte <- function(df,
   result <- adjust(model, data, return_influence)
   result$original_df <- df
 
-  ## Normal approximation correction (Krotka & Magirr 2022)
+  ## Normal approximation correction (Krotka & Magirr 2026)
   if (variance_correction == "normal_approximation"){
     result <- apply_correction(result)
   }

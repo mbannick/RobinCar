@@ -77,7 +77,7 @@ robincar_covhr <- function(df,
   result <- adjust(model, data)
   result$original_df <- df
 
-  ## Normal approximation correction (Krotka & Magirr 2022)
+  ## Normal approximation correction (Krotka & Magirr 2026)
   if (variance_correction == "normal_approximation"){
     result <- apply_correction(result)
   }
