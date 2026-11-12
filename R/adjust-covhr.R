@@ -113,10 +113,16 @@ adjust.CovHR <- function(model, data, ...){
     se_theta_CL=se_theta_CL
   )
 
-  return(
-    structure(
-      class=c("TTEResultEst", "TTEResult"),
-      list(result=result, settings=model, data=data)
-    )
+  out <- structure(
+    class=c("TTEResultEst", "TTEResult"),
+    list(result=result, settings=model, data=data)
   )
+
+  if (model$variance_correction %in% c("hc3", "hc3b")) {
+    out <- apply_hc3_correction(out, model$variance_correction,
+                                df=df, p_trt=model$p_trt, n=data$n,
+                                sig2_L=sig2_L, sig2_CL=sig2_CL)
+  }
+
+  return(out)
 }

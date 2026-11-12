@@ -1,4 +1,3 @@
-
 # Function to format results.
 format_results <- function(labels, estimates, varcov, label_name="treat", ...){
 
@@ -61,4 +60,124 @@ apply_correction <- function(result){
   
   return(result)
   
+}
+
+
+# ---------------------------------------------------------------------------
+# HC3 variance correction
+# ---------------------------------------------------------------------------
+
+# Compute the three additive HC3 correction terms for the variance of the
+# covariate-adjusted log-rank statistic or log-HR estimator.
+#
+# Terms:
+#   B1 -- variance from estimating A_n' delta_hat
+#   B2 -- variance from estimating Sigma_X in the denominator
+#   B3 -- covariance between U_oracle and the estimation error
+#          (used only by variance_correction = "hc3b")
+#
+# Returns zeros for all three terms when there are no covariates.
+#
+# @param df    Data frame produced inside adjust.LogRank / adjust.CovHR,
+#              after get.tte.adjustment() has been called.  Must contain
+#              O.hat, trt0, trt1, car_strata, and the centred covariate
+#              columns (xmat_*_center).
+# @param p_trt Randomisation probability for the treatment arm.
+# @param n     Total sample size.
+#
+# @return List with numeric elements B1, B2, B3.
+compute_hc3_correction <- function(df, p_trt, n) {
+
+  # Centred covariate columns produced by get_design_matrix().
+  # Stratum-indicator columns (carcov_z) are excluded because they are
+  # absorbed into the stratification and must not enter the HC3 sandwich.
+  covnames_c  <- grep("^xmat_(?!.*carcov_z).*_center$", colnames(df),
+                      perl = TRUE, value = TRUE)
+  covnames_uc <- gsub("_center$", "", covnames_c)
+
+  if (length(covnames_c) == 0L) return(list(B1 = 0, B2 = 0, B3 = 0))
+
+  strata <- df$car_strata
+
+  # A_n = (1/n) * sum_{i : trt=1} (X_i - Xbar_stratum).
+  # The uncentred xmat columns are already overall-mean-centred by
+  # get_design_matrix(), so summing within trt=1 gives A_n directly.
+  An <- colSums(as.matrix(df[df$trt1 == 1L, covnames_uc, drop = FALSE])) / n
+
+  # SigmaX: stratum-size-weighted mean of within-stratum sample covariances.
+  SigmaX <- Reduce("+", lapply(unique(strata), function(z) {
+    Xz <- as.matrix(df[strata == z, covnames_uc, drop = FALSE])
+    nz <- nrow(Xz)
+    (nz / n) * crossprod(scale(Xz, center = TRUE, scale = FALSE)) / (nz - 1L)
+  }))
+
+  # Per-arm HC3 sandwich: S_j^{-1} * meat_j * S_j^{-1},
+  # where meat_j = sum_i Xtilde_i Xtilde_i' (e_i / (1 - h_i))^2.
+  arm_sandwich <- function(arm_df) {
+    Xc   <- as.matrix(arm_df[, covnames_c, drop = FALSE])
+    O    <- arm_df$O.hat
+    S    <- crossprod(Xc)
+    Sinv <- solve(S)
+    gam  <- as.numeric(Sinv %*% crossprod(Xc, O))
+    res  <- O - as.numeric(Xc %*% gam)
+    lev  <- rowSums((Xc %*% Sinv) * Xc)      # hat-matrix diagonal
+    meat <- crossprod(Xc * (res / (1 - lev))) # HC3 meat
+    list(Sinv = Sinv, Xc = Xc, res = res, lev = lev,
+         sandwich = Sinv %*% meat %*% Sinv)
+  }
+
+  arm0  <- arm_sandwich(df[df$trt0 == 1L, , drop = FALSE])
+  arm1  <- arm_sandwich(df[df$trt1 == 1L, , drop = FALSE])
+  V_HC3 <- arm0$sandwich + arm1$sandwich
+
+  B1 <- as.numeric(t(An) %*% V_HC3 %*% An)
+  B2 <- p_trt * (1 - p_trt) * sum(diag(SigmaX %*% V_HC3)) / n
+
+  # B3 = (-2/n) * An' * (S1inv sum_i v_i1 Xtilde_i1
+  #                    - S0inv sum_i v_i0 Xtilde_i0),
+  # where v_ij = e_ij^2 / (1 - h_ij)^2.
+  v1      <- arm1$res^2 / (1 - arm1$lev)^2
+  v0      <- arm0$res^2 / (1 - arm0$lev)^2
+  B3_vec  <- arm1$Sinv %*% colSums(arm1$Xc * v1) -
+             arm0$Sinv %*% colSums(arm0$Xc * v0)
+  B3 <- as.numeric(-2 / n * t(An) %*% B3_vec)
+
+  list(B1 = B1, B2 = B2, B3 = B3)
+}
+
+
+# Apply HC3 or HC3b variance correction to a TTEResult or TTEResultEst.
+#
+# Overwrites se (log-rank) or se_theta_CL (CovHR) in place, matching the
+# convention used by apply_correction() for the normal approximation.
+#
+# @param result              Object returned by adjust.LogRank or adjust.CovHR,
+#                            with original_df already attached.
+# @param variance_correction One of "hc3" or "hc3b".
+# @param df                  Processed data frame from inside the adjust.*
+#                            method (contains O.hat and xmat_* columns).
+# @param p_trt               Randomisation probability for the treatment arm.
+# @param n                   Total sample size.
+# @param sig2_L              (CovHR only) unadjusted information quantity.
+# @param sig2_CL             (CovHR only) adjusted information quantity.
+apply_hc3_correction <- function(result, variance_correction,
+                                 df, p_trt, n,
+                                 sig2_L = NULL, sig2_CL = NULL) {
+
+  hc3    <- compute_hc3_correction(df, p_trt, n)
+  extra  <- hc3$B1 + hc3$B2 + if (variance_correction == "hc3b") hc3$B3 else 0
+
+  is_covhr <- inherits(result, "TTEResultEst")
+
+  if (is_covhr) {
+    # Rescale to the log-HR scale: extra variance on the log-rank scale
+    # is divided by sig2_L^2 (see Ye et al. 2024, supplementary material).
+    result$result$se_theta_CL <- sqrt(sig2_CL / sig2_L^2 / n + extra / sig2_L^2)
+  } else {
+    var_CSL <- result$result$se^2
+    result$result$se        <- sqrt(var_CSL + extra)
+    result$result$statistic <- result$result$U / result$result$se
+  }
+
+  return(result)
 }
