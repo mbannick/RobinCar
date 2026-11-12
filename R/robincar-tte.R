@@ -24,11 +24,7 @@
 #' @param id_col Name of the column in df indicating individual ids
 #' @param variance_correction Small-sample variance correction method. One of
 #'   \code{"none"} (default), \code{"normal_approximation"} (Krotka & Magirr
-#'   2022), \code{"hc3"}, or \code{"hc3b"}.  The \code{"hc3"} and
-#'   \code{"hc3b"} options apply an HC3 sandwich correction derived from the
-#'   influence function of the adjusted statistic; \code{"hc3b"} additionally
-#'   includes a covariance term between the oracle statistic and the estimation
-#'   error.
+#'   2026), \code{"hc3"}, or \code{"hc3b"}.
 #'
 #' @export
 #'

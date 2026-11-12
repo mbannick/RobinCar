@@ -55,7 +55,8 @@ adjust.LogRank <- function(model, data, ...){
   )
 
   if (model$variance_correction %in% c("hc3", "hc3b")) {
-    out <- apply_hc3_correction(out, model$variance_correction,
+    out <- apply_hc3_correction(result=out, 
+                                variance_correction=model$variance_correction,
                                 df=df, p_trt=model$p_trt, n=data$n)
   }
 

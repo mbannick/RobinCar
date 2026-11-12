@@ -19,8 +19,7 @@
 #' @param interval Interval for uniroot function
 #' @param variance_correction Small-sample variance correction method. One of
 #'   \code{"none"} (default), \code{"normal_approximation"} (Krotka & Magirr
-#'   2022), \code{"hc3"}, or \code{"hc3b"}.  See \link[RobinCar:robincar_tte]{RobinCar::robincar_tte()}
-#'   for details.
+#'   2026), \code{"hc3"}, or \code{"hc3b"}.
 #'
 #' @export
 #'

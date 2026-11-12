@@ -80,15 +80,15 @@ apply_correction <- function(result){
 #
 # @param df    Data frame produced inside adjust.LogRank / adjust.CovHR,
 #              after get.tte.adjustment() has been called.  Must contain
-#              O.hat, trt0, trt1, car_strata, and the centred covariate
+#              O.hat, trt0, trt1, car_strata, and the centered covariate
 #              columns (xmat_*_center).
-# @param p_trt Randomisation probability for the treatment arm.
+# @param p_trt Randomization probability for the treatment arm.
 # @param n     Total sample size.
 #
 # @return List with numeric elements B1, B2, B3.
 compute_hc3_correction <- function(df, p_trt, n) {
 
-  # Centred covariate columns produced by get_design_matrix().
+  # Centered covariate columns produced by get_design_matrix().
   # Stratum-indicator columns (carcov_z) are excluded because they are
   # absorbed into the stratification and must not enter the HC3 sandwich.
   covnames_c  <- grep("^xmat_(?!.*carcov_z).*_center$", colnames(df),
@@ -109,14 +109,13 @@ compute_hc3_correction <- function(df, p_trt, n) {
   SigmaX <- Reduce("+", lapply(unique(strata), function(z) {
     Xz <- as.matrix(df[strata == z, covnames_c, drop = FALSE])
     nz <- nrow(Xz)
-    (nz / n) * crossprod(scale(Xz, center = TRUE, scale = FALSE)) / (nz - 1L)
+    (nz / n) * var(as.matrix(df[strata == z, covnames_c, drop = FALSE]))
   }))
 
   # Per-arm HC3 sandwich: S_j^{-1} * meat_j * S_j^{-1},
   # where meat_j = sum_i Xtilde_i Xtilde_i' (e_i / (1 - h_i))^2.
   #
-  # Covariates must be centred within arm and within stratum (not across arms),
-  # matching the centering used in hc3_se() / Get_Arm_Qs() in utils.R.
+  # Covariates must be centered within arm and within stratum (not across arms),
   arm_sandwich <- function(arm_df) {
     # Re-centre within arm, within stratum
     Xraw <- as.matrix(arm_df[, covnames_uc, drop = FALSE])
@@ -183,7 +182,7 @@ apply_hc3_correction <- function(result, variance_correction,
   if (is_covhr) {
     # Rescale to the log-HR scale: extra variance on the log-rank scale
     # is divided by sig2_L^2 (see Ye et al. 2024, supplementary material).
-    result$result$se_theta_CL <- sqrt(sig2_CL / sig2_L^2 / n + extra / sig2_L^2)
+    result$result$se_theta_CL <- sqrt(sig2_CL / sig2_L**2 / n + extra / sig2_L**2)
   } else {
     var_CSL <- result$result$se^2
     result$result$se        <- sqrt(var_CSL + extra)
