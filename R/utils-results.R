@@ -180,8 +180,6 @@ apply_hc3_correction <- function(result, variance_correction,
   is_covhr <- inherits(result, "TTEResultEst")
 
   if (is_covhr) {
-    # Rescale to the log-HR scale: extra variance on the log-rank scale
-    # is divided by sig2_L^2 (see Ye et al. 2024, supplementary material).
     result$result$se_theta_CL <- sqrt(sig2_CL / sig2_L**2 / n + extra / sig2_L**2)
   } else {
     var_CSL <- result$result$se^2
