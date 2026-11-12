@@ -100,21 +100,32 @@ compute_hc3_correction <- function(df, p_trt, n) {
   strata <- df$car_strata
 
   # A_n = (1/n) * sum_{i : trt=1} (X_i - Xbar_stratum).
-  # The uncentred xmat columns are already overall-mean-centred by
-  # get_design_matrix(), so summing within trt=1 gives A_n directly.
-  An <- colSums(as.matrix(df[df$trt1 == 1L, covnames_uc, drop = FALSE])) / n
+  # covnames_c are the stratum-centred columns produced by get_design_matrix(),
+  # so summing them within trt=1 gives A_n directly.
+  An <- colSums(as.matrix(df[df$trt1 == 1L, covnames_c, drop = FALSE])) / n
 
-  # SigmaX: stratum-size-weighted mean of within-stratum sample covariances.
+  # SigmaX: stratum-size-weighted mean of within-stratum sample covariances,
+  # computed on the stratum-centred columns.
   SigmaX <- Reduce("+", lapply(unique(strata), function(z) {
-    Xz <- as.matrix(df[strata == z, covnames_uc, drop = FALSE])
+    Xz <- as.matrix(df[strata == z, covnames_c, drop = FALSE])
     nz <- nrow(Xz)
     (nz / n) * crossprod(scale(Xz, center = TRUE, scale = FALSE)) / (nz - 1L)
   }))
 
   # Per-arm HC3 sandwich: S_j^{-1} * meat_j * S_j^{-1},
   # where meat_j = sum_i Xtilde_i Xtilde_i' (e_i / (1 - h_i))^2.
+  #
+  # Covariates must be centred within arm and within stratum (not across arms),
+  # matching the centering used in hc3_se() / Get_Arm_Qs() in utils.R.
   arm_sandwich <- function(arm_df) {
-    Xc   <- as.matrix(arm_df[, covnames_c, drop = FALSE])
+    # Re-centre within arm, within stratum
+    Xraw <- as.matrix(arm_df[, covnames_uc, drop = FALSE])
+    arm_strata <- arm_df$car_strata
+    Xc <- Xraw
+    for (z in unique(arm_strata)) {
+      idx <- arm_strata == z
+      Xc[idx, ] <- scale(Xraw[idx, , drop = FALSE], center = TRUE, scale = FALSE)
+    }
     O    <- arm_df$O.hat
     S    <- crossprod(Xc)
     Sinv <- solve(S)
