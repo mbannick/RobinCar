@@ -39,7 +39,6 @@ apply_correction <- function(result){
                     n_terms_cov + n_terms_strata,
                     n_terms_cov)
   
-  ## formula from Krotka & Magirr
   correction <- (1 + n_terms * (((n_0 / n)^2) / (n_1 - n_terms - 2) + ((n_1 / n)^2) / (n_0 - n_terms - 2))) *
     (n / (n - ((n_0 / n_1) + (n_1 / n_0) - 1) * n_terms - ((n_0 / n_1) + (n_1 / n_0))))
   
@@ -73,8 +72,7 @@ apply_correction <- function(result){
 # Terms:
 #   B1 -- variance from estimating A_n' delta_hat
 #   B2 -- variance from estimating Sigma_X in the denominator
-#   B3 -- covariance between U_oracle and the estimation error
-#          (used only by variance_correction = "hc3b")
+#   B3 -- covariance between U_oracle and the estimation error (currently not used)
 #
 # Returns zeros for all three terms when there are no covariates.
 #
@@ -156,26 +154,25 @@ compute_hc3_correction <- function(df, p_trt, n) {
 }
 
 
-# Apply HC3 or HC3b variance correction to a TTEResult or TTEResultEst.
+# Apply HC3 variance correction to a TTEResult or TTEResultEst.
 #
 # Overwrites se (log-rank) or se_theta_CL (CovHR) in place, matching the
 # convention used by apply_correction() for the normal approximation.
 #
 # @param result              Object returned by adjust.LogRank or adjust.CovHR,
 #                            with original_df already attached.
-# @param variance_correction One of "hc3" or "hc3b".
 # @param df                  Processed data frame from inside the adjust.*
 #                            method (contains O.hat and xmat_* columns).
 # @param p_trt               Randomisation probability for the treatment arm.
 # @param n                   Total sample size.
 # @param sig2_L              (CovHR only) unadjusted information quantity.
 # @param sig2_CL             (CovHR only) adjusted information quantity.
-apply_hc3_correction <- function(result, variance_correction,
+apply_hc3_correction <- function(result,
                                  df, p_trt, n,
                                  sig2_L = NULL, sig2_CL = NULL) {
 
   hc3    <- compute_hc3_correction(df, p_trt, n)
-  extra  <- hc3$B1 + hc3$B2 + if (variance_correction == "hc3b") hc3$B3 else 0
+  extra  <- hc3$B1 + hc3$B2
 
   is_covhr <- inherits(result, "TTEResultEst")
 

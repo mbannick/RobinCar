@@ -118,9 +118,8 @@ adjust.CovHR <- function(model, data, ...){
     list(result=result, settings=model, data=data)
   )
 
-  if (model$variance_correction %in% c("hc3", "hc3b")) {
+  if (model$variance_correction %in% c("hc3")) {
     out <- apply_hc3_correction(result=out, 
-                                variance_correction=model$variance_correction,
                                 df=df, p_trt=model$p_trt, n=data$n,
                                 sig2_L=sig2_L, sig2_CL=sig2_CL)
   }

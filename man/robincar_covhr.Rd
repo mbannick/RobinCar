@@ -16,7 +16,7 @@ robincar_covhr(
   car_scheme = "simple",
   adj_method = "CL",
   interval = c(-10, 10),
-  finite_sample = FALSE
+  variance_correction = c("none", "normal_approximation", "hc3")
 )
 }
 \arguments{
@@ -44,7 +44,8 @@ which results in using the first element of `unique(data[, treat_col])`.}
 
 \item{interval}{Interval for uniroot function}
 
-\item{finite_sample}{Perform a finite-sample size correction}
+\item{variance_correction}{Small-sample variance correction method. One of
+\code{"none"} (default), \code{"normal_approximation"}, \code{"hc3"}.}
 }
 \value{
 An object with attribute named "result", which lists:

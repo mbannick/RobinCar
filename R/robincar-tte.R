@@ -23,8 +23,7 @@
 #' @param return_influence Return the influence function for the covariate-adjusted log-rank test for each individual
 #' @param id_col Name of the column in df indicating individual ids
 #' @param variance_correction Small-sample variance correction method. One of
-#'   \code{"none"} (default), \code{"normal_approximation"} (Krotka & Magirr
-#'   2026), \code{"hc3"}, or \code{"hc3b"}.
+#'   \code{"none"} (default), \code{"normal_approximation"} or \code{"hc3"}.
 #'
 #' @export
 #'
@@ -36,7 +35,7 @@ robincar_tte <- function(df,
                          p_trt=0.5, ref_arm=NULL, sparse_remove=TRUE,
                          car_scheme="simple", return_influence=FALSE, id_col=NULL,
                          variance_correction=c("none", "normal_approximation",
-                                               "hc3", "hc3b")){
+                                               "hc3")){
 
   variance_correction <- match.arg(variance_correction)
 
@@ -69,7 +68,6 @@ robincar_tte <- function(df,
   result <- adjust(model, data, return_influence)
   result$original_df <- df
 
-  ## Normal approximation correction (Krotka & Magirr 2026)
   if (variance_correction == "normal_approximation"){
     result <- apply_correction(result)
   }

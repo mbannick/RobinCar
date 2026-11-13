@@ -18,8 +18,7 @@
 #' @param adj_method Adjustment method (one of "CL", "CSL")
 #' @param interval Interval for uniroot function
 #' @param variance_correction Small-sample variance correction method. One of
-#'   \code{"none"} (default), \code{"normal_approximation"} (Krotka & Magirr
-#'   2026), \code{"hc3"}, or \code{"hc3b"}.
+#'   \code{"none"} (default), \code{"normal_approximation"}, \code{"hc3"}.
 #'
 #' @export
 #'
@@ -40,7 +39,7 @@ robincar_covhr <- function(df,
                            adj_method="CL",
                            interval=c(-10, 10),
                            variance_correction=c("none", "normal_approximation",
-                                                 "hc3", "hc3b")){
+                                                 "hc3")){
 
   variance_correction <- match.arg(variance_correction)
 
@@ -77,7 +76,6 @@ robincar_covhr <- function(df,
   result <- adjust(model, data)
   result$original_df <- df
 
-  ## Normal approximation correction (Krotka & Magirr 2026)
   if (variance_correction == "normal_approximation"){
     result <- apply_correction(result)
   }
