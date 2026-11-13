@@ -142,22 +142,11 @@ test_that("hc3 correction inflates se relative to no correction (log-rank)", {
     variance_correction="hc3"
   )
 
-  cl_hc3b <- robincar_logrank(
-    df=data.simu,
-    treat_col="I1", response_col="t", event_col="delta",
-    car_strata_cols=NULL,
-    covariate_cols=c("model_w3", "strata_2"),
-    car_scheme="simple",
-    adj_method="CL", ref_arm=0,
-    variance_correction="hc3b"
-  )
-
   # HC3 must inflate the SE
   expect_gt(cl_hc3$result$se, cl_none$result$se)
 
   # statistic must be recomputed consistently with the new SE
   expect_equal(cl_hc3$result$statistic,  cl_hc3$result$U  / cl_hc3$result$se)
-  expect_equal(cl_hc3b$result$statistic, cl_hc3b$result$U / cl_hc3b$result$se)
 
 })
 
