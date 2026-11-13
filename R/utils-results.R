@@ -39,6 +39,7 @@ apply_correction <- function(result){
                     n_terms_cov + n_terms_strata,
                     n_terms_cov)
   
+  ## formula from Krotka & Magirr
   correction <- (1 + n_terms * (((n_0 / n)^2) / (n_1 - n_terms - 2) + ((n_1 / n)^2) / (n_0 - n_terms - 2))) *
     (n / (n - ((n_0 / n_1) + (n_1 / n_0) - 1) * n_terms - ((n_0 / n_1) + (n_1 / n_0))))
   
