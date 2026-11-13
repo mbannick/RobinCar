@@ -47,11 +47,17 @@ adjust.LogRank <- function(model, data, ...){
   if (model$return_influence) {
     influence_function <- df$uu_cl + (model$p_trt) * df$adjust1 - (1 - model$p_trt) * df$adjust0
     result$inf_func <- data.frame(id = df$id, inf_func = influence_function)
-  } 
-  return(
-    structure(
-      class="TTEResult",
-      list(result=result, settings=model, data=data)
-    )
+  }
+
+  out <- structure(
+    class="TTEResult",
+    list(result=result, settings=model, data=data)
   )
+
+  if (model$variance_correction %in% c("hc3")) {
+    out <- apply_hc3_correction(result=out, 
+                                df=df, p_trt=model$p_trt, n=data$n)
+  }
+
+  return(out)
 }

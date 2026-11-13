@@ -17,7 +17,8 @@
 #' @param p_trt Treatment allocation ratio for the reference arm.
 #' @param adj_method Adjustment method (one of "CL", "CSL")
 #' @param interval Interval for uniroot function
-#' @param finite_sample Perform a finite-sample size correction
+#' @param variance_correction Small-sample variance correction method. One of
+#'   \code{"none"} (default), \code{"normal_approximation"}, \code{"hc3"}.
 #'
 #' @export
 #'
@@ -37,7 +38,10 @@ robincar_covhr <- function(df,
                            car_scheme="simple",
                            adj_method="CL",
                            interval=c(-10, 10),
-                           finite_sample = FALSE){
+                           variance_correction=c("none", "normal_approximation",
+                                                 "hc3")){
+
+  variance_correction <- match.arg(variance_correction)
 
   .check.car_scheme(car_scheme, car_strata_cols)
 
@@ -59,8 +63,9 @@ robincar_covhr <- function(df,
     car_scheme=car_scheme,
     p_trt=p_trt,
     ref_arm=ref_arm,
-    interval=interval, 
-    return_influence=F
+    interval=interval,
+    return_influence=F,
+    variance_correction=variance_correction
   )
 
   # Append the CovHR classification
@@ -71,11 +76,10 @@ robincar_covhr <- function(df,
   result <- adjust(model, data)
   result$original_df <- df
 
-  ## Finite sample correction
-  if (finite_sample){
+  if (variance_correction == "normal_approximation"){
     result <- apply_correction(result)
   }
-  
+
   return(result)
 
 }

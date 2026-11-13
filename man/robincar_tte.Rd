@@ -18,7 +18,7 @@ robincar_tte(
   car_scheme = "simple",
   return_influence = FALSE,
   id_col = NULL,
-  finite_sample = FALSE
+  variance_correction = c("none", "normal_approximation", "hc3")
 )
 }
 \arguments{
@@ -50,7 +50,8 @@ which results in using the first element of `unique(data[, treat_col])`.}
 
 \item{id_col}{Name of the column in df indicating individual ids}
 
-\item{finite_sample}{Perform a finite-sample size correction}
+\item{variance_correction}{Small-sample variance correction method. One of
+\code{"none"} (default), \code{"normal_approximation"} or \code{"hc3"}.}
 }
 \value{
 For adjustment method "CL" or "CSL", see value of \link[RobinCar:robincar_linear]{RobinCar::robincar_logrank()}; for adjustment method "coxscore" see value of \link[RobinCar:robincar_coxscore]{RobinCar::robincar_coxscore()}.
